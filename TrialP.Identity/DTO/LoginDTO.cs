@@ -1,4 +1,4 @@
-﻿namespace TrialP.Identity.LoginDTO
+﻿namespace TrialP.Identity.DTO
 {
     public class LoginAuthModel
     {

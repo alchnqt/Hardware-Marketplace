@@ -4,8 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ApiOne.Controllers
 {
-    [Route("api/[controller]/[action]")]
     [ApiController]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]/[action]")]
     public class ValuesController : ControllerBase
     {
         [HttpGet]

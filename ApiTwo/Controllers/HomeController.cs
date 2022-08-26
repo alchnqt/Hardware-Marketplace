@@ -1,6 +1,5 @@
 ﻿using IdentityModel.Client;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace ApiTwo.Controllers
 {
@@ -34,7 +33,7 @@ namespace ApiTwo.Controllers
 
             apiClient.SetBearerToken(tokenResponse.AccessToken);
 
-            var response = await apiClient.GetAsync("https://localhost:7171/api/values/secret");
+            var response = await apiClient.GetAsync("https://localhost:7171/api/v1/values/secret");
 
             var content = await response.Content.ReadAsStringAsync();
 

@@ -26,7 +26,7 @@ namespace TrialP.Identity.Properties
                 {
                     ClientId = "client_id",
                     ClientSecrets = { new Secret("client_secret".ToSha256()) },
-                    AllowedGrantTypes = GrantTypes.ClientCredentials,
+                    AllowedGrantTypes = GrantTypes.Hybrid,
                     AllowedScopes = { "ApiOne", "ApiTwo" }
                 },
                 new Client()

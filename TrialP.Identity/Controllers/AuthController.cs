@@ -31,7 +31,7 @@ namespace TrialP.Identity.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginAuthModel user)
         {
-            var result = await _signInManager.PasswordSignInAsync(user.UserName, user.Password, false, false);
+            var result = await _signInManager.PasswordSignInAsync(user.Login, user.Password, false, false);
             if (result.Succeeded)
             {
                 return Redirect(user.ReturnUrl);
@@ -50,7 +50,7 @@ namespace TrialP.Identity.Controllers
                 return BadRequest();
             }
 
-            var user = new IdentityUser(registerUser.UserName);
+            var user = new IdentityUser(registerUser.Login);
             var result = await _userManager.CreateAsync(user, registerUser.Password);
             if (result.Succeeded)
             {
