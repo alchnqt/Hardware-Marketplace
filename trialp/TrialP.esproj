@@ -11,5 +11,6 @@
     <Folder Include="src\Components\Auth\Login\" />
     <Folder Include="src\Components\Auth\Profile\" />
     <Folder Include="src\Components\Auth\Register\" />
+    <Folder Include="src\Auth\" />
   </ItemGroup>
 </Project>
