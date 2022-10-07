@@ -8,9 +8,13 @@
     <JavaScriptTestFramework>Jest</JavaScriptTestFramework>
   </PropertyGroup>
   <ItemGroup>
+    <Folder Include="src\App_Data\" />
+    <Folder Include="src\Auth\Types\" />
     <Folder Include="src\Components\Auth\Login\" />
     <Folder Include="src\Components\Auth\Profile\" />
     <Folder Include="src\Components\Auth\Register\" />
-    <Folder Include="src\Auth\" />
+    <Folder Include="src\Interfaces\Auth\" />
+    <Folder Include="src\redux\actions\" />
+    <Folder Include="src\services\auth\" />
   </ItemGroup>
 </Project>

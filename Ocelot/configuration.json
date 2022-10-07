@@ -39,7 +39,7 @@
           "Port": 7077
         }
       ],
-      "UpstreamPathTemplate": "/api/b/{everything}",
+      "UpstreamPathTemplate": "/api/auth/{everything}",
       "UpstreamHttpMethod": [ "GET", "POST" ]
     }
   ],
