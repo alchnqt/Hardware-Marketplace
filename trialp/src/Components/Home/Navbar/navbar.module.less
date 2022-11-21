@@ -1,13 +1,30 @@
-.navbar{
+.navbar {
     width: 100%;
 
-    .btn{
+    .btn {
         color: #000;
         background: #fff;
         border-radius: 0;
-        border: 1px solid #000;
-        &::after{
+        border: 1px solid #dfdfdf;
+        flex: 1 1 0;
+        justify-content: center;
+        align-items: center;
+
+        &::after {
+            display: none;
+        }
+
+        &:focus {
+            background: #05a9b1;
             color: #fff;
         }
+
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-content: center;
     }
+}
+.image{
+    width: 100%;
 }

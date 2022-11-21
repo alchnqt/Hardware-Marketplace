@@ -158,14 +158,21 @@ namespace TrialP.Auth.Controllers
             return refreshToken;
         }
 
-        private void SetRefreshToken(RefreshToken newRefreshToken)
+        private void SetRefreshToken(RefreshToken newRefreshToken, bool rememberMe = true)
         {
             var cookieOptions = new CookieOptions
             {
                 HttpOnly = true,
                 Expires = newRefreshToken.Expires
             };
-            Response.Cookies.Append("refreshToken", newRefreshToken.Token, cookieOptions);
+            if (rememberMe)
+            {
+                Response.Cookies.Append("refreshToken", newRefreshToken.Token, cookieOptions);
+            }
+            else
+            {
+                HttpContext.Session.SetString("refreshToken", newRefreshToken.Token);
+            }
 
             //user.RefreshToken = newRefreshToken.Token;
             //user.TokenCreated = newRefreshToken.Created;

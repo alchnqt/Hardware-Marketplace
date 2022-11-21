@@ -10,10 +10,9 @@ import CssBaseline from '@mui/material/CssBaseline';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-
+import TextField from '@mui/material/TextField';
 function Header() {
     const [show, setShow] = useState(false);
-
     return (
         <React.Fragment>
             <AppBar
@@ -22,10 +21,20 @@ function Header() {
                 elevation={0}
                 sx={{ borderBottom: (theme) => `1px solid ${theme.palette.divider}` }}
             >
-                <Toolbar sx={{ flexWrap: 'wrap' }}>
+                <Toolbar className={`${styles.header}`} sx={{ flexWrap: 'no-wrap' }}>
                     <Typography variant="h6" color="inherit" noWrap sx={{ flexGrow: 1 }}>
-                        <Link href='/'>Company name</Link>
+                        <Link className={`${styles.logo} `} href='/'>Company name</Link>
                     </Typography>
+                    <TextField
+                        className={`${styles.search}`}
+                        autoComplete="given-name"
+                        name="search"
+                        required
+                        fullWidth
+                        id="search"
+                        label="Поиск"
+                        autoFocus
+                    />
                     <nav>
                         <Link
                             variant="button"
@@ -49,11 +58,11 @@ function Header() {
                             href="#"
                             sx={{ my: 1, mx: 1.5 }}
                         >
-                            Support
+                            Поддержка
                         </Link>
                     </nav>
-                    <Button onClick={() => setShow(prev => !prev)} variant="outlined" sx={{ my: 1, mx: 1.5 }}>
-                        Login
+                    <Button className={`${styles.loginBtn}`} onClick={() => setShow(prev => !prev)} variant="outlined" sx={{ my: 1, mx: 1.5 }}>
+                        Войти
                     </Button>
                 </Toolbar>
             </AppBar>

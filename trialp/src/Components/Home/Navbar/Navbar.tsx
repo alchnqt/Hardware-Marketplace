@@ -1,80 +1,34 @@
 import React from 'react';
+import { SubCategory, SubSubCategory } from '../../../Models/Products/CategoriesType';
+import { useCategoriesQuery } from '../../../redux/store/backend/productsServer.api';
 import styles from './navbar.module.css';
 function Navbar() {
-    return (
-        <div className={`btn-group bg-primary ${styles.navbar} shadow-lg`} >
-            <button type="button" className={`${styles.btn} btn btn-primary dropdown-toggle`} data-bs-toggle="dropdown" aria-expanded="false">
-              Комлпектующие
-          </button>
-          <ul className="dropdown-menu">
-              <li><a className="dropdown-item" href="#">Action</a></li>
-              <li><a className="dropdown-item" href="#">Another action</a></li>
-              <li><a className="dropdown-item" href="#">Something else here</a></li>
-          </ul>
 
-          <button type="button" className="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-              Устройства ввода
-          </button>
-          <ul className="dropdown-menu">
-              <li><a className="dropdown-item" href="#">Action</a></li>
-              <li><a className="dropdown-item" href="#">Another action</a></li>
-              <li><a className="dropdown-item" href="#">Something else here</a></li>
-          </ul>
+    const { data, error, isLoading } = useCategoriesQuery(undefined);
+    data?.main[0].subs.map((sub: SubCategory): void => { console.log(sub) })
+    if (isLoading) {
+        return <></>
+    }
+    else {
+        return (
+            <div className={`btn-group bg-primary ${styles.navbar} shadow-lg`} >
+                {data?.main[0].subs.map((sub: SubCategory): any =>
+                    <>
+                        <button type="button" className={`${styles.btn} btn btn-primary dropdown-toggle`} data-bs-toggle="dropdown" aria-expanded="false">
+                            {sub.subsName}
+                            <span className={`${styles.image}`}>
+                                <img height='45' src={`${sub.imageUrl}`} />
+                            </span>
+                        </button>
+                        <ul className="dropdown-menu">
+                            {sub.subssubs.map((subsub: SubSubCategory): any => <li><a className="dropdown-item" href="#">{subsub.name}</a></li>)}
+                        </ul>
+                    </>
+                )}
+            </div>
+        );
+    }
 
-          <button type="button" className="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-              Хранение данных
-          </button>
-          <ul className="dropdown-menu">
-              <li><a className="dropdown-item" href="#">Action</a></li>
-              <li><a className="dropdown-item" href="#">Another action</a></li>
-              <li><a className="dropdown-item" href="#">Something else here</a></li>
-          </ul>
-
-          <button type="button" className="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-              Мультимедиа
-          </button>
-          <ul className="dropdown-menu">
-              <li><a className="dropdown-item" href="#">Action</a></li>
-              <li><a className="dropdown-item" href="#">Another action</a></li>
-              <li><a className="dropdown-item" href="#">Something else here</a></li>
-          </ul>
-
-          <button type="button" className="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-              Электропитание
-          </button>
-          <ul className="dropdown-menu">
-              <li><a className="dropdown-item" href="#">Action</a></li>
-              <li><a className="dropdown-item" href="#">Another action</a></li>
-              <li><a className="dropdown-item" href="#">Something else here</a></li>
-          </ul>
-
-          <button type="button" className="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-              Сетевое оборудование
-          </button>
-          <ul className="dropdown-menu">
-              <li><a className="dropdown-item" href="#">Action</a></li>
-              <li><a className="dropdown-item" href="#">Another action</a></li>
-              <li><a className="dropdown-item" href="#">Something else here</a></li>
-          </ul>
-
-          <button type="button" className="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-              Аксессуары
-          </button>
-          <ul className="dropdown-menu">
-              <li><a className="dropdown-item" href="#">Action</a></li>
-              <li><a className="dropdown-item" href="#">Another action</a></li>
-              <li><a className="dropdown-item" href="#">Something else here</a></li>
-          </ul>
-          <button type="button" className="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-              Компьютеры
-          </button>
-          <ul className="dropdown-menu">
-              <li><a className="dropdown-item" href="#">Action</a></li>
-              <li><a className="dropdown-item" href="#">Another action</a></li>
-              <li><a className="dropdown-item" href="#">Something else here</a></li>
-          </ul>
-      </div>
-  );
 }
 
 export default Navbar;

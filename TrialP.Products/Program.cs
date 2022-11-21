@@ -12,7 +12,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddHttpClient();
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("AdministratorsOnly", 
+    options.AddPolicy("AdministratorsOnly",
     policy => policy.RequireRole("Administrator"));
 });
 builder.Services.AddAuthentication("Bearer")
@@ -22,6 +22,7 @@ builder.Services.AddAuthentication("Bearer")
         config.Audience = "ApiTwo";
     });
 
+builder.Services.AddCors();
 
 var app = builder.Build();
 
@@ -33,7 +34,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseCors(options => options.WithOrigins("http://courseproject:8989").AllowAnyMethod());
 app.UseAuthorization();
 
 app.MapControllers();

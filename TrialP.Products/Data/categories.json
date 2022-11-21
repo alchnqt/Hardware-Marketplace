@@ -1,0 +1,191 @@
+{
+  "main": [
+    {
+      "mainName": "Компьюетрная техника",
+      "subs": [
+        {
+          "subsName": "Комплектующие",
+          "imageUrl": "https://icons.veryicon.com/png/o/commerce-shopping/alibaba-international-station-icon-library/tools-hardware.png",
+          "subssubs": [
+            {
+              "name": "Видеокарты",
+              "apiCategory": "videocard"
+            },
+            {
+              "name": "Процессоры",
+              "apiCategory": "cpu"
+            },
+            {
+              "name": "Материнские платы",
+              "apiCategory": "motherboard"
+            },
+            {
+              "name": "Оперативная память",
+              "apiCategory": "dram"
+            }
+          ]
+        },
+        {
+          "subsName": "Устройства ввода",
+          "imageUrl": "https://icons.veryicon.com/png/o/object/material-design-icons/input-1.png",
+          "subssubs": [
+            {
+              "name": "Видеокарты",
+              "apiCategory": "videocard"
+            },
+            {
+              "name": "Процессоры",
+              "apiCategory": "cpu"
+            },
+            {
+              "name": "Материнские платы",
+              "apiCategory": "motherboard"
+            },
+            {
+              "name": "Оперативная память",
+              "apiCategory": "dram"
+            }
+          ]
+
+        },
+        {
+          "subsName": "Хранение данных",
+          "imageUrl": "https://icons.veryicon.com/png/o/internet--web/network-correlation/hardware-7.png",
+          "subssubs": [
+            {
+              "name": "Видеокарты",
+              "apiCategory": "videocard"
+            },
+            {
+              "name": "Процессоры",
+              "apiCategory": "cpu"
+            },
+            {
+              "name": "Материнские платы",
+              "apiCategory": "motherboard"
+            },
+            {
+              "name": "Оперативная память",
+              "apiCategory": "dram"
+            }
+          ]
+
+        },
+        {
+          "subsName": "Мультимедиа",
+          "imageUrl": "https://icons.veryicon.com/png/o/miscellaneous/mini-line-icons/multimedia-4-1.png",
+          "subssubs": [
+            {
+              "name": "Видеокарты",
+              "apiCategory": "videocard"
+            },
+            {
+              "name": "Процессоры",
+              "apiCategory": "cpu"
+            },
+            {
+              "name": "Материнские платы",
+              "apiCategory": "motherboard"
+            },
+            {
+              "name": "Оперативная память",
+              "apiCategory": "dram"
+            }
+          ]
+
+        },
+        {
+          "subsName": "Электропитание",
+          "imageUrl": "https://icons.veryicon.com/png/o/system/remote-cost-control/electric-4.png",
+          "subssubs": [
+            {
+              "name": "Видеокарты",
+              "apiCategory": "videocard"
+            },
+            {
+              "name": "Процессоры",
+              "apiCategory": "cpu"
+            },
+            {
+              "name": "Материнские платы",
+              "apiCategory": "motherboard"
+            },
+            {
+              "name": "Оперативная память",
+              "apiCategory": "dram"
+            }
+          ]
+
+        },
+        {
+          "subsName": "Сетевое оборудование",
+          "imageUrl": "https://icons.veryicon.com/png/o/internet--web/network-correlation/net-4.png",
+          "subssubs": [
+            {
+              "name": "Видеокарты",
+              "apiCategory": "videocard"
+            },
+            {
+              "name": "Процессоры",
+              "apiCategory": "cpu"
+            },
+            {
+              "name": "Материнские платы",
+              "apiCategory": "motherboard"
+            },
+            {
+              "name": "Оперативная память",
+              "apiCategory": "dram"
+            }
+          ]
+
+        },
+        {
+          "subsName": "Аксессуары",
+          "imageUrl": "https://icons.veryicon.com/png/o/miscellaneous/menu-management/purchasing-accessories.png",
+          "subssubs": [
+            {
+              "name": "Видеокарты",
+              "apiCategory": "videocard"
+            },
+            {
+              "name": "Процессоры",
+              "apiCategory": "cpu"
+            },
+            {
+              "name": "Материнские платы",
+              "apiCategory": "motherboard"
+            },
+            {
+              "name": "Оперативная память",
+              "apiCategory": "dram"
+            }
+          ]
+
+        },
+        {
+          "subsName": "Компьютеры",
+          "imageUrl": "https://icons.veryicon.com/png/o/internet--web/complete-icon-sets-for-hundreds-of-categories/computer-computer-2.png",
+          "subssubs": [
+            {
+              "name": "Видеокарты",
+              "apiCategory": "videocard"
+            },
+            {
+              "name": "Процессоры",
+              "apiCategory": "cpu"
+            },
+            {
+              "name": "Материнские платы",
+              "apiCategory": "motherboard"
+            },
+            {
+              "name": "Оперативная память",
+              "apiCategory": "dram"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
