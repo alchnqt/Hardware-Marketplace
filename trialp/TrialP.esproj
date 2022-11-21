@@ -18,6 +18,7 @@
     <Folder Include="src\Components\Layout\" />
     <Folder Include="src\Components\AppRouter\" />
     <Folder Include="src\Interfaces\Auth\" />
+    <Folder Include="src\Models\Products\" />
     <Folder Include="src\redux\actions\" />
     <Folder Include="src\services\auth\" />
     <Folder Include="webpack\dist\" />
