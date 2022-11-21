@@ -1,31 +1,24 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddApiVersioning();
 
-builder.Services.AddAuthentication("Bearer")
-    .AddJwtBearer("Bearer", config =>
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
     {
-        config.TokenValidationParameters.RoleClaimType = "role";
-        config.Authority = "https://localhost:7077";
-        config.TokenValidationParameters = new TokenValidationParameters
+        options.TokenValidationParameters = new TokenValidationParameters
         {
-            ValidAudience = "ApiOne",
-            RoleClaimType = "client_role"
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8
+                .GetBytes("this is my custom Secret key for authentication")),
+            ValidateIssuer = false,
+            ValidateAudience = false
         };
     });
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("Admin", policy =>
-    {
-        policy.AddAuthenticationSchemes("Bearer");
-        policy.RequireAuthenticatedUser();
-        policy.RequireClaim("client_role", "admin");
-        //policy.RequireRole(new[] { "Admin" });
-    });
-});
 
 var app = builder.Build();
 

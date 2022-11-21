@@ -11,6 +11,8 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Web;
+using TrialP.Auth.Data;
+using TrialP.Auth.DTO;
 using TrialP.Auth.Models;
 
 namespace TrialP.Auth.Controllers
@@ -19,21 +21,28 @@ namespace TrialP.Auth.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        //public static User user = new User();
         private readonly IConfiguration _configuration;
-        //private readonly IUserService _userService;
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public AuthController(IConfiguration configuration)
+        public AuthController(IConfiguration configuration, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _configuration = configuration;
+            _userManager = userManager;
+            _roleManager = roleManager;
             //_userService = userService;
         }
 
         [HttpGet, Authorize]
-        public ActionResult<string> GetMe()
+        public ActionResult<string> Secret()
         {
-            //var userName = _userService.GetMyName();
             return Ok("secret");
+        }
+
+        [HttpGet, Authorize(Roles = "Admin")]
+        public ActionResult<string> AdminSecret()
+        {
+            return Ok("admin secret");
         }
 
         //[HttpPost("register")]
@@ -49,28 +58,71 @@ namespace TrialP.Auth.Controllers
         //}
 
         [HttpPost]
-        public async Task<ActionResult<string>> Login(string login, string password)
+        public async Task<ActionResult<string>> Login(UserDto user)
         {
-            if (login != "bob")
+            var existingUser = await _userManager.FindByNameAsync(user.Login);
+
+            if (existingUser == null)
+            {
+                return BadRequest();
+            }
+
+            if (user.Login != existingUser.UserName)
             {
                 return BadRequest("User not found.");
             }
 
-            if (password != "1234")
+            if (string.IsNullOrEmpty(user.Password))
             {
                 return BadRequest("Wrong password.");
             }
 
-            string token = CreateToken(login);
-
-            var refreshToken = GenerateRefreshToken();
+            string token = await CreateToken(user.Login);
+            var refreshToken = GenerateRefreshToken(existingUser.Id.ToString());
             SetRefreshToken(refreshToken);
-
             return Ok(token);
+
         }
 
         [HttpPost]
-        public async Task<ActionResult<string>> RefreshToken()
+        public async Task<ActionResult<string>> Register(RegisterDto user)
+        {
+            var existingUser = await _userManager.FindByNameAsync(user.Username);
+
+            if (string.IsNullOrEmpty(user.Username) || existingUser != null)
+            {
+                return BadRequest("Пользователь уже существует");
+            }
+
+            if (user.Password != user.RepeatPassword)
+            {
+                return BadRequest("Пароли не совпдают");
+            }
+            var newUser = new IdentityUser()
+            {
+                UserName = user.Username,
+                Email = user.Email,
+                PhoneNumber = user.Phone
+
+            };
+            var result = await _userManager.CreateAsync(
+                newUser,
+                user.Password
+            );
+            await _userManager.AddToRoleAsync(newUser, "Customer");
+            if (result.Succeeded)
+            {
+                return Ok("User was registered");
+            }
+            else
+            {
+                return BadRequest("Coudln't create user");
+            }
+           
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<string>> RefreshToken(string login, string userId)
         {
             var refreshToken = Request.Cookies["refreshToken"];
 
@@ -82,23 +134,27 @@ namespace TrialP.Auth.Controllers
             //{
             //    return Unauthorized("Token expired.");
             //}
-
-            string token = CreateToken("");
-            var newRefreshToken = GenerateRefreshToken();
+            string token = await CreateToken(login);
+            var newRefreshToken = GenerateRefreshToken(userId);
             SetRefreshToken(newRefreshToken);
 
             return Ok(token);
         }
 
-        private RefreshToken GenerateRefreshToken()
+        private RefreshToken GenerateRefreshToken(string userId)
         {
-            var refreshToken = new RefreshToken
+            var refreshToken = new TrialP.Auth.Models.RefreshToken
             {
                 Token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64)),
                 Expires = DateTime.Now.AddDays(7),
-                Created = DateTime.Now
+                Created = DateTime.Now,
+                UserId = userId
             };
-
+            using(var c = new AppDbContext())
+            {
+                c.RefreshTokens.Add(refreshToken);
+                c.SaveChanges();
+            }
             return refreshToken;
         }
 
@@ -116,22 +172,23 @@ namespace TrialP.Auth.Controllers
             //user.TokenExpires = newRefreshToken.Expires;
         }
 
-        private string CreateToken(string login)
+        private async Task<string> CreateToken(string login)
         {
+            var user = await _userManager.FindByNameAsync(login);
+            var roles = await _userManager.GetRolesAsync(user);
             List<Claim> claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, login),
-                new Claim(ClaimTypes.Role, "Admin")
+                new Claim(ClaimsIdentity.DefaultNameClaimType, login),
+                new Claim(ClaimsIdentity.DefaultRoleClaimType, roles.FirstOrDefault())
             };
 
-            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
-                _configuration.GetSection("AppSettings:Token").Value));
+            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes("this is my custom Secret key for authentication"));
 
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
             var token = new JwtSecurityToken(
                 claims: claims,
-                expires: DateTime.Now.AddDays(1),
+                expires: DateTime.Now.AddSeconds(30),
                 signingCredentials: creds);
 
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
