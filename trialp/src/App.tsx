@@ -1,29 +1,20 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import '@fontsource/roboto/300.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css';
 
-import Login from './Components/Auth/Login/Login';
-import Register from './Components/Auth/Register/Register';
-import Profile from './Components/Auth/Profile/Profile';
 import {
-    Route,
-    Router,
-    Link,
-    BrowserRouter,
-    Routes,
-    Outlet
+    BrowserRouter
 } from "react-router-dom";
+import AppRouter from './Components/AppRouter/AppRouter';
 
-import { getAccessToken } from './Auth/AccessToken';
-import { Home } from './Components/Home';
 const App = () => {
     return (
         <BrowserRouter>
-            <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/register" element={<Register />} />
-                <Route path="/profile" element={<Profile />} />
-            </Routes>
+            <AppRouter/>
         </BrowserRouter>
     );
 }

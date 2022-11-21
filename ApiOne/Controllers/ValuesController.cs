@@ -10,7 +10,7 @@ namespace ApiOne.Controllers
     public class ValuesController : ControllerBase
     {
         [HttpGet]
-        [Authorize]
+        [Authorize(Policy = "Admin")]
         public string Secret()
         {
             return "secret message";

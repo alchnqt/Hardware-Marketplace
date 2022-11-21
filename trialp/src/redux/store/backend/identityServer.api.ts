@@ -7,12 +7,14 @@ export const identityApi = createApi({
         }
     ),
     endpoints: build => ({
-        login: build.query<any, any>({
-            query: () => ({
+        login: build.mutation<any, any>({
+            query: (data) => ({
+                method: 'POST',
+                body: data,
                 url: 'auth/login',
             })
         }),
-        register: build.query({
+        register: build.mutation({
             query: () => ({
                 url: 'auth/register',
             })
@@ -25,4 +27,4 @@ export const identityApi = createApi({
     })
 });
 
-export const { useLoginQuery } = identityApi;
+export const { useLoginMutation, useLogoutQuery } = identityApi;

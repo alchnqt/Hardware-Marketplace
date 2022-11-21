@@ -8,13 +8,29 @@
     <JavaScriptTestFramework>Jest</JavaScriptTestFramework>
   </PropertyGroup>
   <ItemGroup>
+    <Folder Include="build\" />
     <Folder Include="src\App_Data\" />
-    <Folder Include="src\Auth\Types\" />
     <Folder Include="src\Components\Auth\Login\" />
     <Folder Include="src\Components\Auth\Profile\" />
     <Folder Include="src\Components\Auth\Register\" />
+    <Folder Include="src\Components\Footer\HowToUse\" />
+    <Folder Include="src\Components\Footer\RelevantItems\" />
+    <Folder Include="src\Components\Layout\" />
+    <Folder Include="src\Components\AppRouter\" />
     <Folder Include="src\Interfaces\Auth\" />
     <Folder Include="src\redux\actions\" />
     <Folder Include="src\services\auth\" />
+    <Folder Include="webpack\dist\" />
+  </ItemGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties less-watcher_1config_1json__JsonSchema="{" />
+    </VisualStudio>
+  </ProjectExtensions>
+  <ItemGroup>
+    <TypeScriptConfiguration Remove="src\Auth\Types\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="src\Auth\Types\**" />
   </ItemGroup>
 </Project>

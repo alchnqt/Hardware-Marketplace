@@ -1,0 +1,13 @@
+.navbar {
+  width: 100%;
+}
+.navbar .btn {
+  color: #000;
+  background: #fff;
+  border-radius: 0;
+  border: 1px solid #000;
+}
+.navbar .btn::after {
+  color: #fff;
+}
+/*# sourceMappingURL=navbar.module.css.map */

@@ -1,6 +1,7 @@
 ﻿using IdentityModel;
 using IdentityServer4;
 using IdentityServer4.Models;
+using System.Security.Claims;
 
 namespace TrialP.Identity.Properties
 {
@@ -11,12 +12,14 @@ namespace TrialP.Identity.Properties
             {
                 new ApiResource("ApiOne")
                 {
-                    Scopes = { "ApiOne" }
+                    Scopes = { "ApiOne" },
+                    UserClaims = new string[] { JwtClaimTypes.Role }
                 },
                 new ApiResource("ApiTwo")
                 {
                     Scopes = { "ApiTwo" }
-                }
+                },
+                new ApiResource("TrialP.Products", "TrialP.Products", new List<string>() { JwtClaimTypes.Role })
             };
 
         public static IEnumerable<Client> GetClients() =>
@@ -26,8 +29,33 @@ namespace TrialP.Identity.Properties
                 {
                     ClientId = "client_id",
                     ClientSecrets = { new Secret("client_secret".ToSha256()) },
-                    AllowedGrantTypes = GrantTypes.Hybrid,
-                    AllowedScopes = { "ApiOne", "ApiTwo" }
+                    AllowedGrantTypes = GrantTypes.Implicit,
+                    AllowAccessTokensViaBrowser = true,
+                    AllowedScopes =
+                    {
+                        "ApiOne", "ApiTwo", "TrialP.Products",
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile
+                    },
+                    //AlwaysSendClientClaims = true,
+                    //AlwaysIncludeUserClaimsInIdToken = true,
+                    RedirectUris = { "https://localhost:7077/" }
+                },
+                new Client()
+                {
+                    ClientId = "client_admin_id",
+                    ClientSecrets = { new Secret("client_admin_secret".ToSha256()) },
+                    AllowedGrantTypes = GrantTypes.HybridAndClientCredentials,
+                    AllowedScopes =
+                    {
+                        "ApiOne", "ApiTwo", "TrialP.Products", "TrialP.Admin",
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile
+                    },
+
+                    AlwaysIncludeUserClaimsInIdToken = true,
+                    RedirectUris = { "https://localhost:7077/" },
+                    RequirePkce = true
                 },
                 new Client()
                 {
@@ -38,13 +66,15 @@ namespace TrialP.Identity.Properties
                     //RequirePkce = true,
                     //RequireClientSecret = false,
                     RedirectUris = { "https://localhost:3000/profile" },
-                    AllowedScopes = 
-                    { 
-                        "ApiOne", 
-                        "ApiTwo", 
+                    AllowedScopes =
+                    {
+                        "ApiOne",
+                        "ApiTwo",
+                        JwtClaimTypes.Role,
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile
                     },
+                    AlwaysIncludeUserClaimsInIdToken = true,
                     PostLogoutRedirectUris = { "https://localhost:3000/login" },
                     AllowAccessTokensViaBrowser = true,
                     AccessTokenLifetime = 60
@@ -56,7 +86,7 @@ namespace TrialP.Identity.Properties
             return new List<IdentityResource>
             {
                 new IdentityResources.OpenId(),
-                new IdentityResources.Profile() 
+                new IdentityResources.Profile()
             };
         }
 
@@ -64,7 +94,8 @@ namespace TrialP.Identity.Properties
             new List<ApiScope>
             {
                 new ApiScope("ApiOne", "ApiOne"),
-                new ApiScope("ApiTwo", "ApiTwo")
+                new ApiScope("ApiTwo", "ApiTwo"),
+                new ApiScope("TrialP.Products", "TrialP.Products")
             };
     }
 }

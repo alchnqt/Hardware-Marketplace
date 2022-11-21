@@ -1,6 +1,8 @@
 ﻿using IdentityModel.Client;
 using IdentityServer4.Extensions;
 using IdentityServer4.Services;
+using IdentityServer4.Test;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -49,8 +51,8 @@ namespace TrialP.Identity.Controllers
             {
                 return BadRequest();
             }
-
             var user = new IdentityUser(registerUser.Login);
+            
             var result = await _userManager.CreateAsync(user, registerUser.Password);
             if (result.Succeeded)
             {
@@ -72,6 +74,13 @@ namespace TrialP.Identity.Controllers
             }
 
             return Redirect(logoutRequest.PostLogoutRedirectUri);
+        }
+
+        //[Authorize(Roles = "Admin")]
+        [HttpGet]
+        public IActionResult AdminSecret()
+        {
+            return Content("Admin secret");
         }
     }
 }

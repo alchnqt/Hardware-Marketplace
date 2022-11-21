@@ -1,5 +1,6 @@
 using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.EntityFramework.Mappers;
+using IdentityServer4.Services;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using TrialP.Identity.Database;
 using TrialP.Identity.Properties;
+using TrialP.Identity.Services.Domain;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,11 +20,11 @@ ConfigurationManager configuration = builder.Configuration; // allows both to ac
 IWebHostEnvironment environment = builder.Environment;
 
 
-var filePath = Path.Combine(environment.ContentRootPath, "identity.pfx");
-var cert = new X509Certificate2(filePath, "1234");
+//var filePath = Path.Combine(environment.ContentRootPath, "identity.pfx");
+//var cert = new X509Certificate2(filePath, "1234");
 
 var migrationsAssembly = typeof(Program).GetTypeInfo().Assembly.GetName().Name;
-const string connectionString = @"Data Source=localhost;database=IdentityServer;trusted_connection=yes;";
+const string connectionString = @"Data Source=localhost;database=IdentityServer;trusted_connection=yes;trustServerCertificate=true;";
 
 // Add services to the container.
 
@@ -40,6 +42,7 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(config =>
 
 builder.Services.AddIdentityServer()
     .AddAspNetIdentity<IdentityUser>()
+    
     .AddConfigurationStore(options =>
     {
         options.ConfigureDbContext = builder =>
@@ -52,14 +55,16 @@ builder.Services.AddIdentityServer()
             builder.UseSqlServer(connectionString,
                 sql => sql.MigrationsAssembly(migrationsAssembly));
         options.EnableTokenCleanup = true;
-        options.TokenCleanupInterval = 3600; 
+        options.TokenCleanupInterval = 3600;
     })
-    //.AddInMemoryApiScopes(Config.ApiScopes)
-    //.AddInMemoryApiResources(Config.GetApisResources())
-    //.AddInMemoryClients(Config.GetClients())
-    //.AddInMemoryIdentityResources(Config.GetIdentityResources())
-    .AddDeveloperSigningCredential()
-    .AddSigningCredential(cert);
+    .AddInMemoryApiScopes(Config.ApiScopes)
+    .AddInMemoryApiResources(Config.GetApisResources())
+    .AddInMemoryClients(Config.GetClients())
+    .AddInMemoryIdentityResources(Config.GetIdentityResources())
+    .AddDeveloperSigningCredential();
+//.AddSigningCredential(cert);
+
+builder.Services.AddTransient<IProfileService, ProfileService>();
 
 builder.Services.AddDbContext<AppDbContext>(config =>
 {
@@ -76,45 +81,57 @@ builder.Services.ConfigureApplicationCookie(config =>
 
 
 
+
+
 var app = builder.Build();
 
-//using (var scope = app.Services.CreateScope())
-//{
-//    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
 
-//    var user = new IdentityUser("bob");
-//    userManager.CreateAsync(user, "1234").GetAwaiter().GetResult();
+using (var scope = app.Services.CreateScope())
+{
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+    scope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>().Database.Migrate();
+    var context = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
+    context.Database.Migrate();
+    if (!context.Clients.Any())
+    {
+        foreach (var client in Config.GetClients())
+        {
+            context.Clients.Add(client.ToEntity());
+        }
+        context.SaveChanges();
+    }
 
-//    scope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>().Database.Migrate();
-//    var context = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
-//    context.Database.Migrate();
-//    if (!context.Clients.Any())
-//    {
-//        foreach (var client in Config.GetClients())
-//        {
-//            context.Clients.Add(client.ToEntity());
-//        }
-//        context.SaveChanges();
-//    }
+    if (!context.IdentityResources.Any())
+    {
+        foreach (var resource in Config.GetIdentityResources())
+        {
+            context.IdentityResources.Add(resource.ToEntity());
+        }
+        context.SaveChanges();
+    }
 
-//    if (!context.IdentityResources.Any())
-//    {
-//        foreach (var resource in Config.GetIdentityResources())
-//        {
-//            context.IdentityResources.Add(resource.ToEntity());
-//        }
-//        context.SaveChanges();
-//    }
+    if (!context.ApiScopes.Any())
+    {
+        foreach (var resource in Config.ApiScopes)
+        {
+            context.ApiScopes.Add(resource.ToEntity());
+        }
+        context.SaveChanges();
+    }
 
-//    if (!context.ApiScopes.Any())
-//    {
-//        foreach (var resource in Config.ApiScopes)
-//        {
-//            context.ApiScopes.Add(resource.ToEntity());
-//        }
-//        context.SaveChanges();
-//    }
-//}
+   
+    IdentityResult adminRoleResult;
+    bool adminRoleExists = await roleManager.RoleExistsAsync("Admin");
+
+    if (!adminRoleExists)
+    {
+        adminRoleResult = await roleManager.CreateAsync(new IdentityRole("Admin"));
+    }
+
+    IdentityUser userToMakeAdmin = await userManager.FindByNameAsync("bob");
+    await userManager.AddToRoleAsync(userToMakeAdmin, "Admin");
+}
 
 app.UseHttpsRedirection();
 
