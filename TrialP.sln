@@ -21,8 +21,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrialP.Layout", "TrialP.Lay
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrialP.Auth", "TrialP.Auth\TrialP.Auth.csproj", "{DAC326E2-F443-4639-B384-38709691FB0A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication3", "WebApplication3\WebApplication3.csproj", "{8AA41468-3909-44C5-A7D0-3253F511FB8C}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,10 +57,6 @@ Global
 		{DAC326E2-F443-4639-B384-38709691FB0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DAC326E2-F443-4639-B384-38709691FB0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DAC326E2-F443-4639-B384-38709691FB0A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8AA41468-3909-44C5-A7D0-3253F511FB8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8AA41468-3909-44C5-A7D0-3253F511FB8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8AA41468-3909-44C5-A7D0-3253F511FB8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8AA41468-3909-44C5-A7D0-3253F511FB8C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
