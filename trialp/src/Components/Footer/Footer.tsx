@@ -9,9 +9,9 @@ import styles from './footer.module.css';
 function Copyright() {
     return (
         <Typography variant="body2" color="text.secondary">
-            {'Copyright © '}
+            {'Copyright '}
             <Link color="inherit" href="https://mui.com/">
-                Your Website
+                © E-Katalog Inc.
             </Link>{' '}
             {new Date().getFullYear()}
             {'.'}
@@ -31,11 +31,14 @@ export default function StickyFooter() {
             <CssBaseline />
             <Container component="main" sx={{ mt: 8, mb: 2 }} maxWidth="sm">
                 <Typography variant="h2" component="h1" gutterBottom>
-                    Sticky footer
+                    Наша задача
                 </Typography>
                 <Typography variant="h5" component="h2" gutterBottom>
-                    {'Pin a footer to the bottom of the viewport.'}
-                    {'The footer will move as the main element of the page grows.'}
+                    <p>Помочь покупателю быстро и удобно найти самое выгодное предложение.</p>
+                    <p>Для тех, кто определяется с выбором, в каждом разделе есть подбор по параметрам и возможность сравнить товары между собой.</p>
+                    <p>Доступен и удобный текстовый поиск, позволяющий искать как нужные разделы, так и конкретные товары по названию.</p>
+                    <p>А на странице каждой модели есть подробная информация, которая поможет принять решение: описание, технические характеристики, фото и видео, полезные ссылки и отзывы.</p>
+                    <p>Там же находится блок «Где купить?» со списком интернет-магазинов, ценами и прямыми ссылками на страницу покупки.</p>
                 </Typography>
                 <Typography variant="body1">Sticky footer placeholder.</Typography>
             </Container>

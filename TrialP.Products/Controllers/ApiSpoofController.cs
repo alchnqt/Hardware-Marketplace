@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace TrialP.Products.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class ApiSpoofController : ControllerBase
     {
@@ -20,6 +21,17 @@ namespace TrialP.Products.Controllers
         public IActionResult UpdateProductsByGategory(string category)
         {
             return NoContent();
+        }
+
+        public IActionResult GetProductsBySubSubCategory(string subSubCategory)
+        {
+            WebRequest request = WebRequest.Create($"https://catalog.onliner.by/sdapi/catalog.api/search/{subSubCategory}");
+            request.Credentials = CredentialCache.DefaultCredentials;
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            Stream dataStream = response.GetResponseStream();
+            StreamReader reader = new StreamReader(dataStream);
+            string responseFromServer = reader.ReadToEnd();
+            return Content(responseFromServer, "application/json");
         }
     }
 }

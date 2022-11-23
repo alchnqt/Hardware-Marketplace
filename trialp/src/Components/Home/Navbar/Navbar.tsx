@@ -1,3 +1,4 @@
+import { Link } from '@mui/material';
 import React from 'react';
 import { SubCategory, SubSubCategory } from '../../../Models/Products/CategoriesType';
 import { useCategoriesQuery } from '../../../redux/store/backend/productsServer.api';
@@ -5,7 +6,6 @@ import styles from './navbar.module.css';
 function Navbar() {
 
     const { data, error, isLoading } = useCategoriesQuery(undefined);
-    data?.main[0].subs.map((sub: SubCategory): void => { console.log(sub) })
     if (isLoading) {
         return <></>
     }
@@ -21,7 +21,7 @@ function Navbar() {
                             </span>
                         </button>
                         <ul className="dropdown-menu">
-                            {sub.subssubs.map((subsub: SubSubCategory): any => <li><a className="dropdown-item" href="#">{subsub.name}</a></li>)}
+                            {sub.subssubs.map((subsub: SubSubCategory): any => <li><Link className="dropdown-item" href={`/products?subsubcategory=${subsub.apiCategory}`}>{subsub.name}</Link></li>)}
                         </ul>
                     </>
                 )}

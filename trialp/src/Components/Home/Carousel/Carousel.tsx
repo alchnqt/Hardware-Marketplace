@@ -18,7 +18,7 @@ import Container from '@mui/material/Container';
 function Copyright(props: any) {
     return (
         <Typography variant="body2" color="text.secondary" align="center" {...props}>
-            {'Copyright � '}
+            {'Copyright © '}
             <Link color="inherit" href="https://mui.com/">
                 Your Website
             </Link>{' '}
@@ -97,7 +97,7 @@ function PricingContent() {
         <React.Fragment>
 
             {/* Hero unit */}
-            <Container disableGutters maxWidth="sm" component="main" sx={{ pt: 8, pb: 6 }}>
+            <Container disableGutters maxWidth="sm" component="main" sx={{ pt: 3, pb: 3 }}>
                 <Typography
                     component="h1"
                     variant="h2"
@@ -105,12 +105,12 @@ function PricingContent() {
                     color="text.primary"
                     gutterBottom
                 >
-                    Pricing
+                    E-Katalog
                 </Typography>
                 <Typography variant="h5" align="center" color="text.secondary" component="p">
-                    Quickly build an effective pricing table for your potential customers with
-                    this layout. It&apos;s built with default MUI components with little
-                    customization.
+                    Это многофункциональный сервис поиска товаров в интернет-магазинах и сравнения цен.
+                    Он охватывает самые разнообразные категории товаров: электроника, компьютеры, бытовая техника, автотовары,
+                    оборудование для ремонта и строительства, туристическое снаряжение, детские товары и многое другое.
                 </Typography>
             </Container>
             {/* End hero unit */}

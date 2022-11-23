@@ -11,6 +11,7 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
+import Navbar from '../Home/Navbar/Navbar';
 function Header() {
     const [show, setShow] = useState(false);
     return (
@@ -29,7 +30,6 @@ function Header() {
                         className={`${styles.search}`}
                         autoComplete="given-name"
                         name="search"
-                        required
                         fullWidth
                         id="search"
                         label="Поиск"
@@ -67,6 +67,7 @@ function Header() {
                 </Toolbar>
             </AppBar>
             {show && <Login />}
+            <Navbar />
         </React.Fragment>
   );    
 }
