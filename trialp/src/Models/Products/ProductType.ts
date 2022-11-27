@@ -31,15 +31,15 @@ export interface Product {
     reviewUrl: string | null,
     colorCode: string | null,
     prices: {
-        priceMin: {
+        price_min: {
             amount: string,
-            currency: string,
             converted: {
                 BYN: {
                     amount: string,
                     currency: string
                 }
             }
+            currency: string
         }
         priceMax: {
             amount: string,

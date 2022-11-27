@@ -24,7 +24,7 @@ function Header() {
             >
                 <Toolbar className={`${styles.header}`} sx={{ flexWrap: 'no-wrap' }}>
                     <Typography variant="h6" color="inherit" noWrap sx={{ flexGrow: 1 }}>
-                        <Link className={`${styles.logo} `} href='/'>Company name</Link>
+                        <Link className={`${styles.logo} `} href='/'>E-Katalog</Link>
                     </Typography>
                     <TextField
                         className={`${styles.search}`}

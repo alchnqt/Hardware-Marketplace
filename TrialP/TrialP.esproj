@@ -20,7 +20,7 @@
     <Folder Include="src\Components\Products\" />
     <Folder Include="src\Components\NotFound\" />
     <Folder Include="src\Models\Products\" />
-    <Folder Include="src\redux\actions\" />
+    <Folder Include="src\redux\slices\" />
     <Folder Include="src\services\auth\" />
     <Folder Include="webpack\dist\" />
   </ItemGroup>
@@ -34,5 +34,32 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="src\Auth\Types\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptConfiguration Remove="src\redux\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="src\redux\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="src\redux\store\store.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="src\redux\store\backend\productsServer.api.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="src\redux\store\backend\identityServer.api.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="src\redux\store\backend\external.api.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="src\redux\reducers\rootReducer.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="src\redux\reducers\Localization\LocalisationReducer.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="src\redux\reducers\Header.tsx" />
   </ItemGroup>
 </Project>

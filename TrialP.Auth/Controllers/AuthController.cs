@@ -60,14 +60,14 @@ namespace TrialP.Auth.Controllers
         [HttpPost]
         public async Task<ActionResult<string>> Login(UserDto user)
         {
-            var existingUser = await _userManager.FindByNameAsync(user.Login);
+            var existingUser = await _userManager.FindByEmailAsync(user.Email);
 
             if (existingUser == null)
             {
                 return BadRequest();
             }
 
-            if (user.Login != existingUser.UserName)
+            if (user.Email != existingUser.Email)
             {
                 return BadRequest("User not found.");
             }
@@ -77,10 +77,10 @@ namespace TrialP.Auth.Controllers
                 return BadRequest("Wrong password.");
             }
 
-            string token = await CreateToken(user.Login);
+            string token = await CreateToken(existingUser.UserName);
             var refreshToken = GenerateRefreshToken(existingUser.Id.ToString());
             SetRefreshToken(refreshToken);
-            return Ok(token);
+            return Ok(new { access_token = token });
 
         }
 
@@ -119,6 +119,12 @@ namespace TrialP.Auth.Controllers
                 return BadRequest("Coudln't create user");
             }
            
+        }
+
+        [HttpGet]
+        public void Logout()
+        {
+            Response.Cookies.Delete("refreshToken");
         }
 
         [HttpPost]

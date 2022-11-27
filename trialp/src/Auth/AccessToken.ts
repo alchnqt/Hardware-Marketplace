@@ -1,5 +1,17 @@
-let accessToken = '';
+let accessToken: string = '';
 
-export const setAccessToken = (token: string): string => accessToken = token;
+const setAccessToken = (token: string): string => accessToken = token;
 
-export const getAccessToken = () => accessToken;
+const getAccessToken = (): string => accessToken;
+
+export interface AccessTokenService {
+    setAccessToken(token: string): string,
+    getAccessToken(): void
+}
+
+export const accessTokenService: AccessTokenService = {
+    setAccessToken: setAccessToken,
+    getAccessToken: getAccessToken
+}
+
+export default accessTokenService;
