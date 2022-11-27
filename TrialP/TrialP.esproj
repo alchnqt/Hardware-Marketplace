@@ -21,7 +21,6 @@
     <Folder Include="src\Components\NotFound\" />
     <Folder Include="src\Models\Products\" />
     <Folder Include="src\redux\slices\" />
-    <Folder Include="src\services\auth\" />
     <Folder Include="webpack\dist\" />
   </ItemGroup>
   <ProjectExtensions>
@@ -61,5 +60,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="src\redux\reducers\Header.tsx" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptConfiguration Remove="src\services\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="src\services\**" />
   </ItemGroup>
 </Project>
