@@ -33,5 +33,16 @@ namespace TrialP.Products.Controllers
             string responseFromServer = reader.ReadToEnd();
             return Content(responseFromServer, "application/json");
         }
+
+        public IActionResult GetProductByKey(string key)
+        {
+            WebRequest request = WebRequest.Create($"https://shop.api.onliner.by/products/{key}/positions");
+            request.Credentials = CredentialCache.DefaultCredentials;
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            Stream dataStream = response.GetResponseStream();
+            StreamReader reader = new StreamReader(dataStream);
+            string responseFromServer = reader.ReadToEnd();
+            return Content(responseFromServer, "application/json");
+        }
     }
 }

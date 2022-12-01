@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { CONFIG } from '../../../App_Data/configuration';
+import { ProductAllShop } from '../../../Models/Products/ProductAllShop';
 import { ProductsResult } from '../../../Models/Products/ProductType';
 
 export const externalProductsApi = createApi({
@@ -16,8 +17,16 @@ export const externalProductsApi = createApi({
                     url: `/GetProductsBySubSubCategory?subsubcategory=${subsubcategory}`,
                 }
             }
+        }),
+        product: build.query<ProductAllShop, { key: string | undefined }>({
+            query: (args) => {
+                const { key } = args;
+                return {
+                    url: `/GetProductByKey?key=${key}`,
+                }
+            }
         })
     })
 });
 
-export const { useProductsQuery } = externalProductsApi;
+export const { useProductsQuery, useProductQuery } = externalProductsApi;

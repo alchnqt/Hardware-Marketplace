@@ -7,17 +7,14 @@ import styles from './products.module.css';
 import Button from '@mui/material/Button';
 import Link from '@mui/material/Link';
 import Divider from '@mui/material/Divider';
-import CircularProgress from '@mui/material/CircularProgress';
-import { Box, Container } from '@mui/material';
+import CircularLoader from '../CircularLoader/CircularLoader';
 function Products() {
     const [searchParams, setSearchParams] = useSearchParams();
     let subsubcategory: string = searchParams.get("subsubcategory") || "";
     const { data, error, isLoading } = useProductsQuery({ subsubcategory });
     if (isLoading) {
         return (
-            <Box sx={{ display: 'flex' }} className={`${styles.loader}`}>
-                <CircularProgress />
-            </Box>
+           <CircularLoader/>
         );
     }
     else if (error) {
@@ -42,7 +39,7 @@ function Products() {
                             </div>
                             <div className={`${styles.buy}`}>
                                 <Link
-                                    href={`${product.html_url}`}
+                                    href={`/product/${product.key}`}
                                     className={`${styles.buyBtn}`}
                                     sx={{ mt: 3, mb: 2 }}>
                                     {`Предложений ${product.prices.offers.count}`}

@@ -17,6 +17,7 @@
     <Folder Include="src\Components\Footer\RelevantItems\" />
     <Folder Include="src\Components\Layout\" />
     <Folder Include="src\Components\AppRouter\" />
+    <Folder Include="src\Components\CircularLoader\" />
     <Folder Include="src\Components\Products\" />
     <Folder Include="src\Components\NotFound\" />
     <Folder Include="src\Models\Products\" />
