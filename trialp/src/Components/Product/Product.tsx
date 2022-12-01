@@ -2,8 +2,8 @@
 import { Button, Container } from '@mui/material';
 import React, { useEffect } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
-import { ProductShop } from '../../Models/Products/ProductAllShop';
-import { useProductQuery } from '../../redux/store/backend/external.api';
+import { PositionsPrimary, ProductShop } from '../../Models/Products/ProductAllShop';
+import { useProductQuery, useProductShopsQuery } from '../../redux/store/backend/external.api';
 import CircularLoader from '../CircularLoader/CircularLoader';
 import styles from './product.module.css';
 interface ProductShopMap {
@@ -13,43 +13,53 @@ interface ProductShopMap {
 
 function Product() {
     let { key } = useParams();
-    const { data, error, isLoading } = useProductQuery({ key: key });
-    if (isLoading) {
+    const shopQuery = useProductShopsQuery({ key: key });
+    const productQuery = useProductQuery({ key: key });
+
+    if (shopQuery.isLoading && productQuery.isLoading) {
         return (
             <CircularLoader />
         );
     }
     else {
         const array: ProductShopMap[] = [];
-        if (data?.shops != undefined) {
-            Object.entries(data?.shops).forEach(
+        if (shopQuery.data?.shops != undefined) {
+            Object.entries(shopQuery.data?.shops).forEach(
                 ([key, value]) => array.push({ key, value })
             );
         }
-        if (array != undefined) {
-            console.log(array);
-        }
         return (
             <Container>
+                <div className={`${styles.productItself}`}>
+                    <img src={`${productQuery.data?.images.header}`} />
+                    <div className={`${styles.description}`}>
+                        <h3>{productQuery.data?.extended_name}</h3>
+                        <p>{productQuery.data?.description}</p>
+                    </div>
+                </div>
+                <hr />
                 {array.map(x => {
-                    let { amount, currency }: any = data?.positions.primary.find(obj => {
+                    let primary: PositionsPrimary | undefined = shopQuery.data?.positions.primary.find(obj => {
                         return obj.shop_id == x.key
-                    })?.position_price;
-
+                    });
                     return <>
                         <div className={`${styles.prouduct}`}>
                             <div className={`${styles.element}`}>
-                                <div>
-                                    <div className={`${styles.currency}`}>
-                                        <b>{amount} {currency}</b>
-                                    </div>
-
+                                <div className={`${styles.currency}`}>
+                                    <h2>{primary?.position_price.amount} {primary?.position_price.currency}</h2>
+                                </div>
+                                <div className={`${styles.article}`}>
+                                    <p>{primary?.comment}</p>
+                                    <small>Импортер: {primary?.importer}</small>
                                 </div>
                                 <div className={`${styles.buy}`}>
-                                    <Button type="button">Купить сейчас</Button>
+                                    <div>
+                                        <Button className={`${styles.buyNow}`} type="button">Купить сейчас</Button>
+                                        <Button className={`${styles.toCart}`} type="button">В корзину</Button>
+                                    </div>
                                     <div>
                                         <img src={`${x.value.logo}`} />
-                                        <span className={`${styles.title}`}>{x.value.title}</span>
+                                        
                                     </div>
                                 </div>
                             </div>

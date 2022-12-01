@@ -1,3 +1,17 @@
+.productItself {
+    display: flex;
+    align-content: center;
+    align-items: center;
+    margin: 15px 0;
+
+    img {
+        margin-right: 20px;
+    }
+    .description{
+        margin-top: 20px;
+    }
+}
+
 .prouduct {
     margin: 15px 0;
 
@@ -11,12 +25,43 @@
         text-align: center;
     }
 
+    .article {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-content: center;
+        width: 660px;
+        padding: 0 15px;
+    }
+
     .buy {
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
         align-content: center;
-        align-items: center;
+
+
+        button {
+            margin-bottom: 10px;
+
+            &:hover {
+                background: #05a9b1;
+                color: #fff;
+            }
+        }
+
+        .buyNow {
+            background: #ffda50;
+            border-radius: 3px;
+            color: #000;
+            margin-right: 10px;
+        }
+
+        .toCart {
+            border-radius: 3px;
+            background: #ff8b00;
+            color: #fff !important;
+        }
 
         img {
             width: 56px;
@@ -27,5 +72,13 @@
             display: inline-block;
             vertical-align: top;
         }
+    }
+
+    .currency {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        align-content: center;
+        width: 250px;
     }
 }

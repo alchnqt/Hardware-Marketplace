@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Net;
 
 namespace TrialP.Products.Controllers
@@ -25,24 +26,29 @@ namespace TrialP.Products.Controllers
 
         public IActionResult GetProductsBySubSubCategory(string subSubCategory)
         {
-            WebRequest request = WebRequest.Create($"https://catalog.onliner.by/sdapi/catalog.api/search/{subSubCategory}");
-            request.Credentials = CredentialCache.DefaultCredentials;
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-            Stream dataStream = response.GetResponseStream();
-            StreamReader reader = new StreamReader(dataStream);
-            string responseFromServer = reader.ReadToEnd();
-            return Content(responseFromServer, "application/json");
+            return Content(GetProccess($"https://catalog.onliner.by/sdapi/catalog.api/search/{subSubCategory}"), "application/json");
         }
 
         public IActionResult GetProductByKey(string key)
         {
-            WebRequest request = WebRequest.Create($"https://shop.api.onliner.by/products/{key}/positions");
+            //https://catalog.onliner.by/sdapi/catalog.api/products/gvn3050eagleoc8g?include=schema
+            return Content(GetProccess($"https://catalog.onliner.by/sdapi/catalog.api/products/{key}?include=schema"), "application/json");
+        }
+
+        public IActionResult GetProductShopsByKey(string key)
+        {
+            return Content(GetProccess($"https://shop.api.onliner.by/products/{key}/positions"), "application/json");
+        }
+
+        private string GetProccess(string url)
+        {
+            WebRequest request = WebRequest.Create(url);
             request.Credentials = CredentialCache.DefaultCredentials;
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
             Stream dataStream = response.GetResponseStream();
             StreamReader reader = new StreamReader(dataStream);
             string responseFromServer = reader.ReadToEnd();
-            return Content(responseFromServer, "application/json");
+            return responseFromServer;
         }
     }
 }
