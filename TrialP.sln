@@ -19,7 +19,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrialP.Products", "TrialP.P
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrialP.Layout", "TrialP.Layout\TrialP.Layout.csproj", "{1539B840-A9DA-4324-A3D0-371A3B2927ED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrialP.Auth", "TrialP.Auth\TrialP.Auth.csproj", "{DAC326E2-F443-4639-B384-38709691FB0A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrialP.Auth", "TrialP.Auth\TrialP.Auth.csproj", "{DAC326E2-F443-4639-B384-38709691FB0A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SQL", "SQL", "{8EA8541D-D4D0-4DCC-8368-922367E679FF}"
+	ProjectSection(SolutionItems) = preProject
+		refreshtokentable.sql = refreshtokentable.sql
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
