@@ -21,6 +21,7 @@
     <Folder Include="src\Components\Products\" />
     <Folder Include="src\Components\NotFound\" />
     <Folder Include="src\Models\Products\" />
+    <Folder Include="src\redux\thunks\" />
     <Folder Include="src\redux\slices\" />
     <Folder Include="webpack\dist\" />
   </ItemGroup>
