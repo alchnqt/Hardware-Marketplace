@@ -28,7 +28,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = false
         };
     });
-builder.Services.AddCors();
+
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 {
     options.User.RequireUniqueEmail = false;
@@ -46,6 +46,8 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 //    });
 //});
 
+
+builder.Services.AddCors();
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
@@ -75,16 +77,13 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.UseHttpsRedirection();
-app.UseCors(options => options.WithOrigins("http://courseproject:8989").AllowAnyMethod());
+app.UseCors(options => options.WithOrigins("http://courseproject:8989").AllowAnyMethod().AllowAnyOrigin().AllowAnyHeader());
 app.UseRouting();
 
 app.UseAuthentication();
 
 app.UseAuthorization();
 
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapControllers();
-});
+app.MapControllers();
 
 app.Run();

@@ -12,8 +12,12 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import Navbar from '../Home/Navbar/Navbar';
+import { useSelector } from 'react-redux';
 function Header() {
     const [show, setShow] = useState(false);
+    const { isLoggedIn } = useSelector((state: any) => state.auth);
+    console.log(isLoggedIn);
+
     return (
         <React.Fragment>
             <AppBar
@@ -60,16 +64,36 @@ function Header() {
                         >
                             Поддержка
                         </Link>
+                        {isLoggedIn &&
+                            <>
+                                <Link
+                                    variant="button"
+                                    color="text.primary"
+                                    href="/profile"
+                                    sx={{ my: 1, mx: 1.5 }}
+                                >
+                                    Профиль
+                                </Link>
+                                <Button
+                                    variant="outlined"
+                                    sx={{ my: 1, mx: 1.5 }}
+                                >
+                                    Выйти
+                                </Button>
+                            </>
+                        }
                     </nav>
-                    <Button className={`${styles.loginBtn}`} onClick={() => setShow(prev => !prev)} variant="outlined" sx={{ my: 1, mx: 1.5 }}>
-                        Войти
-                    </Button>
+                    {!isLoggedIn &&
+                        <Button className={`${styles.loginBtn}`} onClick={() => setShow(prev => !prev)} variant="outlined" sx={{ my: 1, mx: 1.5 }}>
+                            Войти
+                        </Button>
+                    }
                 </Toolbar>
             </AppBar>
             {show && <Login />}
             <Navbar />
         </React.Fragment>
-  );    
+    );
 }
 
 export default Header;

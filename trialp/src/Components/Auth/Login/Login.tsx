@@ -31,17 +31,59 @@ function Copyright(props: any) {
 
 const theme = createTheme();
 
+import { login } from "../../../redux/slices/authSlice";
+import { clearMessage } from "../../../redux/slices/messageSlice";
+import { Navigate, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { LoginDTO } from '../../../redux/services/userService';
+import { useAppDispatch } from '../../../redux/store/store';
+
 export default function Login() {
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        const data = new FormData(event.currentTarget);
+        event.preventDefault();
+    };
+    let navigate = useNavigate();
+
+    const [loading, setLoading] = useState(false);
+
+    const { isLoggedIn } = useSelector((state: any) => state.auth);
+    const { message } = useSelector((state: any) => state.message);
+
+    const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        dispatch(clearMessage());
+    }, [dispatch]);
+
+
+    const initialValues = {
+        email: "",
+        password: "",
+    };
+
+    if (isLoggedIn) {
+        return <Navigate to="/" />;
+    }
+
+    const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-
-
-
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
-        });
+        const loginDto: LoginDTO = {
+            email: data.get('email')?.toString() || "",
+            password: data.get('password')?.toString() || ""
+        }
+        setLoading(true);
+        dispatch(login(loginDto))
+            .unwrap()
+            .then(() => {
+                //navigate("/profile");
+                //window.location.reload();
+            })
+            .catch(() => {
+                setLoading(false);
+            });
     };
 
     return (
@@ -62,7 +104,7 @@ export default function Login() {
                     <Typography component="h1" variant="h5">
                         Вход
                     </Typography>
-                    <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
+                    <Box component="form" noValidate onSubmit={handleLogin} sx={{ mt: 1 }}>
                         <TextField
                             margin="normal"
                             required
