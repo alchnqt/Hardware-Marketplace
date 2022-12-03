@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { CONFIG } from '../../../App_Data/configuration';
 import { ProductAllShop } from '../../../Models/Products/ProductAllShop';
-import { ProductsResult } from '../../../Models/Products/ProductType';
+import { Product, ProductsResult } from '../../../Models/Products/ProductType';
 
 export const externalProductsApi = createApi({
     reducerPath: 'apiProducts/',
@@ -18,7 +18,15 @@ export const externalProductsApi = createApi({
                 }
             }
         }),
-        product: build.query<ProductAllShop, { key: string | undefined }>({
+        productShops: build.query<ProductAllShop, { key: string | undefined }>({
+            query: (args) => {
+                const { key } = args;
+                return {
+                    url: `/GetProductShopsByKey?key=${key}`,
+                }
+            }
+        }),
+        product: build.query<Product, { key: string | undefined }>({
             query: (args) => {
                 const { key } = args;
                 return {
@@ -29,4 +37,4 @@ export const externalProductsApi = createApi({
     })
 });
 
-export const { useProductsQuery, useProductQuery } = externalProductsApi;
+export const { useProductsQuery, useProductQuery, useProductShopsQuery } = externalProductsApi;
