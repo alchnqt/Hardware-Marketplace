@@ -3,14 +3,18 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
-import { store } from './redux/store/store';
+import { persistor, store } from './redux/store/store';
+import { PersistGate } from 'redux-persist/integration/react';
+import CircularLoader from './Components/CircularLoader/CircularLoader';
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
 );
 root.render(
     <Provider store={store}>
         <React.StrictMode>
-            <App />
+            <PersistGate loading={<CircularLoader />} persistor={persistor}>
+                <App />
+            </PersistGate>
         </React.StrictMode>
     </Provider>
 );

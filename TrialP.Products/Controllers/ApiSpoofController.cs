@@ -24,9 +24,14 @@ namespace TrialP.Products.Controllers
             return NoContent();
         }
 
-        public IActionResult GetProductsBySubSubCategory(string subSubCategory)
+        public IActionResult GetProductsBySubSubCategory(string subSubCategory, int page = 1)
         {
-            return Content(GetProccess($"https://catalog.onliner.by/sdapi/catalog.api/search/{subSubCategory}"), "application/json");
+            string url = $"https://catalog.onliner.by/sdapi/catalog.api/search/{subSubCategory}";
+            if(page > 1)
+            {
+                url += $"?page={page}";
+            }
+            return Content(GetProccess(url), "application/json");
         }
 
         public IActionResult GetProductByKey(string key)

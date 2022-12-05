@@ -1,28 +1,34 @@
 .navbar {
     width: 100%;
 
-    .btn {
-        color: #000;
+    .btnContainer {
         background: #fff;
         border-radius: 0;
         border: 1px solid #dfdfdf;
         flex: 1 1 0;
+    }
+
+    .btn {
+        color: #000;
+        width: 100%;
+        background: #fff;
+        border: none;
         justify-content: center;
         align-items: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-content: center;
 
-        &::after {
-            display: none;
-        }
 
         &:focus {
             background: #05a9b1;
             color: #fff;
         }
 
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-content: center;
+        &::after {
+            display: none;
+        }
     }
 }
 .image{

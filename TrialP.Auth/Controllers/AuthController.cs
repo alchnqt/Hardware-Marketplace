@@ -192,7 +192,9 @@ namespace TrialP.Auth.Controllers
             List<Claim> claims = new List<Claim>
             {
                 new Claim(ClaimsIdentity.DefaultNameClaimType, login),
-                new Claim(ClaimsIdentity.DefaultRoleClaimType, roles.FirstOrDefault())
+                new Claim(System.Security.Claims.ClaimTypes.MobilePhone, user.PhoneNumber ?? ""),
+                new Claim(System.Security.Claims.ClaimTypes.Email, user.Email ?? ""),
+                new Claim(ClaimsIdentity.DefaultRoleClaimType, roles.FirstOrDefault() ?? "")
             };
 
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes("this is my custom Secret key for authentication"));

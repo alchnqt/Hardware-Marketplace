@@ -1,7 +1,6 @@
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
@@ -13,8 +12,6 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import styles from './login.module.css';
-import axios from 'axios';
-import { Authenticate } from "react-oidc-client";
 
 function Copyright(props: any) {
     return (
@@ -53,9 +50,9 @@ export default function Login() {
 
     const dispatch = useAppDispatch();
 
-    useEffect(() => {
-        dispatch(clearMessage());
-    }, [dispatch]);
+    //useEffect(() => {
+    //    dispatch(clearMessage());
+    //}, [dispatch]);
 
 
     const initialValues = {
@@ -74,15 +71,15 @@ export default function Login() {
             email: data.get('email')?.toString() || "",
             password: data.get('password')?.toString() || ""
         }
-        setLoading(true);
+        //setLoading(true);
         dispatch(login(loginDto))
             .unwrap()
             .then(() => {
                 //navigate("/profile");
-                //window.location.reload();
+                window.location.href = '/profile';
             })
             .catch(() => {
-                setLoading(false);
+                //setLoading(false);
             });
     };
 

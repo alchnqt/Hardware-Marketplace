@@ -10,11 +10,11 @@ export const externalProductsApi = createApi({
     }
     ),
     endpoints: build => ({
-        products: build.query<any, {subsubcategory: string}>({
+        products: build.query<any, { subsubcategory: string, page: number }>({
             query: (args) => {
-                const { subsubcategory } = args;
+                const { subsubcategory, page } = args;
                 return {
-                    url: `/GetProductsBySubSubCategory?subsubcategory=${subsubcategory}`,
+                    url: `/GetProductsBySubSubCategory?subsubcategory=${subsubcategory}&page=${page}`,
                 }
             }
         }),

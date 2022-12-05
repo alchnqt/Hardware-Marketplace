@@ -12,8 +12,8 @@ function Navbar() {
     else {
         return (
             <div className={`btn-group bg-primary ${styles.navbar} shadow-lg`} >
-                {data?.main[0].subs.map((sub: SubCategory): any =>
-                    <>
+                {data?.main[0].subs.map((sub: SubCategory, index: number): any =>
+                    <div key={`${index}s`} className={`${styles.btnContainer}`}>
                         <button type="button" className={`${styles.btn} btn btn-primary dropdown-toggle`} data-bs-toggle="dropdown" aria-expanded="false">
                             {sub.subsName}
                             <span className={`${styles.image}`}>
@@ -21,9 +21,9 @@ function Navbar() {
                             </span>
                         </button>
                         <ul className="dropdown-menu">
-                            {sub.subssubs.map((subsub: SubSubCategory): any => <li><Link className="dropdown-item" href={`/products?subsubcategory=${subsub.apiCategory}`}>{subsub.name}</Link></li>)}
+                            {sub.subssubs.map((subsub: SubSubCategory, index1: number): any => <li key={`${index1}ss`}><Link className="dropdown-item" href={`/products?subsubcategory=${subsub.apiCategory}`}>{subsub.name}</Link></li>)}
                         </ul>
-                    </>
+                    </div>
                 )}
             </div>
         );

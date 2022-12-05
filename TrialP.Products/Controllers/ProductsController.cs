@@ -20,6 +20,19 @@ namespace TrialP.Products.Controllers
             _context = context;
         }
 
+        [HttpPost]
+        public async Task<ActionResult<Product>> CreateOrder(string key)
+        {
+            var product = await _context.Products.FindAsync(id);
+
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            return product;
+        }
+
         // GET: api/Products
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Product>>> GetProducts()

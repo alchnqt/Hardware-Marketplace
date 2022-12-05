@@ -1,5 +1,6 @@
 export interface PositionsPrimary {
     id: string,
+    key: string,
     product_id: number,
     article: string,
     manufacturer_id: number,

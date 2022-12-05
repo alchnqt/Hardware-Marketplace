@@ -23,7 +23,7 @@ const login = (data: LoginDTO) => {
         .post(API_URL + "login", data)
         .then((response) => {
             if (response.data.accessToken) {
-                localStorage.setItem("user", JSON.stringify(response.data));
+                localStorage.setItem("user", response.data);
             }
 
             return response.data;

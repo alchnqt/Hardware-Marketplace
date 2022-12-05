@@ -32,6 +32,14 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 {
     options.User.RequireUniqueEmail = false;
+    options.Password = new PasswordOptions()
+    {
+        RequireDigit = true,
+        RequiredLength = 3,
+        RequireLowercase = false,
+        RequireUppercase = false,
+        RequireNonAlphanumeric = false
+    };
 })
 .AddEntityFrameworkStores<AppDbContext>()
 .AddDefaultTokenProviders();
@@ -69,10 +77,50 @@ using (var scope = app.Services.CreateScope())
         customerRoleResult = await roleManager.CreateAsync(new IdentityRole("Customer"));
     }
 
-    IdentityUser userToMakeAdmin = await userManager.FindByNameAsync("bob");
-    if(userToMakeAdmin != null)
+    //pre admin
+    IdentityUser bob = new IdentityUser() { UserName="bob", Email="bob@gmail.com"};
+
+    IdentityResult bobResult = await userManager.CreateAsync(bob, "1234");
+    if (!bobResult.Succeeded)
     {
+        IdentityUser bobDelete = await userManager.FindByNameAsync("bob");
+        if(bobDelete != null)
+        {
+            await userManager.DeleteAsync(bobDelete);
+        }
+    }
+    bobResult = await userManager.CreateAsync(bob, "1234");
+    if (bobResult.Succeeded)
+    {
+        IdentityUser userToMakeAdmin = await userManager.FindByNameAsync("bob");
+        if (userToMakeAdmin != null)
+        {
+            await userManager.AddToRoleAsync(userToMakeAdmin, "Admin");
+        }
         await userManager.AddToRoleAsync(userToMakeAdmin, "Admin");
+    }
+
+    //pre customer
+    IdentityUser alice = new IdentityUser() { UserName = "alice", Email = "alice@gmail.com", PhoneNumber="+375298889922" };
+
+    IdentityResult aliceResult = await userManager.CreateAsync(alice, "1234");
+    if (!aliceResult.Succeeded)
+    {
+        IdentityUser aliceDelete = await userManager.FindByNameAsync("alice");
+        if (aliceDelete != null)
+        {
+            await userManager.DeleteAsync(aliceDelete);
+        }
+    }
+    aliceResult = await userManager.CreateAsync(alice, "1234");
+    if (aliceResult.Succeeded)
+    {
+        IdentityUser userToMakeCustomer = await userManager.FindByNameAsync("alice");
+        if (userToMakeCustomer != null)
+        {
+            await userManager.AddToRoleAsync(userToMakeCustomer, "Customer");
+        }
+        await userManager.AddToRoleAsync(userToMakeCustomer, "Customer");
     }
 }
 

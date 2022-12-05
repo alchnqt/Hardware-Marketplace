@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import Link from '@mui/material/Link';
 import styles from './header.module.css';
 import Modal from 'react-bootstrap/Modal';
@@ -13,10 +13,47 @@ import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import Navbar from '../Home/Navbar/Navbar';
 import { useSelector } from 'react-redux';
+import { RootState, useAppDispatch } from '../../redux/store/store';
+import { logout, ROLE_CLAIM } from '../../redux/slices/authSlice';
+import EventBus from '../../redux/common/EventBus';
+
 function Header() {
     const [show, setShow] = useState(false);
-    const { isLoggedIn } = useSelector((state: any) => state.auth);
-    console.log(isLoggedIn);
+    const { isLoggedIn } = useSelector((state: RootState) => state.auth);
+
+    const { cart } = useSelector((state: RootState) => state.cart);
+
+    const getTotalQuantity = () => {
+        let total = 0;
+        for (let item of cart) {
+            total += (item as any).quantity
+        }
+        return total;
+    }
+
+    const [showAdminBoard, setShowAdminBoard] = useState(false);
+    const { user: currentUser } = useSelector((state: any) => state.auth);
+    const dispatch = useAppDispatch();
+    const isAdmin: boolean = currentUser ? currentUser[ROLE_CLAIM] == 'Admin' : false;
+    const logOut = useCallback(() => {
+        dispatch(logout());
+    }, [dispatch]);
+
+    //useEffect(() => {
+    //    if (currentUser) {
+    //        setShowAdminBoard(currentUser.roles.includes("Admin"));
+    //    } else {
+    //        setShowAdminBoard(false);
+    //    }
+
+    //    EventBus.on("logout", () => {
+    //        logOut();
+    //    });
+
+    //    return () => {
+    //        EventBus.remove("logout", undefined);
+    //    };
+    //}, [currentUser, logOut]);
 
     return (
         <React.Fragment>
@@ -43,11 +80,11 @@ function Header() {
                         <Link
                             variant="button"
                             color="text.primary"
-                            href="#"
-                            sx={{ my: 1, mx: 1.5 }}
-                        >
-                            Features
+                            href="/cart"
+                            sx={{ my: 1, mx: 1.5 }}>
+                            Избранное: {getTotalQuantity()}
                         </Link>
+                        
                         <Link
                             variant="button"
                             color="text.primary"
@@ -64,6 +101,18 @@ function Header() {
                         >
                             Поддержка
                         </Link>
+                        {
+                            isAdmin && isLoggedIn &&
+                            <>
+                            <Link
+                                variant="button"
+                                color="text.primary"
+                                href="/admin"
+                                sx={{ my: 1, mx: 1.5 }}>
+                                Админ
+                            </Link>
+                            </>
+                        }
                         {isLoggedIn &&
                             <>
                                 <Link
@@ -73,11 +122,12 @@ function Header() {
                                     sx={{ my: 1, mx: 1.5 }}
                                 >
                                     Профиль
-                                </Link>
+                            </Link>
+
                                 <Button
+                                    onClick={() => logOut()}
                                     variant="outlined"
-                                    sx={{ my: 1, mx: 1.5 }}
-                                >
+                                    sx={{ my: 1, mx: 1.5 }}>
                                     Выйти
                                 </Button>
                             </>

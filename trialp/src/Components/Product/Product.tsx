@@ -6,6 +6,10 @@ import { PositionsPrimary, ProductShop } from '../../Models/Products/ProductAllS
 import { useProductQuery, useProductShopsQuery } from '../../redux/store/backend/external.api';
 import CircularLoader from '../CircularLoader/CircularLoader';
 import styles from './product.module.css';
+import { addToCart, CartItem } from '../../redux/slices/cartSlice';
+import { useAppDispatch } from '../../redux/store/store';
+
+
 interface ProductShopMap {
     key: string,
     value: ProductShop
@@ -15,6 +19,13 @@ function Product() {
     let { key } = useParams();
     const shopQuery = useProductShopsQuery({ key: key });
     const productQuery = useProductQuery({ key: key });
+
+    const dispatch = useAppDispatch();
+
+    const handleCart = (item: CartItem): void => {
+        dispatch(addToCart(item))
+    };
+
 
     if (shopQuery.isLoading && productQuery.isLoading) {
         return (
@@ -42,7 +53,7 @@ function Product() {
                     let primary: PositionsPrimary | undefined = shopQuery.data?.positions.primary.find(obj => {
                         return obj.shop_id == x.key
                     });
-                    return <>
+                    return <div key={x.key}>
                         <div className={`${styles.prouduct}`}>
                             <div className={`${styles.element}`}>
                                 <div className={`${styles.currency}`}>
@@ -55,7 +66,19 @@ function Product() {
                                 <div className={`${styles.buy}`}>
                                     <div>
                                         <Button className={`${styles.buyNow}`} type="button">Купить сейчас</Button>
-                                        <Button className={`${styles.toCart}`} type="button">В корзину</Button>
+                                        <Button className={`${styles.toCart}`} onClick={() => {
+                                            const item: CartItem = {
+                                                id: `${productQuery.data?.id || ""}${primary?.shop_id || ""}`,
+                                                key: productQuery.data?.id || "",
+                                                shopId: primary?.shop_id || "",
+                                                title: productQuery.data?.extended_name || "",
+                                                image: productQuery.data?.images.header || "",
+                                                amount: primary?.position_price.amount || "",
+                                                currency: primary?.position_price.currency || ""
+                                            };
+                                            //console.log(item);
+                                            handleCart(item)
+                                        }} type="button">В корзину</Button>
                                     </div>
                                     <div>
                                         <img src={`${x.value.logo}`} />
@@ -65,7 +88,7 @@ function Product() {
                             </div>
                         </div>
                         <hr />
-                    </>
+                    </div>
                 }
                 )}
             </Container>

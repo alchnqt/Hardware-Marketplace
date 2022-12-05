@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { setMessage } from "./messageSlice";
+import jwt_decode from "jwt-decode";
 
 import AuthService, { LoginDTO, RegisterDTO } from "../services/userService";
 
@@ -29,8 +30,9 @@ export const login = createAsyncThunk(
     "auth/login",
     async (data: LoginDTO, thunkAPI) => {
         try {
-            const dataResp = await AuthService.login(data);
-            return { user: dataResp };
+            const resp = await AuthService.login(data);
+            var decoded = jwt_decode(resp.access_token);
+            return { user: decoded };
         } catch (error: any) {
             const message =
                 (error.response &&
@@ -48,9 +50,7 @@ export const logout = createAsyncThunk("auth/logout", async () => {
     await AuthService.logout();
 });
 
-const initialState = user
-    ? { isLoggedIn: true, user }
-    : { isLoggedIn: false, user: null };
+const initialState = user ? { isLoggedIn: true, user} : { isLoggedIn: false, user: null };
 
 const authSlice = createSlice({
     name: "auth",
@@ -70,13 +70,20 @@ const authSlice = createSlice({
         [login.rejected as any]: (state, action) => {
             state.isLoggedIn = false;
             state.user = null;
+            //state.role = null;
         },
         [logout.fulfilled as any]: (state, action) => {
             state.isLoggedIn = false;
             state.user = null;
+            //state.role = null;
         },
     },
 });
 
 const { reducer } = authSlice;
 export default reducer;
+
+export const ROLE_CLAIM = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role";
+export const NAME_CLAIM = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name";
+export const PHONE_CLAIM = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/mobilephone";
+export const EMAIL_CLAIM = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress";

@@ -19,6 +19,8 @@ public partial class AggregatorAppProductsContext : DbContext
 
     public virtual DbSet<Product> Products { get; set; }
 
+    public virtual DbSet<Order> Orders { get; set; }
+
     public virtual DbSet<ProductReview> ProductReviews { get; set; }
 
     public virtual DbSet<Shop> Shops { get; set; }

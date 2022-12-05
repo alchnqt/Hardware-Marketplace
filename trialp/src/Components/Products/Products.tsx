@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 import { useProductsQuery } from '../../redux/store/backend/external.api';
 import { Product, ProductsResult } from '../../Models/Products/ProductType';
@@ -8,13 +8,19 @@ import Button from '@mui/material/Button';
 import Link from '@mui/material/Link';
 import Divider from '@mui/material/Divider';
 import CircularLoader from '../CircularLoader/CircularLoader';
+import { RootState, useAppDispatch } from '../../redux/store/store';
+import { decrementPage, incrementPage } from '../../redux/slices/productsSlice';
+
 function Products() {
     const [searchParams, setSearchParams] = useSearchParams();
+    const { page } = useSelector((state: RootState) => state.product);
+    const dispatch = useAppDispatch();
     let subsubcategory: string = searchParams.get("subsubcategory") || "";
-    const { data, error, isLoading } = useProductsQuery({ subsubcategory });
+    const { data, error, isLoading } = useProductsQuery({ subsubcategory, page });
+
     if (isLoading) {
         return (
-           <CircularLoader/>
+            <CircularLoader />
         );
     }
     else if (error) {
@@ -23,9 +29,15 @@ function Products() {
         );
     }
     else {
-        console.log(data);
         return (
             <div className={`container ${styles.container}`}>
+                {page > 1 && (
+                    <Button
+                        fullWidth
+                        className={`${styles.prevBtnTop}`}
+                        onClick={() => { dispatch(decrementPage(undefined)) }}>
+                        <span>{`<< Вернуться`}</span>
+                    </Button>)}
                 {data.products.map((product: Product): any =>
                     <>
                         <div className={`${styles.product}`}>
@@ -54,9 +66,17 @@ function Products() {
                     <Button
                         fullWidth
                         className={`${styles.nextBtn}`}
-                    >
+                        onClick={() => { dispatch(incrementPage(undefined)) }}>
                         {`Следующие ${data.page.limit} товаров`}
                     </Button>
+                    <Divider className={`${styles.divider}`}></Divider>
+                    {page > 1 && (
+                        <Button
+                            fullWidth
+                            className={`${styles.nextBtn}`}
+                            onClick={() => { dispatch(decrementPage(undefined)) }}>
+                            {`Вернуться`}
+                        </Button>)}
                 </div>
             </div>
         );

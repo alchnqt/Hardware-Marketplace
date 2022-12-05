@@ -5,7 +5,8 @@ import {
     Link,
     BrowserRouter,
     Routes,
-    Outlet
+    Outlet,
+    Navigate
 } from "react-router-dom";
 
 import Login from './../../Components/Auth/Login/Login';
@@ -16,6 +17,14 @@ import Layout from '../Layout/Layout';
 import NotFound from '../NotFound/NotFound';
 import Products from '../Products/Products';
 import Product from '../Product/Product';
+import { useSelector } from 'react-redux';
+import Cart from '../Cart/Cart';
+
+
+function RequireAuth({ children, redirectTo }: any) {
+    const { isLoggedIn } = useSelector((state: any) => state.auth);
+    return isLoggedIn ? children : <Navigate to={redirectTo} />;
+}
 
 function AppRouter() {
   return (
@@ -24,7 +33,19 @@ function AppRouter() {
               <Route index element={<Home />} />
               <Route path="/login" element={<Login/>} />
               <Route path="/register" element={<Register />} />
-              <Route path="/profile" element={<Profile />} />
+              
+              <Route path="/profile" element={
+                  <RequireAuth redirectTo="/">
+                      <Profile />
+                  </RequireAuth>
+              }/>
+
+              <Route path="/cart" element={
+                  <RequireAuth redirectTo="/">
+                      <Cart />
+                  </RequireAuth>
+              }/>
+
               <Route path="/products" element={<Products />} />
               <Route path="/products/:subsubcategory" element={<Products />} />
               <Route path="/product/:key" element={<Product />} />
