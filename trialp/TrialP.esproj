@@ -18,6 +18,7 @@
     <Folder Include="src\Components\Layout\" />
     <Folder Include="src\Components\AppRouter\" />
     <Folder Include="src\Components\CircularLoader\" />
+    <Folder Include="src\Components\Cart\" />
     <Folder Include="src\Components\Products\" />
     <Folder Include="src\Components\NotFound\" />
     <Folder Include="src\Models\Products\" />
@@ -59,9 +60,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="src\redux\reducers\Localization\LocalisationReducer.ts" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Remove="src\redux\reducers\Header.tsx" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptConfiguration Remove="src\services\**" />
