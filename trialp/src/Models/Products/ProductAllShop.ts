@@ -8,7 +8,11 @@ export interface PositionsPrimary {
     position_price: {
         amount: string,
         currency: string
-    }
+    },
+
+    amount: string,
+    currency: string,
+
     comment: string,
     producer: string,
     importer: string,

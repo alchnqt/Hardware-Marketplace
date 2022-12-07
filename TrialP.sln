@@ -24,6 +24,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SQL", "SQL", "{8EA8541D-D4D0-4DCC-8368-922367E679FF}"
 	ProjectSection(SolutionItems) = preProject
 		refreshtokentable.sql = refreshtokentable.sql
+		scaffold.txt = scaffold.txt
 	EndProjectSection
 EndProject
 Global

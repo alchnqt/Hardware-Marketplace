@@ -30,20 +30,12 @@
           "imageUrl": "https://icons.veryicon.com/png/o/object/material-design-icons/input-1.png",
           "subssubs": [
             {
-              "name": "Видеокарты",
-              "apiCategory": "videocard"
+              "name": "Мыши",
+              "apiCategory": "mouse"
             },
             {
-              "name": "Процессоры",
-              "apiCategory": "cpu"
-            },
-            {
-              "name": "Материнские платы",
-              "apiCategory": "motherboard"
-            },
-            {
-              "name": "Оперативная память",
-              "apiCategory": "dram"
+              "name": "Клавиатуры",
+              "apiCategory": "keyboards"
             }
           ]
 
@@ -53,20 +45,12 @@
           "imageUrl": "https://icons.veryicon.com/png/o/internet--web/network-correlation/hardware-7.png",
           "subssubs": [
             {
-              "name": "Видеокарты",
-              "apiCategory": "videocard"
+              "name": "SSD",
+              "apiCategory": "ssd"
             },
             {
-              "name": "Процессоры",
-              "apiCategory": "cpu"
-            },
-            {
-              "name": "Материнские платы",
-              "apiCategory": "motherboard"
-            },
-            {
-              "name": "Оперативная память",
-              "apiCategory": "dram"
+              "name": "HDD",
+              "apiCategory": "hdd"
             }
           ]
 
@@ -76,20 +60,16 @@
           "imageUrl": "https://icons.veryicon.com/png/o/miscellaneous/mini-line-icons/multimedia-4-1.png",
           "subssubs": [
             {
-              "name": "Видеокарты",
-              "apiCategory": "videocard"
+              "name": "Акустика",
+              "apiCategory": "sound"
             },
             {
-              "name": "Процессоры",
-              "apiCategory": "cpu"
+              "name": "Наушники",
+              "apiCategory": "headphones"
             },
             {
-              "name": "Материнские платы",
-              "apiCategory": "motherboard"
-            },
-            {
-              "name": "Оперативная память",
-              "apiCategory": "dram"
+              "name": "Камеры",
+              "apiCategory": "webcams"
             }
           ]
 
@@ -99,20 +79,16 @@
           "imageUrl": "https://icons.veryicon.com/png/o/system/remote-cost-control/electric-4.png",
           "subssubs": [
             {
-              "name": "Видеокарты",
-              "apiCategory": "videocard"
+              "name": "Источники бесперебойного питания",
+              "apiCategory": "ups"
             },
             {
-              "name": "Процессоры",
-              "apiCategory": "cpu"
+              "name": "Стабилизаторы, сетевые фильтры",
+              "apiCategory": "voltageregulator"
             },
             {
-              "name": "Материнские платы",
-              "apiCategory": "motherboard"
-            },
-            {
-              "name": "Оперативная память",
-              "apiCategory": "dram"
+              "name": "Аккумуляторы",
+              "apiCategory": "notebatteries"
             }
           ]
 
@@ -122,20 +98,12 @@
           "imageUrl": "https://icons.veryicon.com/png/o/internet--web/network-correlation/net-4.png",
           "subssubs": [
             {
-              "name": "Видеокарты",
-              "apiCategory": "videocard"
+              "name": "Роутеры",
+              "apiCategory": "wrouter"
             },
             {
-              "name": "Процессоры",
-              "apiCategory": "cpu"
-            },
-            {
-              "name": "Материнские платы",
-              "apiCategory": "motherboard"
-            },
-            {
-              "name": "Оперативная память",
-              "apiCategory": "dram"
+              "name": "Адаптеры",
+              "apiCategory": "wirelessap"
             }
           ]
 
@@ -145,20 +113,16 @@
           "imageUrl": "https://icons.veryicon.com/png/o/miscellaneous/menu-management/purchasing-accessories.png",
           "subssubs": [
             {
-              "name": "Видеокарты",
-              "apiCategory": "videocard"
+              "name": "Рюкзаки",
+              "apiCategory": "backpack"
             },
             {
-              "name": "Процессоры",
-              "apiCategory": "cpu"
+              "name": "Сумки",
+              "apiCategory": "notebookcase"
             },
             {
-              "name": "Материнские платы",
-              "apiCategory": "motherboard"
-            },
-            {
-              "name": "Оперативная память",
-              "apiCategory": "dram"
+              "name": "Подставки для ноутбуков",
+              "apiCategory": "laptopstand"
             }
           ]
 
@@ -168,20 +132,12 @@
           "imageUrl": "https://icons.veryicon.com/png/o/internet--web/complete-icon-sets-for-hundreds-of-categories/computer-computer-2.png",
           "subssubs": [
             {
-              "name": "Видеокарты",
-              "apiCategory": "videocard"
+              "name": "Ноутбуки",
+              "apiCategory": "notebook"
             },
             {
-              "name": "Процессоры",
-              "apiCategory": "cpu"
-            },
-            {
-              "name": "Материнские платы",
-              "apiCategory": "motherboard"
-            },
-            {
-              "name": "Оперативная память",
-              "apiCategory": "dram"
+              "name": "Сборки",
+              "apiCategory": "desktoppc"
             }
           ]
         }

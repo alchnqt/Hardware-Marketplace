@@ -16,10 +16,11 @@ interface ProductShopMap {
 }
 
 function Product() {
+    const noInfoImporter = 'No information, please contact administrator';  
     let { key } = useParams();
     const shopQuery = useProductShopsQuery({ key: key });
     const productQuery = useProductQuery({ key: key });
-
+    
     const dispatch = useAppDispatch();
 
     const handleCart = (item: CartItem): void => {
@@ -57,11 +58,11 @@ function Product() {
                         <div className={`${styles.prouduct}`}>
                             <div className={`${styles.element}`}>
                                 <div className={`${styles.currency}`}>
-                                    <h2>{primary?.position_price.amount} {primary?.position_price.currency}</h2>
+                                    <h2>{primary?.amount ?? (<span style={{ display: 'flex', textAlign: 'center', alignItems: 'center' }}>Уточняйте у продавца</span>)} {primary?.currency}</h2>
                                 </div>
                                 <div className={`${styles.article}`}>
                                     <p>{primary?.comment}</p>
-                                    <small>Импортер: {primary?.importer}</small>
+                                    <small>Импортер: {primary?.importer ?? (<span>Информация отсутствует</span>)}</small>
                                 </div>
                                 <div className={`${styles.buy}`}>
                                     <div>
@@ -73,8 +74,8 @@ function Product() {
                                                 shopId: primary?.shop_id || "",
                                                 title: productQuery.data?.extended_name || "",
                                                 image: productQuery.data?.images.header || "",
-                                                amount: primary?.position_price.amount || "",
-                                                currency: primary?.position_price.currency || ""
+                                                amount: primary?.amount || "",
+                                                currency: primary?.currency || ""
                                             };
                                             //console.log(item);
                                             handleCart(item)

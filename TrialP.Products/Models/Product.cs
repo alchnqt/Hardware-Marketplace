@@ -1,41 +1,116 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace TrialP.Products.Models;
 
+public class Images
+{
+    public string Header { get; set; }
+}
+
+public class Offers
+{
+    public int Count { get; set; }
+}
+public class Price
+{
+    public string Amount { get; set; }
+    public string Currency { get; set; }
+}
+public class Prices
+{
+    [JsonPropertyName("offers")]
+    public Offers ApiOffers { get; set; }
+
+
+    [JsonPropertyName("price_min")]
+    public Price PriceMin { get; set; }
+
+
+    [JsonPropertyName("price_max")]
+    public Price PriceMax { get; set; }
+}
 public partial class Product
 {
-    public Guid Id { get; set; }
+    private decimal? priceMin;
+    private decimal? priceMax;
+    private int? offers;
+    private string imageHeader;
+    private Prices prices;
+    private Images images;
 
-    public Guid? CategoryId { get; set; }
+    [JsonIgnore]
+    public Guid IdDb { get; set; }
 
-    public Guid? ShopId { get; set; }
-
+    [JsonPropertyName("id")]
     public int? ApiId { get; set; }
 
-    public string? ApiKey { get; set; }
+    public string Key { get; set; }
 
-    public string? Name { get; set; }
+    public string Name { get; set; }
 
-    public string? FullName { get; set; }
+    [JsonPropertyName("full_name")]
+    public string FullName { get; set; }
 
-    public string? NamePrefix { get; set; }
+    [JsonPropertyName("name_prefix")]
+    public string NamePrefix { get; set; }
 
-    public string? ExtendedName { get; set; }
+    [JsonPropertyName("extended_name")]
+    public string ExtendedName { get; set; }
 
-    public string? Status { get; set; }
+    public string Status { get; set; }
 
-    public string? ApiImageUrl { get; set; }
+    public string ImageHeader { get; set; }
 
-    public string? Description { get; set; }
+    [NotMapped]
+    public Images Images
+    {
+        get
+        {
+            Images newImages = new();
+            newImages.Header = images?.Header ?? ImageHeader;
+            return images ?? newImages;
+        }
+        set => images = value;
+    }
 
-    public string? MicroDescription { get; set; }
+    public string Description { get; set; }
 
-    public string? ApiHtmlUrl { get; set; }
+    [JsonPropertyName("micro_description")]
+    public string Microdescription { get; set; }
 
-    public virtual Category? Category { get; set; }
+    [JsonIgnore]
+    public decimal? PriceMin { get; set; }
 
-    public virtual ICollection<ProductReview> ProductReviews { get; } = new List<ProductReview>();
+    [JsonIgnore]
+    public decimal? PriceMax { get; set; }
 
-    public virtual Shop? Shop { get; set; }
+
+    [NotMapped]
+    public Prices Prices
+    {
+        get
+        {
+            Prices pricesNew = new();
+            pricesNew.PriceMax = prices?.PriceMax ?? new Price() { Amount = PriceMax?.ToString() ?? "", Currency = "BYN" };
+            pricesNew.PriceMin = prices?.PriceMin ?? new Price() { Amount = PriceMin?.ToString() ?? "", Currency = "BYN" };
+            pricesNew.ApiOffers = prices?.ApiOffers ?? new Offers() { Count = Offers.Value };
+            return prices ?? pricesNew;
+        }
+        set => prices = value;
+    }
+
+    public int? Offers { get; set; }
+
+    [JsonIgnore]
+    public Guid? SubSubCategoryId { get; set; }
+
+
+    [JsonIgnore]
+    public virtual ICollection<PositionsPrimary> PositionsPrimaries { get; } = new List<PositionsPrimary>();
+
+    [JsonIgnore]
+    public virtual SubSubCategory SubSubCategory { get; set; }
 }

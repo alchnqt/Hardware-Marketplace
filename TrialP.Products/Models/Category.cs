@@ -7,13 +7,8 @@ public partial class Category
 {
     public Guid Id { get; set; }
 
-    public string? Node { get; set; }
+    public string Name { get; set; }
+    public string ApiName { get; set; }
 
-    public int? Left { get; set; }
-
-    public int? Right { get; set; }
-
-    public int? Depth { get; set; }
-
-    public virtual ICollection<Product> Products { get; } = new List<Product>();
+    public virtual ICollection<SubCategory> SubCategories { get; } = new List<SubCategory>();
 }
