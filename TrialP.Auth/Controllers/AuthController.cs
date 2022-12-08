@@ -91,12 +91,12 @@ namespace TrialP.Auth.Controllers
 
             if (string.IsNullOrEmpty(user.Username) || existingUser != null)
             {
-                return BadRequest("Пользователь уже существует");
+                return BadRequest(new { message = "Пользователь уже существует" });
             }
 
             if (user.Password != user.RepeatPassword)
             {
-                return BadRequest("Пароли не совпдают");
+                return BadRequest(new { message = "Пароли не совпдают" });
             }
             var newUser = new IdentityUser()
             {
@@ -112,11 +112,11 @@ namespace TrialP.Auth.Controllers
             await _userManager.AddToRoleAsync(newUser, "Customer");
             if (result.Succeeded)
             {
-                return Ok("User was registered");
+                return Ok(new { message = "User was registered" });
             }
             else
             {
-                return BadRequest("Coudln't create user");
+                return BadRequest(new { message = "Coudln't create user" });
             }
            
         }

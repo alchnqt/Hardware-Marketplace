@@ -1,9 +1,11 @@
 export type SubSubCategory = {
+    id: string,
     name: string,
     apiCategory: string
 }
 
 export type SubCategory = {
+    id: string,
     imageUrl: string,
     subsName: string,
     subssubs: Array<SubSubCategory>

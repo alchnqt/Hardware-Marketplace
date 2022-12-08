@@ -26,7 +26,7 @@ builder.Services.AddCors();
 var app = builder.Build();
 
 app.UseHttpsRedirection();
-app.UseCors(options => options.WithOrigins("http://courseproject:8989").AllowAnyMethod());
+app.UseCors(options => options.WithOrigins("http://courseproject:8989").AllowAnyMethod().AllowAnyMethod().AllowAnyHeader());
 app.UseAuthorization();
 
 app.MapControllers();

@@ -19,11 +19,19 @@ import Products from '../Products/Products';
 import Product from '../Product/Product';
 import { useSelector } from 'react-redux';
 import Cart from '../Cart/Cart';
+import { ROLE_CLAIM } from '../../redux/slices/authSlice';
+import Admin from '../Admin/Admin';
 
 
 function RequireAuth({ children, redirectTo }: any) {
     const { isLoggedIn } = useSelector((state: any) => state.auth);
     return isLoggedIn ? children : <Navigate to={redirectTo} />;
+}
+
+function RequireAuthAdmin({ children, redirectTo }: any) {
+    const { isLoggedIn, user: currentUser } = useSelector((state: any) => state.auth);
+    const isAdmin: boolean = currentUser ? currentUser[ROLE_CLAIM] == 'Admin' : false;
+    return isAdmin && isLoggedIn ? children : <Navigate to={redirectTo} />;
 }
 
 function AppRouter() {
@@ -33,7 +41,13 @@ function AppRouter() {
               <Route index element={<Home />} />
               <Route path="/login" element={<Login/>} />
               <Route path="/register" element={<Register />} />
-              
+
+              <Route path="/admin" element={
+                  <RequireAuthAdmin redirectTo="/">
+                      <Admin />
+                  </RequireAuthAdmin>
+              }/>
+
               <Route path="/profile" element={
                   <RequireAuth redirectTo="/">
                       <Profile />

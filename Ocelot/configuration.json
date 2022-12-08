@@ -52,7 +52,7 @@
         }
       ],
       "UpstreamPathTemplate": "/api/product/{everything}",
-      "UpstreamHttpMethod": [ "POST", "GET", "PATCH", "DELETE", "OPTIONS" ]
+      "UpstreamHttpMethod": [ "POST", "GET", "PATCH", "DELETE", "OPTIONS", "PUT" ]
     }
   ],
 

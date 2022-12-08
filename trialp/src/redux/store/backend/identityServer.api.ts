@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { CONFIG } from '../../../App_Data/configuration';
 import accessTokenService from '../../../Auth/AccessToken';
 export interface AccessToken {
     access_token: string
@@ -13,13 +14,13 @@ export interface RegisterDto {
     password: string,
     repeatPassword: string,
     username: string
-    phone: string | null
+    phone: string
 }
 
 export const identityApi = createApi({
     reducerPath: 'api/',
     baseQuery: fetchBaseQuery({
-            baseUrl: 'https://localhost:7077/'
+        baseUrl: CONFIG.endpoints["auth"]
         }
     ),
     endpoints: build => ({
@@ -27,28 +28,28 @@ export const identityApi = createApi({
             query: (data) => ({
                 method: 'POST',
                 body: data,
-                url: 'auth/login',
+                url: '/login',
             })
         }),
-        register: build.mutation<string, RegisterDto>({
+        register: build.mutation<any, RegisterDto>({
             query: (data) => ({
                 method: 'POST',
-                url: 'auth/register',
+                url: '/register',
                 body: data,
             })
         }),
         logout: build.query({
             query: () => ({
-                url: 'auth/logout',
+                url: '/logout',
             })
         }),
         secret: build.query({
             query: () => ({
                 headers: { Authorization: `Bearer ${accessTokenService.getAccessToken()}` },
-                url: 'auth/secret',
+                url: '/secret',
             })
         })
     })
 });
 
-export const { useLoginMutation, useLogoutQuery } = identityApi;
+export const { useLoginMutation, useLogoutQuery, useRegisterMutation } = identityApi;

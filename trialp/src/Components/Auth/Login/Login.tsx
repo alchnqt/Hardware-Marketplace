@@ -13,19 +13,6 @@ import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import styles from './login.module.css';
 
-function Copyright(props: any) {
-    return (
-        <Typography variant="body2" color="text.secondary" align="center" {...props}>
-            {'Copyright © '}
-            <Link color="inherit" href="https://mui.com/">
-                Your Website
-            </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-        </Typography>
-    );
-}
-
 const theme = createTheme();
 
 import { login } from "../../../redux/slices/authSlice";
@@ -35,6 +22,7 @@ import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { LoginDTO } from '../../../redux/services/userService';
 import { useAppDispatch } from '../../../redux/store/store';
+import Copyright from '../../Copyright/Copyright';
 
 export default function Login() {
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -101,7 +89,7 @@ export default function Login() {
                     <Typography component="h1" variant="h5">
                         Вход
                     </Typography>
-                    <Box component="form" noValidate onSubmit={handleLogin} sx={{ mt: 1 }}>
+                    <Box component="form" onSubmit={handleLogin} sx={{ mt: 1 }}>
                         <TextField
                             margin="normal"
                             required
@@ -141,7 +129,7 @@ export default function Login() {
                                 </Link>
                             </Grid>
                             <Grid item>
-                                <Link href="#" variant="body2">
+                                <Link href="/register" variant="body2">
                                     Нет аккаунта? Зарегестрироваться!
                                 </Link>
                             </Grid>
