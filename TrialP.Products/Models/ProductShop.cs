@@ -6,7 +6,7 @@ namespace TrialP.Products.Models;
 
 public partial class ProductShop
 {
-    [JsonIgnore]
+    [JsonPropertyName("dbId")]
     public Guid Id { get; set; }
 
     [JsonPropertyName("id")]
@@ -18,5 +18,6 @@ public partial class ProductShop
 
     public string Url { get; set; }
 
+    [JsonIgnore]
     public virtual ICollection<PositionsPrimary> PositionsPrimaries { get; } = new List<PositionsPrimary>();
 }

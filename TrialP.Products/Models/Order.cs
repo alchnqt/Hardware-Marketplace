@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace TrialP.Products.Models;
 
@@ -13,5 +14,6 @@ public partial class Order
 
     public DateTime? OrderDate { get; set; }
 
+    [JsonIgnore]
     public virtual PositionsPrimary PositionsPrimary { get; set; }
 }

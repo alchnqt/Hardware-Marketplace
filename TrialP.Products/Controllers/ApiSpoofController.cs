@@ -141,7 +141,6 @@ namespace TrialP.Products.Controllers
             return productShops;
         }
 
-
         private string GetProccess(string url)
         {
             WebRequest request = WebRequest.Create(url);

@@ -1,12 +1,17 @@
 using TrialP.Products.Controllers;
 using Microsoft.IdentityModel.Tokens;
+using System.Configuration;
+using TrialP.Products.Models;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
-
+builder.Services.AddDbContext<TrialPProductsContext>(options =>
+         options.UseSqlServer("Server=localhost;Database=TrialP_Products;Trusted_Connection=True;trustServerCertificate=true;"),
+         ServiceLifetime.Transient);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddHttpClient();
 builder.Services.AddAuthorization(options =>
