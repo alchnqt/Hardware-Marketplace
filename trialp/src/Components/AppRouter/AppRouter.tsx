@@ -21,6 +21,7 @@ import { useSelector } from 'react-redux';
 import Cart from '../Cart/Cart';
 import { ROLE_CLAIM } from '../../redux/slices/authSlice';
 import Admin from '../Admin/Admin';
+import HistoryOrder from '../History/History';
 
 
 function RequireAuth({ children, redirectTo }: any) {
@@ -47,7 +48,11 @@ function AppRouter() {
                       <Admin />
                   </RequireAuthAdmin>
               }/>
-
+              <Route path="/history" element={
+                  <RequireAuth redirectTo="/">
+                      <HistoryOrder />
+                  </RequireAuth>
+              } />
               <Route path="/profile" element={
                   <RequireAuth redirectTo="/">
                       <Profile />

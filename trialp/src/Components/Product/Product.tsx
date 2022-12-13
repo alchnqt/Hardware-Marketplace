@@ -1,14 +1,16 @@
 
 import { Button, Container } from '@mui/material';
 import React, { useEffect } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { Navigate, useParams, useSearchParams } from 'react-router-dom';
 import { PositionsPrimary, ProductShop } from '../../Models/Products/ProductAllShop';
 import { useProductQuery, useProductShopsQuery } from '../../redux/store/backend/external.api';
 import CircularLoader from '../CircularLoader/CircularLoader';
 import styles from './product.module.css';
 import { addToCart, CartItem } from '../../redux/slices/cartSlice';
 import { useAppDispatch } from '../../redux/store/store';
-
+import { useSelector } from 'react-redux';
+import OrderModal from '../OrderModal/OrderModal';
+import { EMAIL_CLAIM, ID_CLAIM } from '../../redux/slices/authSlice';
 
 interface ProductShopMap {
     key: string,
@@ -16,12 +18,12 @@ interface ProductShopMap {
 }
 
 function Product() {
-    const noInfoImporter = 'No information, please contact administrator';  
+    const noInfoImporter = 'No information, please contact administrator';
     let { key } = useParams();
     const shopQuery = useProductShopsQuery({ key: key });
     const productQuery = useProductQuery({ key: key });
-    
     const dispatch = useAppDispatch();
+    const { user, isLoggedIn } = useSelector((state: any) => state.auth);
 
     const handleCart = (item: CartItem): void => {
         dispatch(addToCart(item))
@@ -66,12 +68,19 @@ function Product() {
                                 </div>
                                 <div className={`${styles.buy}`}>
                                     <div>
-                                        <Button className={`${styles.buyNow}`} type="button">Купить сейчас</Button>
+                                        {isLoggedIn && <OrderModal order={{
+                                            userId: user[ID_CLAIM] || "",
+                                            email: user[EMAIL_CLAIM] || "",
+                                            orders: [`${primary?.idDb}`]
+                                        }} /> }
+                                        
                                         <Button className={`${styles.toCart}`} onClick={() => {
                                             const item: CartItem = {
                                                 id: `${productQuery.data?.id || ""}${primary?.shop_id || ""}`,
+                                                idDb: primary?.idDb || "",
                                                 key: productQuery.data?.id || "",
                                                 shopId: primary?.shop_id || "",
+                                                shopName: x.value.title || "",
                                                 title: productQuery.data?.extended_name || "",
                                                 image: productQuery.data?.images.header || "",
                                                 amount: primary?.amount || "",
@@ -83,7 +92,7 @@ function Product() {
                                     </div>
                                     <div>
                                         <img src={`${x.value.logo}`} />
-                                        
+                                        {x.value.title}
                                     </div>
                                 </div>
                             </div>

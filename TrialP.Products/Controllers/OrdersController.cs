@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TrialP.Products.Models;
+using TrialP.Products.Models.Api;
+using TrialP.Products.Services.Abstract;
 
 namespace TrialP.Products.Controllers
 {
@@ -14,10 +16,11 @@ namespace TrialP.Products.Controllers
     public class OrdersController : ControllerBase
     {
         private readonly TrialPProductsContext _context;
-
-        public OrdersController(TrialPProductsContext context)
+        private readonly IEmailService _emailService;
+        public OrdersController(TrialPProductsContext context, IEmailService emailService)
         {
             _context = context;
+            _emailService = emailService;
         }
 
         // GET: api/Orders
@@ -86,17 +89,36 @@ namespace TrialP.Products.Controllers
         // POST: api/Orders
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Order>> PostOrder(Order order)
+        public async Task<ActionResult<Order>> PostOrder(OrderDto order)
         {
+            var orderKey = Guid.NewGuid();
             if (_context.Orders == null)
             {
-                return Problem("Entity set 'TrialPProductsContext.Orders'  is null.");
+                return Problem("Entity set 'TrialPProductsContext.Orders' is null.");
             }
             order.OrderDate = DateTime.Now;
-            _context.Orders.Add(order);
+
+            var newOrder = order.Orders.Select(o => new Order() { Key= orderKey, PositionsPrimaryId = o, OrderDate = DateTime.Now, UserId = order.UserId, Email = order.Email, IsCompleted = false });
+            _context.Orders.AddRange(newOrder);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetOrder", new { id = order.Id }, order);
+            var orderedPositions = from x in _context.Orders.Include(pos => pos.PositionsPrimary).ThenInclude(pr => pr.Product).AsEnumerable()
+                    where x.Key == orderKey
+                    group x by x.PositionsPrimaryId.Value into g
+                    let count = g.Count()
+                    orderby count descending
+                    select new { Count = count, PositionsPrimary = (from p in g select p.PositionsPrimary).FirstOrDefault() };
+
+            List<string> stringOrders = new();
+            decimal finalPrice = 0;
+            foreach (var item in orderedPositions.Distinct())
+            {
+                stringOrders.Add($"<h3>{item.PositionsPrimary.Product.FullName} - {item.PositionsPrimary.Amount} BYN. Количество: {item.Count}<h3/>");
+                finalPrice += item.PositionsPrimary.Amount.Value * item.Count;
+            }
+
+            await _emailService.SendEmailAsync(order.Email, $"Ваш заказ: {string.Join("<br>", stringOrders)} <br><br><b>Общая цена:</b> {finalPrice} BYN");
+            return CreatedAtAction("GetOrder", new { id = order.Email }, order);
         }
 
         // DELETE: api/Orders/5

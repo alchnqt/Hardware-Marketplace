@@ -33,13 +33,13 @@ namespace TrialP.Products.Controllers
 
         // GET: api/ProductShops/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<ProductShop>> GetProductShop(Guid id)
+        public async Task<ActionResult<ProductShop>> GetProductShop(int id)
         {
           if (_context.ProductShops == null)
           {
               return NotFound();
           }
-            var productShop = await _context.ProductShops.FindAsync(id);
+            ProductShop productShop = _context.ProductShops.Where(w => w.ApiId.Value == id).FirstOrDefault();
 
             if (productShop == null)
             {
@@ -51,15 +51,13 @@ namespace TrialP.Products.Controllers
 
         // PUT: api/ProductShops/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutProductShop(Guid id, ProductShop productShop)
+        [HttpPut]
+        public async Task<IActionResult> PutProductShop(ProductShop productShop)
         {
-            if (id != productShop.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(productShop).State = EntityState.Modified;
+            var existingPS = _context.ProductShops.Where(p => p.ApiId.Value == productShop.ApiId).FirstOrDefault();
+            existingPS.Title = productShop.Title;
+            existingPS.Logo = productShop.Logo;
+            _context.Entry(existingPS).State = EntityState.Modified;
 
             try
             {
@@ -67,7 +65,7 @@ namespace TrialP.Products.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ProductShopExists(id))
+                if (!ProductShopExists(productShop.ApiId.Value))
                 {
                     return NotFound();
                 }
@@ -96,13 +94,13 @@ namespace TrialP.Products.Controllers
 
         // DELETE: api/ProductShops/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProductShop(Guid id)
+        public async Task<IActionResult> DeleteProductShop(int id)
         {
             if (_context.ProductShops == null)
             {
                 return NotFound();
             }
-            var productShop = await _context.ProductShops.FindAsync(id);
+            var productShop = _context.ProductShops.Where(w => w.ApiId.Value == id).FirstOrDefault();
             if (productShop == null)
             {
                 return NotFound();
@@ -117,6 +115,11 @@ namespace TrialP.Products.Controllers
         private bool ProductShopExists(Guid id)
         {
             return (_context.ProductShops?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
+
+        private bool ProductShopExists(int id)
+        {
+            return (_context.ProductShops?.Any(e => e.ApiId == id)).GetValueOrDefault();
         }
     }
 }

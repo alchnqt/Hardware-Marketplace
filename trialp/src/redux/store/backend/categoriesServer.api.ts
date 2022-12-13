@@ -9,7 +9,7 @@ export interface SubSubCategoryDto {
     subCategoryName: string | null
 }
 
-export const productsApi = createApi({
+export const categoriesApi = createApi({
     reducerPath: 'api/',
     baseQuery: fetchBaseQuery({
         baseUrl: CONFIG.endpoints["categories"]
@@ -41,8 +41,8 @@ export const productsApi = createApi({
                 body: data,
                 url: 'removeCategory',
             })
-        }),
+        })
     }),
 });
 
-export const { useCategoriesQuery, useAddCategoryMutation, useUpdateCategoryMutation, useRemoveCategoryMutation  } = productsApi;
+export const { useCategoriesQuery, useAddCategoryMutation, useUpdateCategoryMutation, useRemoveCategoryMutation  } = categoriesApi;

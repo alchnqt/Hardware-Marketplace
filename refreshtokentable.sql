@@ -21,5 +21,5 @@ ALTER TABLE [dbo].[RefreshTokens] ADD  DEFAULT (newid()) FOR [id]
 GO
 
 ALTER TABLE [dbo].[RefreshTokens]  WITH CHECK ADD FOREIGN KEY([UserId])
-REFERENCES [dbo].[AspNetUsers] ([Id])
+REFERENCES [dbo].[AspNetUsers] ([Id]) on delete cascade on update cascade
 GO

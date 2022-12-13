@@ -2,8 +2,12 @@
 import { Box, Button, Container, FormControl, FormHelperText, Input, InputLabel, TextField } from '@mui/material';
 import React, { useState } from 'react';
 import { SubCategory, SubSubCategory } from '../../Models/Products/CategoriesType';
-import { SubSubCategoryDto, useAddCategoryMutation, useCategoriesQuery, useRemoveCategoryMutation, useUpdateCategoryMutation } from '../../redux/store/backend/productsServer.api';
+import { SubSubCategoryDto, useAddCategoryMutation, useCategoriesQuery, useRemoveCategoryMutation, useUpdateCategoryMutation } from '../../redux/store/backend/categoriesServer.api';
+import { useAllOrdersQuery, useCompleteOrderMutation} from '../../redux/store/backend/external.api';
+import { useAllCustomersQuery } from '../../redux/store/backend/identityServer.api';
+import { useAddShopMutation, useRemoveShopMutation, useUpdateShopMutation } from '../../redux/store/backend/shopServer.api';
 import { useAppDispatch } from '../../redux/store/store';
+import CircularLoader from '../CircularLoader/CircularLoader';
 import styles from './admin.module.css';
 
 
@@ -24,6 +28,60 @@ const SubSubCategory = (props: SubSubCategoryView): any => {
             </div>
         </div>
     );
+}
+
+function AllOrders() {
+    const { data, error, isLoading } = useAllCustomersQuery(undefined);
+    const allOrders = useAllOrdersQuery(undefined);
+    const [completeOrder, completeOrderResult] = useCompleteOrderMutation();
+
+    if (isLoading && allOrders.isLoading) {
+        return <></>
+    }
+    if (error) {
+        return <>error</>
+    }
+    return <>
+        <h3>Список пользователей: </h3>
+        <div>
+            {data?.map(u => {
+                return (
+                    <div key={`${u.id}customer`}>
+                        <div>
+                            <span>{u.userName} - {u.email} - {u.id}</span>
+                            <h5>Заказы:</h5>
+                            <div>
+                                {allOrders.data?.userOrders.map(uo => {
+                                    if (uo.userId === u.id) {
+                                        return (
+                                            <ul key={`${uo.userId}uo${uo.count}`}>
+                                                <span>
+                                                    {uo.orders.map(o => {
+                                                        return (<li style={{ color: `${o.isCompleted ? 'green' : 'red'}` }}>{o.key}</li>);
+                                                    })}
+                                                </span>
+                                            </ul>
+                                        )
+                                    }
+                                    else {
+                                        return (<></>);
+                                    }
+                                })}
+                                <Button onClick={() => { completeOrder({ userId: u.id }); }}>Подтвердить все заказы</Button>
+                            </div>
+                        </div>
+                        <hr />
+                    </div>)
+
+            })}
+        </div>
+    </>
+}
+
+function Shops() {
+    const [addShop, addResult] = useAddShopMutation();
+    const [updateShop, updateResult] = useUpdateShopMutation();
+    const [removeShop, removeResult] = useRemoveShopMutation();
 }
 
 
@@ -54,13 +112,12 @@ function Admin() {
         }
         callback(subSubCategoryDto)
             .unwrap()
-            .then((fulfilled: any) =>
-            {
+            .then((fulfilled: any) => {
                 console.log(fulfilled);
                 window.location.reload();
             })
             .catch((rejected: any) => console.error(rejected));
-        
+
     };
 
     const { data, error, isLoading } = useCategoriesQuery(undefined);
@@ -439,6 +496,8 @@ function Admin() {
                     </div>
                 </div>
             </div>
+
+            <AllOrders />
         </Container>);
 }
 

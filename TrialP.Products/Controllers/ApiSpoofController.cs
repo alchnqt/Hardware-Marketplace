@@ -74,16 +74,78 @@ namespace TrialP.Products.Controllers
             }
         }
 
+        public IActionResult GetAllOrders()
+        {
+            using(var context = new TrialPProductsContext())
+            {
+                var groupedOrders = (from order in context.Orders
+                                     group order by order.UserId into orderg
+                                     select new
+                                     {
+                                         Count = orderg.Count(),
+                                         UserId = orderg.Key,
+                                         Orders = (from o in orderg group o by o.Key into og select og.FirstOrDefault())
+                                     }).ToList();
+                return Ok(new { userOrders = groupedOrders });
+            }
+        }
+
+        [HttpPost("{id}")]
+        public IActionResult CompleteOrders(Guid id)
+        {
+            using (var context = new TrialPProductsContext())
+            {
+                var updatedOrders = context.Orders.Where(o => o.UserId == id).ExecuteUpdate(s => s.SetProperty(b => b.IsCompleted, true));
+                return Ok(updatedOrders);
+            }
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetUsersOrderById(Guid id, bool isCompleted = false)
+        {
+            using (var context = new TrialPProductsContext())
+            {
+                var orders = (from order in
+
+                    context.Orders.Include(pp => pp.PositionsPrimary).
+                    Include(pr => pr.PositionsPrimary.Product).
+                    Include(sh => sh.PositionsPrimary.Shop)
+                              where order.UserId == id && order.IsCompleted == isCompleted
+                              group order by order.Key into g
+                              select new
+                              {
+                                  Key = g.Key.Value,
+                                  Amount = g.Sum(x=>x.PositionsPrimary.Amount).ToString(),
+                                  Count = g.Count(),
+                                  PositionsPrimary = (from pp in g group pp by pp.PositionsPrimaryId into gpp select new
+                                  {
+                                      Count = gpp.Count(),
+                                      PositionsPrimaryValue = 
+                                      (from realproduct in gpp select new 
+                                      { 
+                                          realproduct.PositionsPrimary, 
+                                          realproduct.PositionsPrimary.Product 
+                                      }).FirstOrDefault()
+                                  })
+                              }).ToList();
+
+                return Ok(new { orders = orders });
+            }
+        }
+
         public IActionResult GetProductByKey(string key)
         {
             //https://catalog.onliner.by/sdapi/catalog.api/products/gvn3050eagleoc8g?include=schema ignore
-
-
+            using (var context = new TrialPProductsContext())
+            {
+                var searchProduct = context.Products.Where(x => x.Key == key).FirstOrDefault();
+                if (searchProduct != null)
+                {
+                    return Ok(searchProduct);
+                }
+            }
 
             string url = $"https://catalog.onliner.by/sdapi/catalog.api/products/{key}?include=schema";
-
-
-
             return Content(GetProccess(url), "application/json");
         }
 

@@ -19,7 +19,7 @@ namespace TrialP.Auth.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=localhost;Database=TrialP_IdentityServer;Trusted_Connection=True;trustServerCertificate=true;");
+            optionsBuilder.UseSqlServer("Server=host.docker.internal;Database=TrialP_IdentityServer;User=sa;Password=1234;trustServerCertificate=true;");
         }
 
         public virtual DbSet<RefreshToken> RefreshTokens { get; set; }

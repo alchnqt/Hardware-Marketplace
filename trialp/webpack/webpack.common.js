@@ -16,8 +16,7 @@ module.exports = {
     devServer: {
         static: './build',
         compress: true,
-        port: 8989,
-        host: 'courseproject',
+        port: 8099,
         historyApiFallback: true
     },
     module: {

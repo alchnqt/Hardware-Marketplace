@@ -87,3 +87,4 @@ export const ROLE_CLAIM = "http://schemas.microsoft.com/ws/2008/06/identity/clai
 export const NAME_CLAIM = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name";
 export const PHONE_CLAIM = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/mobilephone";
 export const EMAIL_CLAIM = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress";
+export const ID_CLAIM = "id";

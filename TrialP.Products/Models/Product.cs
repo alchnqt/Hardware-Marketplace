@@ -41,11 +41,13 @@ public partial class Product
     private Prices prices;
     private Images images;
 
-    [JsonIgnore]
     public Guid IdDb { get; set; }
 
-    [JsonPropertyName("id")]
+    [JsonIgnore]
     public int? ApiId { get; set; }
+
+    [JsonPropertyName("id")]
+    public string? ApiIdString { get => ApiId.ToString(); }
 
     public string Key { get; set; }
 
@@ -55,12 +57,12 @@ public partial class Product
     public string FullName { get; set; }
 
     [JsonPropertyName("name_prefix")]
-    public string NamePrefix { get; set; }
+    public string? NamePrefix { get; set; }
 
     [JsonPropertyName("extended_name")]
     public string ExtendedName { get; set; }
 
-    public string Status { get; set; }
+    public string? Status { get; set; }
 
     public string ImageHeader { get; set; }
 
@@ -79,7 +81,7 @@ public partial class Product
     public string Description { get; set; }
 
     [JsonPropertyName("micro_description")]
-    public string Microdescription { get; set; }
+    public string? Microdescription { get; set; }
 
     [JsonIgnore]
     public decimal? PriceMin { get; set; }

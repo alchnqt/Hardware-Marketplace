@@ -1,6 +1,7 @@
 import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
 import { setupListeners } from '@reduxjs/toolkit/query';
-import { productsApi } from '../store/backend/productsServer.api';
+import { categoriesApi } from '../store/backend/categoriesServer.api';
+import { ordersApi } from '../store/backend/ordersServer.api';
 import { externalProductsApi } from "./backend/external.api";
 import authReducer from "../slices/authSlice";
 import messageReducer from "../slices/messageSlice";
@@ -17,6 +18,8 @@ import {
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
+import { identityApi } from "./backend/identityServer.api";
+import { shopsApi } from "./backend/shopServer.api";
 
 
 const persistConfig = {
@@ -28,9 +31,12 @@ const persistedCartReducer = persistReducer(persistConfig, cartReducer);
 
 export const store = configureStore({
     reducer: {
-        [productsApi.reducerPath]: productsApi.reducer,
+        [categoriesApi.reducerPath]: categoriesApi.reducer,
+        [ordersApi.reducerPath]: ordersApi.reducer,
         [externalProductsApi.reducerPath]: externalProductsApi.reducer,
         user: userReducer,
+        [shopsApi.reducerPath]: shopsApi.reducer,
+        [identityApi.reducerPath]: identityApi.reducer,
         auth: persistedAuthReducer,
         message: messageReducer,
         cart: persistedCartReducer,
@@ -42,7 +48,7 @@ export const store = configureStore({
             ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
         },
     })
-        .concat([externalProductsApi.middleware, productsApi.middleware])
+        .concat([externalProductsApi.middleware, categoriesApi.middleware, ordersApi.middleware, identityApi.middleware, shopsApi.middleware])
 });
 
 export const persistor = persistStore(store);

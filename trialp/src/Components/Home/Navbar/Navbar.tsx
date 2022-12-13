@@ -1,7 +1,7 @@
 import { Link } from '@mui/material';
 import React from 'react';
 import { SubCategory, SubSubCategory } from '../../../Models/Products/CategoriesType';
-import { useCategoriesQuery } from '../../../redux/store/backend/productsServer.api';
+import { useCategoriesQuery } from '../../../redux/store/backend/categoriesServer.api';
 import styles from './navbar.module.css';
 function Navbar() {
 

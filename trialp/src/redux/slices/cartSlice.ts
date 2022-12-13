@@ -2,6 +2,8 @@ import { createSlice, current, PayloadAction } from '@reduxjs/toolkit';
 
 export interface CartItem {
     id: string,
+    idDb: string,
+    shopName: string,
     key: string,
     shopId: string,
     title: string,
@@ -61,12 +63,14 @@ const cartSlice = createSlice({
             }
 
             let index: number = current(state).cart.indexOf(action.payload);
-            console.log(index);
             if (index > -1) {
                 let newArr = current(state).cart.filter((item: CartItem) => action.payload.id !== item.id); 
                 state.cart = newArr;
             }
         },
+        cleanCart: (state) => {
+            state.cart = [];
+        }
     },
 });
 export default cartSlice.reducer;
@@ -75,4 +79,5 @@ export const {
     incrementQuantity,
     decrementQuantity,
     removeItem,
+    cleanCart
 } = cartSlice.actions;
