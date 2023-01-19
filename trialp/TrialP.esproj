@@ -11,6 +11,7 @@
     <Folder Include="build\" />
     <Folder Include="src\App_Data\" />
     <Folder Include="src\Components\Auth\Login\" />
+    <Folder Include="src\Components\Auth\NewFolder\" />
     <Folder Include="src\Components\Auth\Profile\" />
     <Folder Include="src\Components\Auth\Register\" />
     <Folder Include="src\Components\Footer\HowToUse\" />
@@ -21,7 +22,6 @@
     <Folder Include="src\Components\Cart\" />
     <Folder Include="src\Components\Admin\" />
     <Folder Include="src\Components\Copyright\" />
-    <Folder Include="src\Components\Error\" />
     <Folder Include="src\Components\Products\" />
     <Folder Include="src\Components\NotFound\" />
     <Folder Include="src\Models\Products\" />
