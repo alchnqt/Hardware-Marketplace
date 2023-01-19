@@ -39,7 +39,6 @@ namespace TrialP.Products.Controllers
             {
                 url += $"?page={page}";
             }
-
             string result = GetProccess(url);
 
             var serializeOptions = new JsonSerializerOptions
