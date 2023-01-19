@@ -52,14 +52,17 @@ namespace TrialP.Products.Controllers
         // PUT: api/Products/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutProduct(Guid id, Product product)
+        public async Task<IActionResult> PutProduct(Product product)
         {
-            if (id != product.IdDb)
-            {
-                return BadRequest();
-            }
+            var existingP = _context.Products.Where(w => w.Key== product.Key).FirstOrDefault();
+            existingP.FullName = product.FullName;
+            existingP.Description= product.Description;
+            existingP.ExtendedName = product.ExtendedName;
+            existingP.Name = product.Name;
+            existingP.PriceMax= product.PriceMax;
+            existingP.PriceMin = product.PriceMin;
 
-            _context.Entry(product).State = EntityState.Modified;
+            _context.Entry(existingP).State = EntityState.Modified;
 
             try
             {
@@ -67,7 +70,7 @@ namespace TrialP.Products.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ProductExists(id))
+                if (existingP == null)
                 {
                     return NotFound();
                 }
@@ -97,13 +100,13 @@ namespace TrialP.Products.Controllers
 
         // DELETE: api/Products/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProduct(Guid id)
+        public async Task<IActionResult> DeleteProduct(string id)
         {
             if (_context.Products == null)
             {
                 return NotFound();
             }
-            var product = await _context.Products.FindAsync(id);
+            var product = _context.Products.Where(w => w.Key == id).FirstOrDefault();
             if (product == null)
             {
                 return NotFound();

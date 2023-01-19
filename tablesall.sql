@@ -64,6 +64,8 @@ create table PositionsPrimary(
 
 create table Orders(
 	id uniqueidentifier default NEWID() PRIMARY KEY,
+	user_id uniqueidentifier,
+	"key" uniqueidentifier,
 	positions_primary_id uniqueidentifier foreign key references PositionsPrimary(id) on delete cascade on update cascade,
 	is_completed bit, 
 	order_date datetime

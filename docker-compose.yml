@@ -1,0 +1,42 @@
+version: '3.4'
+
+services:
+  trialp.auth:
+    ports:
+     - "7001:80"
+    extra_hosts:
+     - "host.docker.internal:host-gateway"
+    image: ${DOCKER_REGISTRY-}trialpauth
+    build:
+      context: .
+      dockerfile: TrialP.Auth/Dockerfile
+
+  trialp.products:
+    ports:
+     - "7002:80"
+    extra_hosts:
+       - "host.docker.internal:host-gateway"
+    image: ${DOCKER_REGISTRY-}trialpproducts
+    build:
+      context: .
+      dockerfile: TrialP.Products/Dockerfile
+
+  apigateway:
+    ports:
+     - "7003:80"
+    extra_hosts:
+       - "host.docker.internal:host-gateway"
+    image: ${DOCKER_REGISTRY-}apigateway
+    build:
+      context: .
+      dockerfile: Ocelot/Dockerfile
+
+  client:
+    ports:
+     - "8989:80"
+    extra_hosts:
+       - "host.docker.internal:host-gateway"
+    image: ${DOCKER_REGISTRY-}client
+    build:
+      context: TrialP
+      dockerfile: Dockerfile

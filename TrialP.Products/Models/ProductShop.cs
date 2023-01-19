@@ -12,11 +12,11 @@ public partial class ProductShop
     [JsonPropertyName("id")]
     public int? ApiId { get; set; }
 
-    public string Logo { get; set; }
+    public string? Logo { get; set; }
 
-    public string Title { get; set; }
+    public string? Title { get; set; }
 
-    public string Url { get; set; }
+    public string? Url { get; set; }
 
     [JsonIgnore]
     public virtual ICollection<PositionsPrimary> PositionsPrimaries { get; } = new List<PositionsPrimary>();

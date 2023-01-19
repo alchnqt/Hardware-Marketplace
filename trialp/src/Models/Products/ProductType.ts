@@ -9,6 +9,7 @@ export type TotalUngrouped = number;
 
 export interface Product {
     id: string,
+    idDb: string,
     key: string,
     name: string,
     full_name: string,

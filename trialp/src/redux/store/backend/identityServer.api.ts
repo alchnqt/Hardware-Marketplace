@@ -17,11 +17,17 @@ export interface RegisterDto {
     phone: string
 }
 
+export interface User{
+    userName: string,
+    id: string,
+    email: string
+}
+
 export const identityApi = createApi({
-    reducerPath: 'api/',
+    reducerPath: 'authApi/',
     baseQuery: fetchBaseQuery({
         baseUrl: CONFIG.endpoints["auth"]
-        }
+    }
     ),
     endpoints: build => ({
         login: build.mutation<AccessToken, LoginDto>({
@@ -38,12 +44,17 @@ export const identityApi = createApi({
                 body: data,
             })
         }),
-        logout: build.query({
+        logout: build.query<any, any>({
             query: () => ({
                 url: '/logout',
             })
         }),
-        secret: build.query({
+        allCustomers: build.query<User[], any>({
+            query: () => ({
+                url: '/AllCustomers'
+            })
+        }),
+        secret: build.query<any, any>({
             query: () => ({
                 headers: { Authorization: `Bearer ${accessTokenService.getAccessToken()}` },
                 url: '/secret',
@@ -52,4 +63,4 @@ export const identityApi = createApi({
     })
 });
 
-export const { useLoginMutation, useLogoutQuery, useRegisterMutation } = identityApi;
+export const { useLoginMutation, useLogoutQuery, useRegisterMutation, useAllCustomersQuery } = identityApi;

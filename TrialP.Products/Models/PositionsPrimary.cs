@@ -13,8 +13,7 @@ public class PositionPrice
 
 public partial class PositionsPrimary
 {
-    [JsonIgnore]
-    public Guid Id { get; set; }
+    public Guid IdDb { get; set; }
 
     [JsonPropertyName("id")]
     public string? ApiId { get; set; }

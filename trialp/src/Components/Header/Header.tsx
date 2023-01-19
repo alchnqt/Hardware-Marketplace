@@ -67,15 +67,15 @@ function Header() {
                     <Typography variant="h6" color="inherit" noWrap sx={{ flexGrow: 1 }}>
                         <Link className={`${styles.logo} `} href='/'>E-Katalog</Link>
                     </Typography>
-                    <TextField
-                        className={`${styles.search}`}
-                        autoComplete="given-name"
-                        name="search"
-                        fullWidth
-                        id="search"
-                        label="Поиск"
-                        autoFocus
-                    />
+                    {/*<TextField*/}
+                    {/*    className={`${styles.search}`}*/}
+                    {/*    autoComplete="given-name"*/}
+                    {/*    name="search"*/}
+                    {/*    fullWidth*/}
+                    {/*    id="search"*/}
+                    {/*    label="Поиск"*/}
+                    {/*    autoFocus*/}
+                    {/*/>*/}
                     <nav>
                         <Link
                             variant="button"
@@ -83,15 +83,6 @@ function Header() {
                             href="/cart"
                             sx={{ my: 1, mx: 1.5 }}>
                             Избранное: {getTotalQuantity()}
-                        </Link>
-                        
-                        <Link
-                            variant="button"
-                            color="text.primary"
-                            href="#"
-                            sx={{ my: 1, mx: 1.5 }}
-                        >
-                            Enterprise
                         </Link>
                         <Link
                             variant="button"
@@ -122,6 +113,15 @@ function Header() {
                                     sx={{ my: 1, mx: 1.5 }}
                                 >
                                     Профиль
+                            </Link>
+
+                            <Link
+                                variant="button"
+                                color="text.primary"
+                                href="/history"
+                                sx={{ my: 1, mx: 1.5 }}
+                            >
+                                История
                             </Link>
 
                                 <Button

@@ -30,7 +30,7 @@ public partial class TrialPProductsContext : DbContext
     public virtual DbSet<SubSubCategory> SubSubCategories { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer("Server=localhost;Database=TrialP_Products;Trusted_Connection=True;trustServerCertificate=true;");
+        => optionsBuilder.UseSqlServer("Server=192.168.100.6;Database=TrialP_Products;User=sa;Password=1234;trustServerCertificate=true;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -55,6 +55,8 @@ public partial class TrialPProductsContext : DbContext
                 .HasDefaultValueSql("(newid())")
                 .HasColumnName("id");
             entity.Property(e => e.IsCompleted).HasColumnName("is_completed");
+            entity.Property(e => e.UserId).HasColumnName("user_id"); 
+            entity.Property(e => e.Key).HasColumnName("key");
             entity.Property(e => e.OrderDate)
                 .HasColumnType("datetime")
                 .HasColumnName("order_date");
@@ -68,11 +70,11 @@ public partial class TrialPProductsContext : DbContext
 
         modelBuilder.Entity<PositionsPrimary>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Position__3213E83F09B691F8");
+            entity.HasKey(e => e.IdDb).HasName("PK__Position__3213E83F09B691F8");
 
             entity.ToTable("PositionsPrimary");
 
-            entity.Property(e => e.Id)
+            entity.Property(e => e.IdDb)
                 .HasDefaultValueSql("(newid())")
                 .HasColumnName("id");
             entity.Property(e => e.ApiId).HasColumnName("apiId");

@@ -1,42 +1,12 @@
 {
   "Routes": [
     {
-      "DownstreamPathTemplate": "/api/v1/values/notsecret",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 7171
-        }
-      ],
-      "UpstreamPathTemplate": "/api/v1/free/values/notsecret",
-      "UpstreamHttpMethod": [ "GET" ],
-      "Priority": 1
-    },
-    {
-      "DownstreamPathTemplate": "/api/{version}/{everything}",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 7171
-        }
-      ],
-      "UpstreamPathTemplate": "/api/{version}/a/{everything}",
-      "UpstreamHttpMethod": [ "GET", "POST" ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "IdentityApiKey",
-        "AllowedScopes": [ "ApiOne" ]
-      },
-      "Priority": 0
-    },
-    {
       "DownstreamPathTemplate": "/api/{everything}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 7030
+          "Host": "host.docker.internal",
+          "Port": 7001
         }
       ],
       "UpstreamPathTemplate": "/api/identity/{everything}",
@@ -44,11 +14,11 @@
     },
     {
       "DownstreamPathTemplate": "/api/{everything}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 7288
+          "Host": "host.docker.internal",
+          "Port": 7002
         }
       ],
       "UpstreamPathTemplate": "/api/product/{everything}",
@@ -57,6 +27,6 @@
   ],
 
   "GlobalConfiguration": {
-    "BaseUrl": "https://localhost:7003"
+    "BaseUrl": "https://host.docker.internal:7003"
   }
 }

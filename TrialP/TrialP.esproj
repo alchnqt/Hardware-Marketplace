@@ -22,6 +22,9 @@
     <Folder Include="src\Components\Cart\" />
     <Folder Include="src\Components\Admin\" />
     <Folder Include="src\Components\Copyright\" />
+    <Folder Include="src\Components\History\" />
+    <Folder Include="src\Components\OrderModal\" />
+    <Folder Include="src\Components\Order\" />
     <Folder Include="src\Components\Products\" />
     <Folder Include="src\Components\NotFound\" />
     <Folder Include="src\Models\Products\" />
@@ -48,9 +51,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="src\redux\store\store.ts" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Remove="src\redux\store\backend\productsServer.api.ts" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="src\redux\store\backend\identityServer.api.ts" />

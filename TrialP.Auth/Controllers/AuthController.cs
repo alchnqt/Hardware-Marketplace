@@ -192,6 +192,7 @@ namespace TrialP.Auth.Controllers
             List<Claim> claims = new List<Claim>
             {
                 new Claim(ClaimsIdentity.DefaultNameClaimType, login),
+                new Claim("id", user.Id),
                 new Claim(System.Security.Claims.ClaimTypes.MobilePhone, user.PhoneNumber ?? ""),
                 new Claim(System.Security.Claims.ClaimTypes.Email, user.Email ?? ""),
                 new Claim(ClaimsIdentity.DefaultRoleClaimType, roles.FirstOrDefault() ?? "")
@@ -209,6 +210,13 @@ namespace TrialP.Auth.Controllers
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
 
             return jwt;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> AllCustomers()
+        {
+            var users = await _userManager.GetUsersInRoleAsync("Customer");
+            return Ok(users);
         }
 
         private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
