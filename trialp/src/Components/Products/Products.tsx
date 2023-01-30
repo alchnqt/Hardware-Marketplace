@@ -7,7 +7,7 @@ import styles from './products.module.css';
 import Button from '@mui/material/Button';
 import Link from '@mui/material/Link';
 import Divider from '@mui/material/Divider';
-import CircularLoader from '../CircularLoader/CircularLoader';
+import CircularLoader from '../Loader/CircularLoader';
 import { RootState, useAppDispatch } from '../../redux/store/store';
 import { decrementPage, incrementPage } from '../../redux/slices/productsSlice';
 

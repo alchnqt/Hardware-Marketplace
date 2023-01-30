@@ -30,7 +30,7 @@ public partial class TrialPProductsContext : DbContext
     public virtual DbSet<SubSubCategory> SubSubCategories { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer("Server=192.168.100.6;Database=TrialP_Products;User=sa;Password=1234;trustServerCertificate=true;");
+        => optionsBuilder.UseSqlServer("Server=localhost;Database=TrialP_Products;User=sa;Password=1234;trustServerCertificate=true;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

@@ -102,12 +102,11 @@ function PricingContent() {
                     component="h1"
                     variant="h2"
                     align="center"
-                    color="text.primary"
                     gutterBottom
                 >
                     E-Katalog
                 </Typography>
-                <Typography variant="h5" align="center" color="text.secondary" component="p">
+                <Typography variant="h5" align="center" component="p">
                     Это многофункциональный сервис поиска товаров в интернет-магазинах и сравнения цен.
                     Он охватывает самые разнообразные категории товаров: электроника, компьютеры, бытовая техника, автотовары,
                     оборудование для ремонта и строительства, туристическое снаряжение, детские товары и многое другое.
@@ -142,7 +141,7 @@ function PricingContent() {
                                     }}
                                 />
                                 <CardContent>
-                                    <Box
+                                    <Box component="div"
                                         sx={{
                                             display: 'flex',
                                             justifyContent: 'center',

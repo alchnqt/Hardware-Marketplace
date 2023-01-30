@@ -21,7 +21,7 @@ function Copyright() {
 
 export default function StickyFooter() {
     return (
-        <Box
+        <Box component="div"
             sx={{
                 display: 'flex',
                 flexDirection: 'column',

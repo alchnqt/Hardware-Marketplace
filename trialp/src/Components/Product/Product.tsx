@@ -4,7 +4,7 @@ import React, { useEffect } from 'react';
 import { Navigate, useParams, useSearchParams } from 'react-router-dom';
 import { PositionsPrimary, ProductShop } from '../../Models/Products/ProductAllShop';
 import { useProductQuery, useProductShopsQuery } from '../../redux/store/backend/external.api';
-import CircularLoader from '../CircularLoader/CircularLoader';
+import CircularLoader from '../Loader/CircularLoader';
 import styles from './product.module.css';
 import { addToCart, CartItem } from '../../redux/slices/cartSlice';
 import { useAppDispatch } from '../../redux/store/store';

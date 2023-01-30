@@ -64,7 +64,7 @@ export default function OrderModal(props: modalProps) {
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
             >
-                <Box sx={style}>
+                <Box sx={style} component="div">
                     <div className={`${styles.orderModalContainer}`}>
                         <div className={`${styles.orderModalHeader}`}>
                             <h3>Оформление заказа</h3>

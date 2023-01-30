@@ -7,7 +7,7 @@ import { useAllOrdersQuery, useCompleteOrderMutation} from '../../redux/store/ba
 import { useAllCustomersQuery } from '../../redux/store/backend/identityServer.api';
 import { useAddShopMutation, useRemoveShopMutation, useUpdateShopMutation } from '../../redux/store/backend/shopServer.api';
 import { useAppDispatch } from '../../redux/store/store';
-import CircularLoader from '../CircularLoader/CircularLoader';
+import CircularLoader from '../Loader/CircularLoader';
 import styles from './admin.module.css';
 
 

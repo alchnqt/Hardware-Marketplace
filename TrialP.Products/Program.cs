@@ -12,7 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddDbContext<TrialPProductsContext>(options =>
-         options.UseSqlServer("Server=192.168.100.6;Database=TrialP_Products;Trusted_Connection=True;trustServerCertificate=true;MultipleActiveResultSets=true;"),
+         options.UseSqlServer("Server=localhost;Database=TrialP_Products;Trusted_Connection=True;trustServerCertificate=true;MultipleActiveResultSets=true;"),
          ServiceLifetime.Transient);
 builder.Services.AddTransient<IEmailService, EmailService>();
 builder.Services.AddEndpointsApiExplorer();

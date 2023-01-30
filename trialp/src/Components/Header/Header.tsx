@@ -16,6 +16,7 @@ import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../../redux/store/store';
 import { logout, ROLE_CLAIM } from '../../redux/slices/authSlice';
 import EventBus from '../../redux/common/EventBus';
+import { Logo } from '@pmndrs/branding';
 
 function Header() {
     const [show, setShow] = useState(false);
@@ -64,8 +65,9 @@ function Header() {
                 sx={{ borderBottom: (theme) => `1px solid ${theme.palette.divider}` }}
             >
                 <Toolbar className={`${styles.header}`} sx={{ flexWrap: 'no-wrap' }}>
-                    <Typography variant="h6" color="inherit" noWrap sx={{ flexGrow: 1 }}>
-                        <Link className={`${styles.logo} `} href='/'>E-Katalog</Link>
+                    <Typography className={`${styles.logo}`} variant="h6" color="inherit" noWrap sx={{ flexGrow: 1 }}>
+                        <Logo style={{bottom: 40, left: 80, width: 30 }} />
+                        <Link className={`${styles.logoText}`} href='/'>E-Katalog</Link>
                     </Typography>
                     {/*<TextField*/}
                     {/*    className={`${styles.search}`}*/}
@@ -76,7 +78,7 @@ function Header() {
                     {/*    label="Поиск"*/}
                     {/*    autoFocus*/}
                     {/*/>*/}
-                    <nav>
+                    <nav className={`${styles.headerNav}`}>
                         <Link
                             variant="button"
                             color="text.primary"

@@ -10,6 +10,7 @@
   <ItemGroup>
     <Folder Include="build\" />
     <Folder Include="src\App_Data\" />
+    <Folder Include="src\Components\3D\Computers\" />
     <Folder Include="src\Components\Auth\Login\" />
     <Folder Include="src\Components\Auth\NewFolder\" />
     <Folder Include="src\Components\Auth\Profile\" />
@@ -18,7 +19,6 @@
     <Folder Include="src\Components\Footer\RelevantItems\" />
     <Folder Include="src\Components\Layout\" />
     <Folder Include="src\Components\AppRouter\" />
-    <Folder Include="src\Components\CircularLoader\" />
     <Folder Include="src\Components\Cart\" />
     <Folder Include="src\Components\Admin\" />
     <Folder Include="src\Components\Copyright\" />
@@ -69,5 +69,14 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="src\services\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptConfiguration Remove="src\Components\Loader\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="src\Components\Loader\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="src\Components\Loader\CircularLoader.tsx" />
   </ItemGroup>
 </Project>

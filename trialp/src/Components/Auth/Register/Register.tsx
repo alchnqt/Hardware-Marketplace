@@ -64,7 +64,7 @@ export default function Register() {
     if (result.isSuccess) {
         return (
             <Container component="main" className={`${styles.successMsg}`}>
-                <Box sx={{ color: `success.main` }}><h3>Регистрация прошла успешно</h3></Box>
+                <Box component="div" sx={{ color: `success.main` }}><h3>Регистрация прошла успешно</h3></Box>
             </Container>
         )
     }
@@ -74,7 +74,7 @@ export default function Register() {
             <ThemeProvider theme={theme}>
                 <Container component="main" maxWidth="xs">
                     <CssBaseline />
-                    <Box
+                    <Box component="div"
                         sx={{
                             marginTop: 8,
                             display: 'flex',
@@ -154,7 +154,7 @@ export default function Register() {
                             </Button>
                         </Box>
                     </Box>
-                    {result.isError && !result.isLoading && (<Box sx={{ color: `error.main` }}>Ошибка регистрации, проверьте данные. {`${(result.error as any).data.message}`}</Box>)}
+                    {result.isError && !result.isLoading && (<Box component="div" sx={{ color: `error.main` }}>Ошибка регистрации, проверьте данные. {`${(result.error as any).data.message}`}</Box>)}
                     <Copyright sx={{ mt: 5 }} />
                 </Container>
             </ThemeProvider>

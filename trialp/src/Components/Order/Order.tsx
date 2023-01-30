@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { ID_CLAIM } from '../../redux/slices/authSlice';
 import { useUserOrdersQuery } from '../../redux/store/backend/external.api';
 import { OrdersDto } from '../../redux/store/backend/ordersServer.api';
-import CircularLoader from '../CircularLoader/CircularLoader';
+import CircularLoader from '../Loader/CircularLoader';
 
 interface OrderProps {
     userId: string
@@ -15,7 +15,7 @@ function Order(props: OrderProps) {
     const { data, error, isLoading } = useUserOrdersQuery({ key: props.userId, isCompleted: props.isCompleted });
 
     if (isLoading) {
-        return <CircularLoader />
+        return <CircularLoader/>
     }
     if (error) {
         return <>Error</>

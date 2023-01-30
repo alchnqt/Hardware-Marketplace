@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import Container from '@mui/material/Container';
 import { EMAIL_CLAIM, ID_CLAIM, NAME_CLAIM, PHONE_CLAIM, ROLE_CLAIM } from '../../../redux/slices/authSlice';
 import { useUserOrdersQuery } from '../../../redux/store/backend/external.api';
-import CircularLoader from '../../CircularLoader/CircularLoader';
+import CircularLoader from '../../Loader/CircularLoader';
 import Order from '../../Order/Order';
 const Profile = () => {
     const { user } = useSelector((state: any) => state.auth);

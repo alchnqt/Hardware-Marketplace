@@ -2,6 +2,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const EncodingPlugin = require('encoding-plugin');
+const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = {
     mode: 'development',
@@ -14,6 +15,7 @@ module.exports = {
     },
     devtool: 'inline-source-map',
     devServer: {
+        open: false,
         static: './build',
         compress: true,
         port: 8099,
@@ -26,8 +28,7 @@ module.exports = {
                 exclude: /node_modules/,
                 use: {
                     options: {
-                        cacheDirectory: true, // Использование кэша для избежания рекомпиляции
-                        // при каждом запуске
+                        cacheDirectory: true
                     },
                     loader: 'babel-loader'
                 },
@@ -38,7 +39,7 @@ module.exports = {
                 exclude: /node_modules/,
             },
             {
-                test: /\.(le|c)ss$/i, // /\.(le|c)ss$/i если вы используете less
+                test: /\.(le|c)ss$/i,
                 use: [
                     MiniCssExtractPlugin.loader,
                     'css-loader',
@@ -48,14 +49,25 @@ module.exports = {
             },
             {
                 test: /\.(png|jpe?g|gif|svg|webp|ico)$/i,
-                type: 'asset/resource', // В продакшен режиме
-                // изображения размером до 8кб будут инлайнится в код
-                // В режиме разработки все изображения будут помещаться в dist/assets
+                type: 'asset/resource',
             },
             {
                 test: /\.(woff2?|eot|ttf|otf)$/i,
                 type: 'asset/resource',
-            }
+            },
+            {
+                test: /\.(glb|gltf)$/,
+                use:
+                    [
+                        {
+                            loader: 'file-loader',
+                            options:
+                            {
+                                outputPath: 'assets/models/'
+                            }
+                        }
+                    ]
+            },
         ]
     },
     resolve: {
@@ -67,6 +79,11 @@ module.exports = {
         }),
         new HtmlWebpackPlugin({
             template: './public/index.html'
+        }),
+        new CopyPlugin({
+            patterns: [
+                { from: "./public", to: "assets/models/" } //to the dist root directory
+            ],
         }),
         new MiniCssExtractPlugin()
     ]

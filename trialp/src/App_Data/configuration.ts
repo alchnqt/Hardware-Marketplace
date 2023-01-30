@@ -1,4 +1,4 @@
-export const DEFAULT_OCELOT_GATEWAY: string = 'http://host.docker.internal:7003/api';
+export const DEFAULT_OCELOT_GATEWAY: string = 'https://localhost:7003/api';
 
 interface Endpoints<T> {
     [Key: string]: T;

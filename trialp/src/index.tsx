@@ -5,7 +5,7 @@ import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
 import { persistor, store } from './redux/store/store';
 import { PersistGate } from 'redux-persist/integration/react';
-import CircularLoader from './Components/CircularLoader/CircularLoader';
+import CircularLoader from './Components/Loader/CircularLoader';
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
 );

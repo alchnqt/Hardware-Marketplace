@@ -25,7 +25,7 @@ const Comparer = (props: ComparerProps) => {
         return (<></>)
 
     return (
-        <Box>
+        <Box component="div">
             <h2 className={`${styles.comparerHeader}`}>Сравнение товаров</h2>
             <div className={`${styles.comparerContainer}`}>
                 <div className={`${styles.compareItem}`}>

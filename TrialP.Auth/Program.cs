@@ -12,7 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-var connectionString = builder.Configuration.GetConnectionString("Server=host.docker.internal;Database=TrialP_IdentityServer;User=sa;Password=1234;trustServerCertificate=true;");
+var connectionString = builder.Configuration.GetConnectionString("Server=localhost;Database=TrialP_IdentityServer;User=sa;Password=1234;trustServerCertificate=true;");
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connectionString));
 
