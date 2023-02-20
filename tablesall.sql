@@ -70,3 +70,18 @@ create table Orders(
 	is_completed bit, 
 	order_date datetime
 );
+
+create table Reviews(
+	id uniqueidentifier default NEWID() PRIMARY KEY,
+	user_id uniqueidentifier,
+	api_user_id int,
+	rating int,
+	api_product_id nvarchar(max),
+	product_id uniqueidentifier foreign key references Products(id) on delete cascade on update cascade,
+	api_product_url nvarchar(max),
+	pros nvarchar(max),
+	cons nvarchar(max),
+	summary nvarchar(max),
+	"text" nvarchar(max),
+	created_at datetime
+);

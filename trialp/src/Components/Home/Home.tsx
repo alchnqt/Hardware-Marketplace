@@ -30,7 +30,7 @@ export const Home = () => {
     return (
         <div>
             <div className={`${styles.overlay}`}>
-                <OverlayHomePresent />
+                <img src="/assets/models/images/blockchain-banner-homepage.jpg"/>
                 <OverlayInfo />
             </div>
             <div className={`container ${styles.home}`}>
