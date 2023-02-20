@@ -148,6 +148,45 @@ namespace TrialP.Products.Controllers
             return Content(GetProccess(url), "application/json");
         }
 
+        [HttpGet]
+        public async Task<ReviewsDto> GetProductReviewsById(string key, int page = 1)
+        {
+            string url = $"https://catalog.onliner.by/sdapi/catalog.api/products/{key}/reviews?order=created_at:desc";
+
+            if (page > 1)
+            {
+                url += $"&page={page}";
+            }
+
+            string result = GetProccess(url);
+            var serializeOptions = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                WriteIndented = true
+            };
+
+            ReviewsDto reviewsDto = JsonSerializer.Deserialize<ReviewsDto>(result, serializeOptions);
+
+            using (var context = new TrialPProductsContext())
+            {
+
+                var missingReviews = reviewsDto.Reviews.Where(db => !context.Reviews.Any(search => db.ApiId == search.ApiId))
+                    .Select(s => 
+                    {
+                        s.ProductId = (from pr in context.Products where s.ApiProductId == pr.Key select pr.Id).FirstOrDefault();
+                        return s;
+                    });
+                context.Reviews.AddRange(missingReviews);
+                context.SaveChanges();
+
+                var productsFromDb = context.Reviews.OrderByDescending(odb => odb.CreatedAt).Skip(10 * (page - 1)).Take(10).ToList();
+
+                reviewsDto.Reviews = productsFromDb;
+
+                return reviewsDto;
+            }
+        }
+
         public ProductShops GetProductShopsByKey(string key)
         {
             string url = $"https://shop.api.onliner.by/products/{key}/positions";
@@ -176,7 +215,7 @@ namespace TrialP.Products.Controllers
                 var missingPosistionsPrimaries = productShops.Positions.Primary.Where(search => !context.PositionsPrimaries.Any(db => db.ApiId == search.ApiId))
                     .Select(s =>
                     {
-                        s.ProductId = context.Products.Where(w => w.Key == key).FirstOrDefault()?.IdDb;
+                        s.ProductId = context.Products.Where(w => w.Key == key).FirstOrDefault()?.Id;
                         s.ShopId = context.ProductShops.Where(w => w.ApiId == s.ShopIdApi).FirstOrDefault()?.Id;
                         s.Amount = decimal.Parse(s.PositionPrice.Amount, System.Globalization.CultureInfo.InvariantCulture);
                         s.Currency = s.PositionPrice.Currency;

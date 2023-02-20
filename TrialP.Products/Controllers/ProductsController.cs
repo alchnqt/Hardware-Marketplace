@@ -95,7 +95,7 @@ namespace TrialP.Products.Controllers
             _context.Products.Add(product);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetProduct", new { id = product.IdDb }, product);
+            return CreatedAtAction("GetProduct", new { id = product.Id }, product);
         }
 
         // DELETE: api/Products/5
@@ -120,7 +120,7 @@ namespace TrialP.Products.Controllers
 
         private bool ProductExists(Guid id)
         {
-            return (_context.Products?.Any(e => e.IdDb == id)).GetValueOrDefault();
+            return (_context.Products?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

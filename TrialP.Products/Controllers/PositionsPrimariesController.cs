@@ -54,7 +54,7 @@ namespace TrialP.Products.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPositionsPrimary(Guid id, PositionsPrimary positionsPrimary)
         {
-            if (id != positionsPrimary.IdDb)
+            if (id != positionsPrimary.Id)
             {
                 return BadRequest();
             }
@@ -92,7 +92,7 @@ namespace TrialP.Products.Controllers
             _context.PositionsPrimaries.Add(positionsPrimary);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetPositionsPrimary", new { id = positionsPrimary.IdDb }, positionsPrimary);
+            return CreatedAtAction("GetPositionsPrimary", new { id = positionsPrimary.Id }, positionsPrimary);
         }
 
         // DELETE: api/PositionsPrimaries/5
@@ -117,7 +117,7 @@ namespace TrialP.Products.Controllers
 
         private bool PositionsPrimaryExists(Guid id)
         {
-            return (_context.PositionsPrimaries?.Any(e => e.IdDb == id)).GetValueOrDefault();
+            return (_context.PositionsPrimaries?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

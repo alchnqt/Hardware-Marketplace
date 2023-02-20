@@ -41,7 +41,9 @@ public partial class Product
     private Prices prices;
     private Images images;
 
-    public Guid IdDb { get; set; }
+
+    [JsonPropertyName("dbId")]
+    public Guid Id { get; set; }
 
     [JsonIgnore]
     public int? ApiId { get; set; }
@@ -109,6 +111,8 @@ public partial class Product
     [JsonIgnore]
     public Guid? SubSubCategoryId { get; set; }
 
+    [JsonIgnore]
+    public virtual ICollection<Review> Reviews { get; } = new List<Review>();
 
     [JsonIgnore]
     public virtual ICollection<PositionsPrimary> PositionsPrimaries { get; } = new List<PositionsPrimary>();
