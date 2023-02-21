@@ -8,6 +8,7 @@ using System.Net;
 using System.Security.Permissions;
 using System.Security.Policy;
 using System.Text.Json;
+using TrialP.Products.Data.Request;
 using TrialP.Products.Models;
 using TrialP.Products.Models.Api;
 
@@ -25,11 +26,6 @@ namespace TrialP.Products.Controllers
         public ApiSpoofController(IHttpClientFactory httpClientFactory)
         {
             _httpClientFactory = httpClientFactory;
-        }
-
-        public IActionResult UpdateProductsByGategory(string category)
-        {
-            return NoContent();
         }
 
         public SearchProduct GetProductsBySubSubCategory(string subSubCategory, int page = 1)
@@ -173,17 +169,41 @@ namespace TrialP.Products.Controllers
                 var missingReviews = reviewsDto.Reviews.Where(db => !context.Reviews.Any(search => db.ApiId == search.ApiId))
                     .Select(s => 
                     {
-                        s.ProductId = (from pr in context.Products where s.ApiProductId == pr.Key select pr.Id).FirstOrDefault();
+                        Guid? prId = (from pr in context.Products where s.ApiProductId == pr.Key select pr.Id).FirstOrDefault();
+                        s.ProductId = prId == Guid.Empty ? null : prId;
                         return s;
                     });
-                context.Reviews.AddRange(missingReviews);
-                context.SaveChanges();
+                await context.Reviews.AddRangeAsync(missingReviews);
+                await context.SaveChangesAsync();
 
                 var productsFromDb = context.Reviews.OrderByDescending(odb => odb.CreatedAt).Skip(10 * (page - 1)).Take(10).ToList();
 
                 reviewsDto.Reviews = productsFromDb;
 
                 return reviewsDto;
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateProductReview(CreateReviewDto createReviewDto)
+        {
+            using (var context = new TrialPProductsContext())
+            {
+                var review = new Review()
+                {
+                    UserId = createReviewDto.UserId,
+                    Text = createReviewDto.Text,
+                    Cons = createReviewDto.Cons,
+                    Pros = createReviewDto.Pros,
+                    Summary = createReviewDto.Summary,
+                    Rating = createReviewDto.Rating,
+                    ApiProductId= createReviewDto.ApiProductId,
+                    ProductId = createReviewDto.ProductId,
+                    CreatedAt = DateTime.Now
+                };
+                await context.Reviews.AddAsync(review);
+                await context.SaveChangesAsync();
+                return CreatedAtAction(nameof(GetProductReviewsById), new { id = review.ProductId}, review);
             }
         }
 
