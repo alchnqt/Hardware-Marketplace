@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
-import { connect, useSelector } from 'react-redux';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 import { useProductsQuery } from '../../redux/store/backend/external.api';
-import { Product, ProductsResult } from '../../Models/Products/ProductType';
+import { Product } from '../../Models/Products/ProductType';
 import styles from './products.module.css';
 import Button from '@mui/material/Button';
 import Link from '@mui/material/Link';
@@ -17,6 +17,8 @@ function Products() {
     const dispatch = useAppDispatch();
     let subsubcategory: string = searchParams.get("subsubcategory") || "";
     const { data, error, isLoading } = useProductsQuery({ subsubcategory, page });
+    
+    const [pageCount, setPageCount] = useState(0);
 
     if (isLoading) {
         return (
@@ -39,7 +41,7 @@ function Products() {
                         <span>{`<< Вернуться`}</span>
                     </Button>)}
                 {data.products.map((product: Product): any =>
-                    <>
+                    <React.Fragment key={`product${product.dbId}`}>
                         <div className={`${styles.product}`}>
                             <img className={`${styles.icon}`} src={product.images.header} />
                             <div className={`${styles.secondBlock}`}>
@@ -59,7 +61,7 @@ function Products() {
                             </div>
                         </div>
                         <Divider className={`${styles.dividerProduct}`}></Divider>
-                    </>
+                    </React.Fragment>
                 )}
                 <div>
                     <Divider className={`${styles.divider}`}></Divider>

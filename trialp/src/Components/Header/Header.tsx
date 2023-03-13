@@ -1,22 +1,18 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import Link from '@mui/material/Link';
 import styles from './header.module.css';
-import Modal from 'react-bootstrap/Modal';
 import Button from '@mui/material/Button';
-import Register from '../Auth/Register/Register';
 import Login from '../Auth/Login/Login';
-import GlobalStyles from '@mui/material/GlobalStyles';
-import CssBaseline from '@mui/material/CssBaseline';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import TextField from '@mui/material/TextField';
 import Navbar from '../Home/Navbar/Navbar';
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../../redux/store/store';
 import { logout, ROLE_CLAIM } from '../../redux/slices/authSlice';
-import EventBus from '../../redux/common/EventBus';
 import { Logo } from '@pmndrs/branding';
+import ActiveLastBreadcrumb from '../Breadcrumbs/ActiveLastBreadcrumb';
+import Container from '@mui/material/Container';
 
 function Header() {
     const [show, setShow] = useState(false);
@@ -39,22 +35,6 @@ function Header() {
     const logOut = useCallback(() => {
         dispatch(logout());
     }, [dispatch]);
-
-    //useEffect(() => {
-    //    if (currentUser) {
-    //        setShowAdminBoard(currentUser.roles.includes("Admin"));
-    //    } else {
-    //        setShowAdminBoard(false);
-    //    }
-
-    //    EventBus.on("logout", () => {
-    //        logOut();
-    //    });
-
-    //    return () => {
-    //        EventBus.remove("logout", undefined);
-    //    };
-    //}, [currentUser, logOut]);
 
     return (
         <React.Fragment>
@@ -84,7 +64,7 @@ function Header() {
                             color="text.primary"
                             href="/cart"
                             sx={{ my: 1, mx: 1.5 }}>
-                            Избранное: {getTotalQuantity()}
+                            Корзина: {getTotalQuantity()}
                         </Link>
                         <Link
                             variant="button"
@@ -143,7 +123,16 @@ function Header() {
                 </Toolbar>
             </AppBar>
             {show && <Login />}
-            <Navbar />
+            <div className={styles.categoryContainer}>
+                <Container>
+                    <Navbar />
+                </Container>
+            </div>
+            <div className={styles.navContainer}>
+                <Container>
+                    <ActiveLastBreadcrumb />
+                </Container>
+            </div>
         </React.Fragment>
     );
 }

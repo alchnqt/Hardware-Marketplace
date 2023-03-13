@@ -45,11 +45,8 @@ public partial class Product
     [JsonPropertyName("dbId")]
     public Guid Id { get; set; }
 
-    [JsonIgnore]
-    public int? ApiId { get; set; }
-
     [JsonPropertyName("id")]
-    public string? ApiIdString { get => ApiId.ToString(); }
+    public int? ApiId { get; set; }
 
     public string Key { get; set; }
 

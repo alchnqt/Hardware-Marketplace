@@ -55,7 +55,6 @@ function AppRouter() {
               } />
               <Route path="/profile" element={
                   <RequireAuth redirectTo="/">
-                      <Profile />
                   </RequireAuth>
               }/>
 
