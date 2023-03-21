@@ -7,6 +7,13 @@ export interface Page {
 }
 export type TotalUngrouped = number;
 
+export interface AggregatedReviews{
+    rating: number,
+    count: number,
+    url: string | null,
+    html_url: string | null
+}
+
 export interface Product {
     id: string,
     dbId: string,
@@ -23,12 +30,6 @@ export interface Product {
     description: string,
     microdescription: string,
     html_url: string,
-    reviews: {
-        rating: number,
-        count: number,
-        html_url: string,
-        url: string
-    },
     reviewUrl: string | null,
     colorCode: string | null,
     prices: {
@@ -57,7 +58,8 @@ export interface Product {
         },
         htmlUrl: string,
         url: string
-    }
+    },
+    reviews: AggregatedReviews
 }
 
 export interface ProductsResult {

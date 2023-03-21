@@ -26,57 +26,68 @@ const createTitle = (title: string) => {
 }
 
 export default function ActiveLastBreadcrumb() {
-    const paths = window.location.pathname.split('/').filter(i => i !== '');
-    const breadcrumbs: BreadcrumbsModel[] = [];
+    const [breadcrumbs, setBreadcrumbs] = useState<BreadcrumbsModel[]>([]);
 
-    if (paths.length > 0) {
-        breadcrumbs.push({ title: `Главная`, id: 'Home', link: '/' });
-    }
-
-
+    //products page
     const [productPage, setProductPage] = useState<{ current: number, last: number }>({ current: 0, last: 0 });
 
-    paths.map((p, index): void => {
-        if (p !== '') {
-            breadcrumbs.push({
-                title: `${translateComponent(p)}`,
-                id: `${p}`,
-                link: `/${paths.slice(0, index + 1).join('/')}`
+    //product page
+    const [productName, setProductName] = useState<string>('');
+
+    const [loaded, setLoaded] = useState(false)
+
+    useEffect(() => {
+        if(loaded){
+            return;
+        }
+        let brArr: BreadcrumbsModel[] = [];
+        const paths = window.location.pathname.split('/').filter(i => i !== '');
+        if (paths.length > 0) {
+            brArr.push({ title: `Главная`, id: 'Home', link: '/' });
+        }
+        brArr = [...brArr, ...paths.map((p, index) => {
+            if (p !== '') {
+                return {
+                    title: `${translateComponent(p)}`,
+                    id: `${p}`,
+                    link: `/${paths.slice(0, index + 1).join('/')}`
+                }
+            }
+        }) as BreadcrumbsModel[]];
+
+        if (brArr.length === 2 &&
+            brArr.some(s => s.id === 'products')
+        ) {
+            brArr.push({
+                title: `Страница ${productPage.current} из ${productPage.last}`,
+                id: `prnamepage${productPage.current}`,
+                link: ``
             })
-
-            
         }
-    });
-
-    //productPage
-    if (breadcrumbs.length === 2 &&
-        breadcrumbs.some(s => s.id === 'products')
-    ) {
-        breadcrumbs.push({
-            title: `Страница ${productPage.current} из ${productPage.last}`,
-            id: `prnamepage${productPage.current}`,
-            link: ``
-        })
-    }
-
-    if (breadcrumbs.length > 2) {
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        const [pr, setPr] = useState<string>('');
-        store.subscribe(() => {
-            setPr(store.getState().product.product?.name || '')
-        })
-        breadcrumbs[2] = {
-            title: `${pr}`,
-            id: `prname${pr}`,
-            link: ``
+        //products page
+        if (brArr.length > 2 && brArr.some(s => s.id === 'product')) {
+            brArr[2] = {
+                title: `${productName}`,
+                id: `prname${productName}`,
+                link: ``
+            }
         }
-    }
+        setBreadcrumbs(brArr);
+        setLoaded(true);
+    }, [breadcrumbs, loaded, productName, productPage]);
+
+    store.subscribe(() => {
+        setLoaded(false);
+        setProductName(store.getState().product.product?.name || '');
+        setProductPage(store.getState().product.apiPage);
+    })
+
     return (
         <div role="presentation" className={`${breadcrumbs.length !== 0 ? styles.breadcrumbsBox : ''}`}>
             <Breadcrumbs aria-label='breadcrumb' className={`${breadcrumbs.length === 1 ? styles.breadcrumbsMuiHide : ''}`} separator={<NavigateNextIcon />}>
                 {breadcrumbs &&
                     breadcrumbs.map((b, index) =>
-                        index !== breadcrumbs.length - 1 && b.id !== 'product' ? (
+                        index !== breadcrumbs.length - 1 && b.id.toLowerCase().indexOf("product") === -1 ? (
                             <div key={`breadcrumb${b.title}`}>
                                 <Link underline='hover' className={`${styles.breadcrumb}`} href={b.link}>
                                     <div dangerouslySetInnerHTML={createTitle(b.title)}></div>

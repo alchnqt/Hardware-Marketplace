@@ -10,6 +10,7 @@ import Divider from '@mui/material/Divider';
 import CircularLoader from '../Loader/CircularLoader';
 import { RootState, useAppDispatch } from '../../redux/store/store';
 import { decrementPage, incrementPage } from '../../redux/slices/productsSlice';
+import Rating from '@mui/material/Rating/Rating';
 
 function Products() {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -17,8 +18,6 @@ function Products() {
     const dispatch = useAppDispatch();
     let subsubcategory: string = searchParams.get("subsubcategory") || "";
     const { data, error, isLoading } = useProductsQuery({ subsubcategory, page });
-    
-    const [pageCount, setPageCount] = useState(0);
 
     if (isLoading) {
         return (
@@ -52,6 +51,8 @@ function Products() {
                                 от {product.prices.price_min.amount} {product.prices.price_min.currency}
                             </div>
                             <div className={`${styles.buy}`}>
+                                <Rating className={`${styles.ratingContainer}`} name="read-only" value={(product.reviews.rating / 10)} readOnly />
+                                <Link className={`${styles.reviewsLink}`} target="_blank" href={`${product.reviews.html_url}`}>Отзывов: {product.reviews.count}</Link>
                                 <Link
                                     href={`/product/${product.key}`}
                                     className={`${styles.buyBtn}`}

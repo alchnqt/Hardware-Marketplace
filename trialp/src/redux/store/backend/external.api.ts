@@ -58,6 +58,13 @@ export const externalProductsApi = createApi({
                     url: `/GetUsersOrderById/${key}?isCompleted=${isCompleted}`,
                 }
             }
+        }),
+        search: build.query<any, string>({
+            query: (key) => {
+                return {
+                    url: `/search`
+                }
+            }
         })
     })
 });

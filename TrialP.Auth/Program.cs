@@ -78,12 +78,12 @@ using (var scope = app.Services.CreateScope())
     }
 
     //pre admin
-    IdentityUser bob = new IdentityUser() { UserName="bob", Email="bob@gmail.com"};
+    IdentityUser bob = new IdentityUser() { UserName="admin_default", Email="wndrfljnx@gmail.com"};
 
     IdentityResult bobResult = await userManager.CreateAsync(bob, "1234");
     if (!bobResult.Succeeded)
     {
-        IdentityUser bobDelete = await userManager.FindByNameAsync("bob");
+        IdentityUser bobDelete = await userManager.FindByNameAsync("admin_default");
         if(bobDelete != null)
         {
             await userManager.DeleteAsync(bobDelete);
@@ -92,7 +92,7 @@ using (var scope = app.Services.CreateScope())
     bobResult = await userManager.CreateAsync(bob, "1234");
     if (bobResult.Succeeded)
     {
-        IdentityUser userToMakeAdmin = await userManager.FindByNameAsync("bob");
+        IdentityUser userToMakeAdmin = await userManager.FindByNameAsync("admin_default");
         if (userToMakeAdmin != null)
         {
             await userManager.AddToRoleAsync(userToMakeAdmin, "Admin");

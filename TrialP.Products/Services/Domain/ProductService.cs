@@ -97,7 +97,7 @@ namespace TrialP.Products.Services.Domain
             using (var context = new TrialPProductsContext())
             {
 
-                var missingProducts = searchProduct.Products.Where(db => !context.Products.Any(search => db.ApiId == search.ApiId)).Select(s =>
+                var missingProducts = searchProduct.Products.Where(db => !context.Products.Include(r => r.Reviews).Any(search => db.ApiId == search.ApiId)).Select(s =>
                 {
                     s.PriceMax = decimal.Parse(s.Prices.PriceMax.Amount, System.Globalization.CultureInfo.InvariantCulture);
                     s.PriceMin = decimal.Parse(s.Prices.PriceMin.Amount, System.Globalization.CultureInfo.InvariantCulture);
@@ -109,8 +109,26 @@ namespace TrialP.Products.Services.Domain
                 await context.Products.AddRangeAsync(missingProducts);
                 await context.SaveChangesAsync();
 
+                //.Skip(30 * (page - 1)).Take(30)
+                var requestApiProductKeys = searchProduct.Products.Select(s => s.Key).ToList();
                 var productsFromDb = await context.Products
-                    .Where(w => w.SubSubCategory.ApiName == subSubCategory).Skip(30 * (page - 1)).Take(30).ToListAsync();
+                    .Where(w => w.SubSubCategory.ApiName == subSubCategory 
+                    && requestApiProductKeys.Contains(w.Key)).ToListAsync();
+
+                productsFromDb = productsFromDb.Select(s =>
+                {
+                    var requestProduct = searchProduct.Products.Where(w => w.Key == s.Key).FirstOrDefault();
+                    var requestCount = requestProduct?.AggregatedReviews.Count ?? 0;
+                    var requestRating = (requestProduct?.AggregatedReviews.Rating ?? 0) * requestCount;
+                    s.AggregatedReviews = new AggregatedReviews()
+                    {
+                        Count = requestCount + s.Reviews.Count(),
+                        Rating = (requestRating + s.Reviews.Select(s => s.Rating).Sum() ?? 0) / ((requestCount + s.Reviews.Count()) == 0 ? 1 : (requestCount + s.Reviews.Count())),
+                        Url = requestProduct?.AggregatedReviews.Url ?? "",
+                        HtmlUrl = requestProduct?.AggregatedReviews.HtmlUrl
+                    };
+                    return s;
+                }).ToList();
 
                 searchProduct.Products = productsFromDb;
 

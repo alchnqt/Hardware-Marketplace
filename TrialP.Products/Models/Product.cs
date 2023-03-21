@@ -5,6 +5,14 @@ using System.Text.Json.Serialization;
 
 namespace TrialP.Products.Models;
 
+public class AggregatedReviews
+{
+    public int Rating { get; set; }
+    public int Count { get; set; }
+    [JsonPropertyName("html_url")]
+    public string? HtmlUrl { get; set; }
+    public string? Url { get; set; }
+}
 public class Images
 {
     public string Header { get; set; }
@@ -103,11 +111,13 @@ public partial class Product
         set => prices = value;
     }
 
-    public int? Offers { get; set; }
+    [NotMapped]
+    [JsonPropertyName("reviews")]
+    public AggregatedReviews AggregatedReviews { get; set; }
 
+    public int? Offers { get; set; }
     [JsonIgnore]
     public Guid? SubSubCategoryId { get; set; }
-
     [JsonIgnore]
     public virtual ICollection<Review> Reviews { get; } = new List<Review>();
 

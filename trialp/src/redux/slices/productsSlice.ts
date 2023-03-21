@@ -34,11 +34,13 @@ const productsSlice = createSlice({
     reducers: {
         incrementPage: (state, action) => {
             state.page++;
+            state.apiPage.current++;
             window.scrollTo(0, 0)
         },
         decrementPage: (state, action) => {
             if (state.page > 1) {
                 state.page--;
+                state.apiPage.current--;
             }
             window.scrollTo(0, 0)
         },

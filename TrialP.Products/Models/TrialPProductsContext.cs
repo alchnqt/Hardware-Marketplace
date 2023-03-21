@@ -125,10 +125,10 @@ public partial class TrialPProductsContext : DbContext
             entity.Property(e => e.NamePrefix).HasColumnName("name_prefix");
             entity.Property(e => e.Offers).HasColumnName("offers");
             entity.Property(e => e.PriceMax)
-                .HasColumnType("decimal(8, 2)")
+                .HasColumnType("decimal(20, 2)")
                 .HasColumnName("price_max");
             entity.Property(e => e.PriceMin)
-                .HasColumnType("decimal(8, 2)")
+                .HasColumnType("decimal(20, 2)")
                 .HasColumnName("price_min");
             entity.Property(e => e.Status).HasColumnName("status");
             entity.Property(e => e.SubSubCategoryId).HasColumnName("sub_sub_category_id");

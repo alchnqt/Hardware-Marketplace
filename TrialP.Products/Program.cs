@@ -22,6 +22,7 @@ builder.Services.Configure<ExternalServiceSettings>(
 builder.Services.AddTransient<IEmailService, EmailService>();
 builder.Services.AddTransient<IExternalApiService, ExternalApiService>();
 builder.Services.AddTransient<IProductService, ProductService>();
+builder.Services.AddTransient<ISearchService, SearchService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddHttpClient();
 builder.Services.AddAuthorization(options =>
