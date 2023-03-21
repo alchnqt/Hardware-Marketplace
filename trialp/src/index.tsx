@@ -11,11 +11,9 @@ const root = ReactDOM.createRoot(
 );
 root.render(
     <Provider store={store}>
-        <React.StrictMode>
-            <PersistGate loading={<CircularLoader />} persistor={persistor}>
-                <App />
-            </PersistGate>
-        </React.StrictMode>
+        <PersistGate loading={<CircularLoader />} persistor={persistor}>
+            <App />
+        </PersistGate>
     </Provider>
 );
 

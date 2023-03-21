@@ -10,7 +10,7 @@ export interface SubSubCategoryDto {
 }
 
 export const categoriesApi = createApi({
-    reducerPath: 'api/',
+    reducerPath: 'api',
     baseQuery: fetchBaseQuery({
         baseUrl: CONFIG.endpoints["categories"]
     }

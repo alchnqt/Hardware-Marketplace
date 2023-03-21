@@ -18,7 +18,7 @@ interface ProductShopMap {
 }
 
 function Product() {
-    const noInfoImporter = 'No information, please contact administrator';
+    
     let { key } = useParams();
     const shopQuery = useProductShopsQuery({ key: key });
     const productQuery = useProductQuery({ key: key });
@@ -86,7 +86,6 @@ function Product() {
                                                 amount: primary?.amount || "",
                                                 currency: primary?.currency || ""
                                             };
-                                            //console.log(item);
                                             handleCart(item)
                                         }} type="button">В корзину</Button>
                                     </div>

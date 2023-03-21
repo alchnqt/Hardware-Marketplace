@@ -123,15 +123,11 @@ function Header() {
                 </Toolbar>
             </AppBar>
             {show && <Login />}
-            <div className={styles.categoryContainer}>
-                <Container>
-                    <Navbar />
-                </Container>
+            <div className={`container ${styles.categoryContainer}`}>
+                <Navbar />
             </div>
-            <div className={styles.navContainer}>
-                <Container>
-                    <ActiveLastBreadcrumb />
-                </Container>
+            <div className={`container ${styles.navContainer}`}>
+                <ActiveLastBreadcrumb />
             </div>
         </React.Fragment>
     );

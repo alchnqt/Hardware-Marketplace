@@ -1,5 +1,4 @@
-import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
-import { setupListeners } from '@reduxjs/toolkit/query';
+import { configureStore } from "@reduxjs/toolkit";
 import { categoriesApi } from '../store/backend/categoriesServer.api';
 import { ordersApi } from '../store/backend/ordersServer.api';
 import { externalProductsApi } from "./backend/external.api";
@@ -47,8 +46,12 @@ export const store = configureStore({
             // Ignore these action types
             ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
         },
-    })
-        .concat([externalProductsApi.middleware, categoriesApi.middleware, ordersApi.middleware, identityApi.middleware, shopsApi.middleware])
+    }).concat([
+        externalProductsApi.middleware, 
+        categoriesApi.middleware, 
+        ordersApi.middleware, 
+        identityApi.middleware, 
+        shopsApi.middleware])
 });
 
 export const persistor = persistStore(store);

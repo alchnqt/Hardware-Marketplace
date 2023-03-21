@@ -24,7 +24,7 @@ export interface User{
 }
 
 export const identityApi = createApi({
-    reducerPath: 'authApi/',
+    reducerPath: 'authApi',
     baseQuery: fetchBaseQuery({
         baseUrl: CONFIG.endpoints["auth"]
     }

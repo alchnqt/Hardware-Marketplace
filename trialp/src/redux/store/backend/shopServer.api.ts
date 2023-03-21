@@ -10,7 +10,7 @@ export interface Shop {
 
 
 export const shopsApi = createApi({
-    reducerPath: 'shopsApi/',
+    reducerPath: 'shopsApi',
     baseQuery: fetchBaseQuery({
         baseUrl: CONFIG.endpoints["shops"]
     }

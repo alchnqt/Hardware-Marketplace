@@ -5,7 +5,7 @@ import { ProductAllShop } from '../../../Models/Products/ProductAllShop';
 import { Product, ProductsResult } from '../../../Models/Products/ProductType';
 
 export const externalProductsApi = createApi({
-    reducerPath: 'apiProducts/',
+    reducerPath: 'externalApi',
     baseQuery: fetchBaseQuery({
         baseUrl: CONFIG.endpoints["apiSpoof"]
     }
