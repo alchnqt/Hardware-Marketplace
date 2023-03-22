@@ -20,10 +20,10 @@ export const CONFIG: Config = {
 };
 
 export const translatedComponentNames: Dictionary<string> = {
-    "product": `продукт`,
+    "product": `товар`,
     "profile": `профиль`,
     "history": `история`,
-    "products": `продукты`
+    "products": `товары`
 } 
 
 function toUnicode(str: string) {

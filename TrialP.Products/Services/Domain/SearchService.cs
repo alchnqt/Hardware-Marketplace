@@ -10,7 +10,7 @@ namespace TrialP.Products.Services.Domain
         {
             using(var context = new TrialPProductsContext())
             {
-                var result = await context.Products.Where(s => s.Name.ToLower().IndexOf(name.ToLower()) > -1).Take(5).ToListAsync();
+                var result = await context.Products.Where(s => s.ExtendedName.ToLower().IndexOf(name.ToLower()) > -1).Take(5).ToListAsync();
                 return result;
             }
         }

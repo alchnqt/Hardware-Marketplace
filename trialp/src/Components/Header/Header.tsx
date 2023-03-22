@@ -13,6 +13,7 @@ import { logout, ROLE_CLAIM } from '../../redux/slices/authSlice';
 import { Logo } from '@pmndrs/branding';
 import ActiveLastBreadcrumb from '../Breadcrumbs/ActiveLastBreadcrumb';
 import Container from '@mui/material/Container';
+import Search from '../Search/Search';
 
 function Header() {
     const [show, setShow] = useState(false);
@@ -49,15 +50,7 @@ function Header() {
                         <Logo style={{bottom: 40, left: 80, width: 30 }} />
                         <Link className={`${styles.logoText}`} href='/'>E-Katalog</Link>
                     </Typography>
-                    {/*<TextField*/}
-                    {/*    className={`${styles.search}`}*/}
-                    {/*    autoComplete="given-name"*/}
-                    {/*    name="search"*/}
-                    {/*    fullWidth*/}
-                    {/*    id="search"*/}
-                    {/*    label="Поиск"*/}
-                    {/*    autoFocus*/}
-                    {/*/>*/}
+                    <Search />
                     <nav className={`${styles.headerNav}`}>
                         <Link
                             variant="button"
@@ -74,18 +67,6 @@ function Header() {
                         >
                             Поддержка
                         </Link>
-                        {
-                            isAdmin && isLoggedIn &&
-                            <>
-                            <Link
-                                variant="button"
-                                color="text.primary"
-                                href="/admin"
-                                sx={{ my: 1, mx: 1.5 }}>
-                                Админ
-                            </Link>
-                            </>
-                        }
                         {isLoggedIn &&
                             <>
                                 <Link

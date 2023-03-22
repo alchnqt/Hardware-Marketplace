@@ -20,15 +20,6 @@ namespace TrialP.Products.Services.Domain
 
         public async Task<Product> GetProductByKeyFromApi(string key)
         {
-            using (var context = new TrialPProductsContext())
-            {
-                var searchProduct = context.Products.Where(x => x.Key == key).FirstOrDefault();
-                if (searchProduct != null)
-                {
-                    return searchProduct;
-                }
-            }
-            
             string url = $"{_apiConfiguration.CatalogApiUrl}/products/{key}?include=schema";
             var res = await _apiService.GetProccessStreamAsync(url);
             var serializeOptions = new JsonSerializerOptions
@@ -37,6 +28,26 @@ namespace TrialP.Products.Services.Domain
                 WriteIndented = true
             };
             Product product = await JsonSerializer.DeserializeAsync<Product>(res, serializeOptions);
+
+            using (var context = new TrialPProductsContext())
+            {
+                var searchProduct = context.Products.Include(r => r.Reviews).Where(x => x.Key == key).FirstOrDefault();
+                var requestCount = product?.AggregatedReviews.Count ?? 0;
+                var requestRating = (product?.AggregatedReviews.Rating ?? 0) * requestCount;
+                searchProduct.AggregatedReviews = new AggregatedReviews()
+                {
+                    Count = requestCount + searchProduct.Reviews.Count(),
+                    Rating = (requestRating + searchProduct.Reviews.Select(s => s.Rating).Sum() ?? 0) / ((requestCount + searchProduct.Reviews.Count()) == 0 ? 1 : (requestCount + searchProduct.Reviews.Count())),
+                    Url = product?.AggregatedReviews.Url ?? "",
+                    HtmlUrl = product?.AggregatedReviews.HtmlUrl
+                };
+
+                if (searchProduct != null)
+                {
+                    return searchProduct;
+                }
+            }
+            
             return product;
         }
 

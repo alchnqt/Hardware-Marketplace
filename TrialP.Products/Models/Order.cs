@@ -14,7 +14,6 @@ public partial class Order
 
     public Guid? UserId { get; set; }
 
-    public string Email { get; set; }
     public bool? IsCompleted { get; set; }
 
     public DateTime? OrderDate { get; set; }

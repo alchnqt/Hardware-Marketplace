@@ -26,6 +26,7 @@
     "@types/node": "^16.18.11",
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
+    "autosuggest-highlight": "^3.3.4",
     "axios": "^0.27.2",
     "bootstrap": "^5.2.3",
     "concurrently": "^7.6.0",
@@ -86,6 +87,7 @@
     ]
   },
   "devDependencies": {
+    "@types/autosuggest-highlight": "^3.2.0",
     "babel-loader": "^9.1.2",
     "dts-css-modules-loader": "^2.0.1",
     "eslint-config-react-app": "^7.0.1",

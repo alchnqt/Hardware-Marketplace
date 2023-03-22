@@ -98,7 +98,7 @@ namespace TrialP.Products.Controllers
             }
             order.OrderDate = DateTime.Now;
 
-            var newOrder = order.Orders.Select(o => new Order() { Key= orderKey, PositionsPrimaryId = o, OrderDate = DateTime.Now, UserId = order.UserId, Email = order.Email, IsCompleted = false });
+            var newOrder = order.Orders.Select(o => new Order() { Key= orderKey, PositionsPrimaryId = o, OrderDate = DateTime.Now, UserId = order.UserId, IsCompleted = false });
             _context.Orders.AddRange(newOrder);
             await _context.SaveChangesAsync();
 
