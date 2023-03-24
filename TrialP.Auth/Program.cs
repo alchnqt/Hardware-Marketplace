@@ -54,8 +54,27 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 //    });
 //});
 
+builder.Services.Configure<CookiePolicyOptions>(options =>
+{
+    // This lambda determines whether user consent for non-essential 
+    // cookies is needed for a given request.
+    options.CheckConsentNeeded = context => true;
 
-builder.Services.AddCors();
+    options.MinimumSameSitePolicy = SameSiteMode.None;
+});
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("CorsPolicy",
+                    builder =>
+                    {
+                        builder
+                          .AllowAnyMethod()
+                          .AllowAnyHeader()
+                          .SetIsOriginAllowed(origin => true)
+                          .AllowCredentials();
+                    });
+});
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
@@ -78,13 +97,13 @@ using (var scope = app.Services.CreateScope())
     }
 
     //pre admin
-    IdentityUser bob = new IdentityUser() { UserName="admin_default", Email="wndrfljnx@gmail.com"};
+    IdentityUser bob = new IdentityUser() { UserName = "admin_default", Email = "wndrfljnx@gmail.com" };
 
     IdentityResult bobResult = await userManager.CreateAsync(bob, "1234");
     if (!bobResult.Succeeded)
     {
         IdentityUser bobDelete = await userManager.FindByNameAsync("admin_default");
-        if(bobDelete != null)
+        if (bobDelete != null)
         {
             await userManager.DeleteAsync(bobDelete);
         }
@@ -101,7 +120,7 @@ using (var scope = app.Services.CreateScope())
     }
 
     //pre customer
-    IdentityUser alice = new IdentityUser() { UserName = "alice", Email = "alice@gmail.com", PhoneNumber="+375298889922" };
+    IdentityUser alice = new IdentityUser() { UserName = "alice", Email = "alice@gmail.com", PhoneNumber = "+375298889922" };
 
     IdentityResult aliceResult = await userManager.CreateAsync(alice, "1234");
     if (!aliceResult.Succeeded)
@@ -125,13 +144,18 @@ using (var scope = app.Services.CreateScope())
 }
 
 
-app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyOrigin().AllowAnyHeader());
+
+
 app.UseRouting();
+
+app.UseCors("CorsPolicy");
+
+app.UseCookiePolicy();
 
 app.UseAuthentication();
 
 app.UseAuthorization();
 
-app.MapControllers();
+app.MapControllers().RequireCors("CorsPolicy");
 
 app.Run();

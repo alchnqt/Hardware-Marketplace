@@ -38,7 +38,6 @@ export default function OrderModal(props: modalProps) {
         modalContent = (
             <div className={`${styles.orderModalBtns}`}>
                 <Button variant="outlined" color="success" id="modal-modal-title" onClick={() => {
-                    //console.log(props.order);
                     postOrder(props.order).unwrap().then((data: any) => {
                         if (props.cartCallback) {
                             props.cartCallback();

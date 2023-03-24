@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 
 namespace TrialP.Auth.Models;
@@ -14,4 +15,6 @@ public partial class RefreshToken
     public DateTime? Expires { get; set; }
 
     public DateTime? Created { get; set; }
+
+    public virtual IdentityUser User { get; set; }
 }

@@ -204,17 +204,14 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 CREATE TABLE [dbo].[RefreshTokens](
-	[id] [uniqueidentifier] NULL,
-	[UserId] [nvarchar](450) NULL,
+	[id] [uniqueidentifier] PRIMARY KEY DEFAULT (newid()),
+	[user_id] nvarchar(450) REFERENCES [dbo].[AspNetUsers] ([Id]) on delete cascade on update cascade,
 	[token] [nvarchar](max) NULL,
 	[expires] [datetime] NULL,
 	[created] [datetime] NULL
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+)
 GO
 
-ALTER TABLE [dbo].[RefreshTokens] ADD  DEFAULT (newid()) FOR [id]
-GO
-
-ALTER TABLE [dbo].[RefreshTokens]  WITH CHECK ADD FOREIGN KEY([UserId])
+ALTER TABLE [dbo].[RefreshTokens]  WITH CHECK ADD FOREIGN KEY([user_id])
 REFERENCES [dbo].[AspNetUsers] ([Id]) on delete cascade on update cascade
 GO

@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
@@ -17,6 +19,7 @@ using TrialP.Auth.Models;
 
 namespace TrialP.Auth.Controllers
 {
+    [EnableCors("CorsPolicy")]
     [Route("api/[controller]/[action]")]
     [ApiController]
     public class AuthController : ControllerBase
@@ -81,8 +84,9 @@ namespace TrialP.Auth.Controllers
             var refreshToken = GenerateRefreshToken(existingUser.Id.ToString());
             SetRefreshToken(refreshToken);
             return Ok(new { access_token = token });
-
         }
+
+
 
         [HttpPost]
         public async Task<ActionResult<string>> Register(RegisterDto user)
@@ -128,23 +132,32 @@ namespace TrialP.Auth.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<string>> RefreshToken(string login, string userId)
+        public async Task<IActionResult> RefreshToken(RefreshTokenDto dto)
         {
             var refreshToken = Request.Cookies["refreshToken"];
-
-            //if (!user.RefreshToken.Equals(refreshToken))
-            //{
-            //    return Unauthorized("Invalid Refresh Token.");
-            //}
-            //else if (user.TokenExpires < DateTime.Now)
-            //{
-            //    return Unauthorized("Token expired.");
-            //}
-            string token = await CreateToken(login);
-            var newRefreshToken = GenerateRefreshToken(userId);
+            var user = await _userManager.FindByNameAsync(dto.Login);
+            if(user == null) 
+            {
+                return Unauthorized("User is not found");
+            }
+            using(var context = new TrialPIdentityServerContext())
+            {
+                var userRefreshTokens = await context.RefreshTokens.Where(w => w.UserId == user.Id).ToListAsync();
+                var currentToken = await context.RefreshTokens.Where(w => w.Token == refreshToken).FirstOrDefaultAsync();
+                if (!userRefreshTokens.Any(a => a.Token == refreshToken))
+                {
+                    return Unauthorized("Invalid Refresh Token");
+                }
+                else if (currentToken.Expires < DateTime.Now)
+                {
+                    return Unauthorized("Token expired");
+                }
+            }
+            
+            string accessToken = await CreateToken(dto.Login);
+            var newRefreshToken = GenerateRefreshToken(dto.UserId);
             SetRefreshToken(newRefreshToken);
-
-            return Ok(token);
+            return Ok(accessToken);
         }
 
         private RefreshToken GenerateRefreshToken(string userId)
@@ -156,7 +169,7 @@ namespace TrialP.Auth.Controllers
                 Created = DateTime.Now,
                 UserId = userId
             };
-            using(var c = new AppDbContext())
+            using(var c = new TrialPIdentityServerContext())
             {
                 c.RefreshTokens.Add(refreshToken);
                 c.SaveChanges();
@@ -169,7 +182,10 @@ namespace TrialP.Auth.Controllers
             var cookieOptions = new CookieOptions
             {
                 HttpOnly = true,
-                Expires = newRefreshToken.Expires
+                IsEssential = true,
+                Expires = newRefreshToken.Expires,
+                Secure = true,
+                SameSite = SameSiteMode.None
             };
             if (rememberMe)
             {

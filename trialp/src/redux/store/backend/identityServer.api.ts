@@ -34,6 +34,7 @@ export const identityApi = createApi({
             query: (data) => ({
                 method: 'POST',
                 body: data,
+                credentials: 'include',
                 url: '/login',
             })
         }),
@@ -41,12 +42,14 @@ export const identityApi = createApi({
             query: (data) => ({
                 method: 'POST',
                 url: '/register',
+                credentials: 'include',
                 body: data,
             })
         }),
         logout: build.query<any, any>({
             query: () => ({
-                url: '/logout',
+                credentials: 'include',
+                url: '/logout'
             })
         }),
         allCustomers: build.query<User[], any>({
