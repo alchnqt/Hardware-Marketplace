@@ -13,62 +13,41 @@ import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import styles from './login.module.css';
 
-const theme = createTheme();
-
 import { login } from "../../../redux/slices/authSlice";
 import { clearMessage } from "../../../redux/slices/messageSlice";
 import { Navigate, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { LoginDTO } from '../../../redux/services/userService';
-import { useAppDispatch } from '../../../redux/store/store';
+import { RootState, useAppDispatch } from '../../../redux/store/store';
 import Copyright from '../../Copyright/Copyright';
+import { store } from '../../../redux/store/store';
+const theme = createTheme();
 
 export default function Login() {
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-        const data = new FormData(event.currentTarget);
-        event.preventDefault();
-    };
-    let navigate = useNavigate();
-
-    const [loading, setLoading] = useState(false);
-
-    const { isLoggedIn } = useSelector((state: any) => state.auth);
-    const { message } = useSelector((state: any) => state.message);
 
     const dispatch = useAppDispatch();
 
-    //useEffect(() => {
-    //    dispatch(clearMessage());
-    //}, [dispatch]);
-
+    const [errorMsg, setErrorMsg] = useState<string>('');
 
     const initialValues = {
         email: "",
         password: "",
     };
 
-    if (isLoggedIn) {
-        return <Navigate to="/" />;
-    }
-
-    const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
+    const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         const loginDto: LoginDTO = {
             email: data.get('email')?.toString() || "",
             password: data.get('password')?.toString() || ""
         }
-        //setLoading(true);
-        dispatch(login(loginDto))
-            .unwrap()
-            .then(() => {
-                //navigate("/profile");
-                window.location.href = '/profile';
-            })
-            .catch(() => {
-                //setLoading(false);
-            });
+        const loginRes = await dispatch(login(loginDto)).unwrap();
+        //console.log(loginRes);
+        if(loginRes.accessToken === '' && loginRes.user == null){
+            setErrorMsg(loginRes.message)
+        }
+
     };
 
     return (
@@ -114,6 +93,9 @@ export default function Login() {
                             control={<Checkbox value="remember" color="primary" />}
                             label="Запомнить меня"
                         />
+                        {errorMsg !== '' ? (<div style={{color: 'red'}}>
+                            {errorMsg}
+                        </div>) : null}
                         <Button
                             type="submit"
                             fullWidth

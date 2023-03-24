@@ -210,8 +210,3 @@ CREATE TABLE [dbo].[RefreshTokens](
 	[expires] [datetime] NULL,
 	[created] [datetime] NULL
 )
-GO
-
-ALTER TABLE [dbo].[RefreshTokens]  WITH CHECK ADD FOREIGN KEY([user_id])
-REFERENCES [dbo].[AspNetUsers] ([Id]) on delete cascade on update cascade
-GO

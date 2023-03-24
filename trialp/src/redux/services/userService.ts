@@ -20,18 +20,22 @@ const register = (data: RegisterDTO) => {
 
 const login = (data: LoginDTO) => {
     return axios
-        .post(API_URL + "login", data)
+        .post(API_URL + "login", data, { withCredentials: true })
         .then((response) => {
-            if (response.data.accessToken) {
+            console.log(response)
+            if (response.data.accessToken !== '' && response.status === 200) {
                 localStorage.setItem("user", response.data);
             }
-
-            return response.data;
+            return response;
+        }).catch((err) => {
+            return err;
         });
 };
 
 const logout = () => {
     localStorage.removeItem("user");
+    return axios
+        .post(API_URL + "logout", {}, { withCredentials: true });
 };
 
 const authService = {

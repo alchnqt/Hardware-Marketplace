@@ -1,13 +1,23 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { CONFIG } from '../../../App_Data/configuration';
+import accessTokenService from '../../../Auth/AccessToken';
 import { AdminOrders, AllOrders, UserOrders } from '../../../Models/Products/Order';
 import { ProductAllShop } from '../../../Models/Products/ProductAllShop';
 import { Product, ProductsResult } from '../../../Models/Products/ProductType';
+import { store } from '../store';
 
 export const externalProductsApi = createApi({
     reducerPath: 'externalApi',
     baseQuery: fetchBaseQuery({
-        baseUrl: CONFIG.endpoints["apiSpoof"]
+        baseUrl: CONFIG.endpoints["apiSpoof"],
+        prepareHeaders: (headers, { getState }) => {
+            console.log(store.getState().auth.accessToken);
+            headers.set('Authorization', `Bearer ${store.getState().auth.accessToken}`);
+            // headers.set('Access-Control-Allow-Origin', 'localhost');
+            // headers.set('Access-Control-Allow-Credentials', 'true');
+            return headers
+        },
+        credentials: 'include'
     }
     ),
     endpoints: build => ({

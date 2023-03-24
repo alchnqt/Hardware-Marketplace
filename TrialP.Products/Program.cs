@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using TrialP.Products.Services.Abstract;
 using TrialP.Products.Services.Domain;
 using TrialP.Products.Configuration;
+using Microsoft.Extensions.Options;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,16 +35,34 @@ builder.Services.AddAuthorization(options =>
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer("Bearer", config =>
     {
-        config.Authority = "https://localhost:7077";
-        config.Audience = "ApiTwo";
+        //config.Authority = "http://localhost:8099/";
+        config.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = false,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8
+               .GetBytes("this is my custom Secret key for authentication")),
+            ValidateIssuer = false,
+            ValidateAudience = false
+        };
     });
 
-builder.Services.AddCors();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("CorsPolicy",
+                    builder =>
+                    {
+                        builder
+                          .AllowAnyMethod()
+                          .AllowAnyHeader()
+                          .SetIsOriginAllowed(origin => true)
+                          .AllowCredentials();
+                    });
+});
 
 var app = builder.Build();
 
 app.UseHttpsRedirection();
-app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyMethod().AllowAnyHeader());
+app.UseCors("CorsPolicy");
 app.UseAuthorization();
 
 app.MapControllers();

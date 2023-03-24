@@ -1,6 +1,9 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
+using System.Text;
 
 var authenticationProviderKey = "IdentityApiKey";
 
@@ -12,20 +15,28 @@ builder.Configuration.SetBasePath(builder.Environment.ContentRootPath)
 
 builder.Services.AddOcelot();
 
-builder.Services.AddAuthentication()
-    .AddJwtBearer(authenticationProviderKey, config =>
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+    .AddJwtBearer(options =>
     {
-        config.Authority = "https://localhost:7077";
-        config.TokenValidationParameters = new TokenValidationParameters
+        options.TokenValidationParameters = new TokenValidationParameters
         {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8
+                .GetBytes("this is my custom Secret key for authentication")),
+            ValidateIssuer = false,
             ValidateAudience = false
         };
     });
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
-
+IdentityModelEventSource.ShowPII = true;
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseOcelot().Wait();
-
 app.Run();

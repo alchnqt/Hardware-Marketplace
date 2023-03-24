@@ -67,17 +67,17 @@ namespace TrialP.Auth.Controllers
 
             if (existingUser == null)
             {
-                return BadRequest();
+                return BadRequest("User not found");
             }
 
             if (user.Email != existingUser.Email)
             {
-                return BadRequest("User not found.");
+                return BadRequest("User not found");
             }
 
             if (string.IsNullOrEmpty(user.Password))
             {
-                return BadRequest("Wrong password.");
+                return BadRequest("Wrong password");
             }
 
             string token = await CreateToken(existingUser.UserName);
@@ -125,7 +125,7 @@ namespace TrialP.Auth.Controllers
            
         }
 
-        [HttpGet]
+        [HttpPost]
         public void Logout()
         {
             Response.Cookies.Delete("refreshToken");

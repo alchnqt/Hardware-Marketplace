@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -15,6 +17,7 @@ using TrialP.Products.Services.Abstract;
 
 namespace TrialP.Products.Controllers
 {
+    [EnableCors("CorsPolicy")]
     [Route("api/[controller]/[action]")]
     [ApiController]
     public class ApiSpoofController : ControllerBase
@@ -61,6 +64,7 @@ namespace TrialP.Products.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet("{id}")]
         public IActionResult GetUsersOrderById(Guid id, bool isCompleted = false)
         {
