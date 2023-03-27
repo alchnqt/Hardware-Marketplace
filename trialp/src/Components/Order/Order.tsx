@@ -22,7 +22,7 @@ function Order(props: OrderProps) {
     }
     return (
         <>
-            <h3>{props.isCompleted ? `История заказов: ` : `Действующие заказы: `}</h3>
+            {data?.orders.length !== 0 ? <h3>{props.isCompleted ? `История заказов: ` : `Действующие заказы: `}</h3> : null}
             <hr />
             {data?.orders.map(x => {
                 return (

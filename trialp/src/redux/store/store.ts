@@ -7,6 +7,7 @@ import messageReducer from "../slices/messageSlice";
 import userReducer from '../slices/userSlice';
 import cartReducer from '../slices/cartSlice';
 import productsReducer from '../slices/productsSlice';
+import shopReducer from '../slices/shopSlice';
 import {
     persistStore, persistReducer, FLUSH,
     REHYDRATE,
@@ -39,7 +40,8 @@ export const store = configureStore({
         auth: persistedAuthReducer,
         message: messageReducer,
         cart: persistedCartReducer,
-        product: productsReducer
+        product: productsReducer,
+        shop: shopReducer
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware({
         serializableCheck: {

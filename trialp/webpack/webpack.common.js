@@ -18,6 +18,8 @@ module.exports = {
         open: false,
         static: './build',
         compress: true,
+        host: 'rhino.acme.com',
+        https: false,
         port: 8099,
         historyApiFallback: true
     },

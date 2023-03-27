@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Humanizer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
@@ -67,17 +68,17 @@ namespace TrialP.Auth.Controllers
 
             if (existingUser == null)
             {
-                return BadRequest("User not found");
+                return BadRequest("Пользователь не найден");
             }
 
             if (user.Email != existingUser.Email)
             {
-                return BadRequest("User not found");
+                return BadRequest("Пользователь не найден");
             }
 
             if (string.IsNullOrEmpty(user.Password))
             {
-                return BadRequest("Wrong password");
+                return BadRequest("Неверный пароль");
             }
 
             string token = await CreateToken(existingUser.UserName);
@@ -132,32 +133,27 @@ namespace TrialP.Auth.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> RefreshToken(RefreshTokenDto dto)
+        public async Task<IActionResult> RefreshToken()
         {
             var refreshToken = Request.Cookies["refreshToken"];
-            var user = await _userManager.FindByNameAsync(dto.Login);
-            if(user == null) 
-            {
-                return Unauthorized("User is not found");
-            }
             using(var context = new TrialPIdentityServerContext())
             {
-                var userRefreshTokens = await context.RefreshTokens.Where(w => w.UserId == user.Id).ToListAsync();
                 var currentToken = await context.RefreshTokens.Where(w => w.Token == refreshToken).FirstOrDefaultAsync();
-                if (!userRefreshTokens.Any(a => a.Token == refreshToken))
+                if (currentToken == null)
                 {
-                    return Unauthorized("Invalid Refresh Token");
+                    return Unauthorized();
                 }
                 else if (currentToken.Expires < DateTime.Now)
                 {
-                    return Unauthorized("Token expired");
+                    return Unauthorized(new { result = "Token expired", success = false });
                 }
+
+                var currentUser = await _userManager.FindByIdAsync(currentToken.UserId);
+                string accessToken = await CreateToken(currentUser.UserName);
+                var newRefreshToken = GenerateRefreshToken(currentUser.Id);
+                SetRefreshToken(newRefreshToken);
+                return Ok(new { result = accessToken, success = true });
             }
-            
-            string accessToken = await CreateToken(dto.Login);
-            var newRefreshToken = GenerateRefreshToken(dto.UserId);
-            SetRefreshToken(newRefreshToken);
-            return Ok(accessToken);
         }
 
         private RefreshToken GenerateRefreshToken(string userId)
@@ -183,9 +179,10 @@ namespace TrialP.Auth.Controllers
             {
                 HttpOnly = true,
                 IsEssential = true,
+                Domain = "rhino.acme.com",
                 Expires = newRefreshToken.Expires,
-                Secure = true,
-                SameSite = SameSiteMode.None
+                //Secure = true,
+                SameSite = SameSiteMode.Lax
             };
             if (rememberMe)
             {

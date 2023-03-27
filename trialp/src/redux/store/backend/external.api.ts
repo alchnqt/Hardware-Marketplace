@@ -1,21 +1,21 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { CONFIG } from '../../../App_Data/configuration';
-import accessTokenService from '../../../Auth/AccessToken';
-import { AdminOrders, AllOrders, UserOrders } from '../../../Models/Products/Order';
+import { AdminOrders, UserOrders } from '../../../Models/Products/Order';
 import { ProductAllShop } from '../../../Models/Products/ProductAllShop';
-import { Product, ProductsResult } from '../../../Models/Products/ProductType';
-import { store } from '../store';
+import { Product } from '../../../Models/Products/ProductType';
+import ShopResult from '../../../Models/Shop/ShopResult';
+import { refreshToken } from '../../slices/authSlice';
 
 export const externalProductsApi = createApi({
     reducerPath: 'externalApi',
     baseQuery: fetchBaseQuery({
         baseUrl: CONFIG.endpoints["apiSpoof"],
-        prepareHeaders: (headers, { getState }) => {
-            console.log(store.getState().auth.accessToken);
-            headers.set('Authorization', `Bearer ${store.getState().auth.accessToken}`);
-            // headers.set('Access-Control-Allow-Origin', 'localhost');
-            // headers.set('Access-Control-Allow-Credentials', 'true');
-            return headers
+        prepareHeaders: async (headers, query) => {
+            const authResult = await refreshToken();
+            if (authResult.user !== null) {
+                headers.set('Authorization', 'Bearer ' + authResult.message);
+            }
+            return headers;
         },
         credentials: 'include'
     }
@@ -75,8 +75,24 @@ export const externalProductsApi = createApi({
                     url: `/search`
                 }
             }
-        })
+        }),
+        shop: build.query<ShopResult, { id: number }>({
+            query: (args) => {
+                const { id } = args;
+                return {
+                    url: `/getshopbyid?id=${id}`,
+                }
+            }
+        }),
     })
 });
 
-export const { useProductsQuery, useProductQuery, useProductShopsQuery, useUserOrdersQuery, useAllOrdersQuery, useCompleteOrderMutation } = externalProductsApi;
+export const { 
+    useProductsQuery, 
+    useProductQuery, 
+    useProductShopsQuery, 
+    useUserOrdersQuery, 
+    useAllOrdersQuery, 
+    useCompleteOrderMutation,
+    useShopQuery
+} = externalProductsApi;
