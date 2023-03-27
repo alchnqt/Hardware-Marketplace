@@ -8,6 +8,8 @@ using TrialP.Products.Services.Domain;
 using TrialP.Products.Configuration;
 using Microsoft.Extensions.Options;
 using System.Text;
+using Thinktecture.EntityFrameworkCore;
+using Thinktecture;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +18,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddHttpClient("externalService");
 builder.Services.AddDbContext<TrialPProductsContext>(options =>
-         options.UseSqlServer("Server=localhost;Database=TrialP_Products;Trusted_Connection=True;trustServerCertificate=true;MultipleActiveResultSets=true;"),
+         options.UseSqlServer("Server=localhost;Database=TrialP_Products;Trusted_Connection=True;trustServerCertificate=true;MultipleActiveResultSets=true;", sqlOptions =>
+         {
+             sqlOptions.AddRowNumberSupport();
+         }),
          ServiceLifetime.Transient);
 builder.Services.Configure<ExternalServiceSettings>(
             builder.Configuration.GetSection("ExternalServiceSettings")

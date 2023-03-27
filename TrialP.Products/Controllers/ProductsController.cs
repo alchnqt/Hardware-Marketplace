@@ -1,44 +1,72 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
+using Thinktecture;
 using TrialP.Products.Models;
+using TrialP.Products.Models.Api.Internal;
+using TrialP.Products.Services.Abstract;
 
 namespace TrialP.Products.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class ProductsController : ControllerBase
     {
         private readonly TrialPProductsContext _context;
+        private readonly IExternalApiService _externalApiService;
 
-        public ProductsController(TrialPProductsContext context)
+        public ProductsController(TrialPProductsContext context, IExternalApiService externalApiService)
         {
             _context = context;
+            _externalApiService = externalApiService;
         }
 
-        // GET: api/Products
+        [HttpGet]
+        public async Task<IActionResult> Top3CoProductsByProductId(Guid productId)
+        {
+            var productIndex = _context.Products
+                 .Select(x => new
+                 {
+                     x.Id,
+                     RowNumber = EF.Functions.RowNumber(EF.Functions.OrderBy(x.Id))
+                 })
+                .AsSubQuery()
+                .Where(x => x.Id == productId)
+                .FirstOrDefault()?.RowNumber;
+
+            var result = await _externalApiService.GetProccessAsync($"http://localhost:5173/api/ml/gettop3recommendations?id={productIndex}");
+            var serializeOptions = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                WriteIndented = true
+            };
+            var predictions = JsonSerializer.Deserialize<List<ProductPrediction>>(result, serializeOptions);
+            var neededProducts = _context.Products.Select(s => new
+            {
+                Product = s,
+                RowNumber = EF.Functions.RowNumber(EF.Functions.OrderBy(s.Id))
+            }).AsSubQuery().Where(w => predictions.Any(pr => pr.ProductId == w.RowNumber)).ToList();
+            return Ok(neededProducts);
+        }
+
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
         {
-          if (_context.Products == null)
-          {
-              return NotFound();
-          }
+            if (_context.Products == null)
+            {
+                return NotFound();
+            }
             return await _context.Products.ToListAsync();
         }
 
-        // GET: api/Products/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Product>> GetProduct(Guid id)
         {
-          if (_context.Products == null)
-          {
-              return NotFound();
-          }
+            if (_context.Products == null)
+            {
+                return NotFound();
+            }
             var product = await _context.Products.FindAsync(id);
 
             if (product == null)
@@ -49,17 +77,15 @@ namespace TrialP.Products.Controllers
             return product;
         }
 
-        // PUT: api/Products/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutProduct(Product product)
         {
-            var existingP = _context.Products.Where(w => w.Key== product.Key).FirstOrDefault();
+            var existingP = _context.Products.Where(w => w.Key == product.Key).FirstOrDefault();
             existingP.FullName = product.FullName;
-            existingP.Description= product.Description;
+            existingP.Description = product.Description;
             existingP.ExtendedName = product.ExtendedName;
             existingP.Name = product.Name;
-            existingP.PriceMax= product.PriceMax;
+            existingP.PriceMax = product.PriceMax;
             existingP.PriceMin = product.PriceMin;
 
             _context.Entry(existingP).State = EntityState.Modified;
@@ -83,22 +109,19 @@ namespace TrialP.Products.Controllers
             return NoContent();
         }
 
-        // POST: api/Products
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Product>> PostProduct(Product product)
         {
-          if (_context.Products == null)
-          {
-              return Problem("Entity set 'TrialPProductsContext.Products'  is null.");
-          }
+            if (_context.Products == null)
+            {
+                return Problem("Entity set 'TrialPProductsContext.Products'  is null.");
+            }
             _context.Products.Add(product);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetProduct", new { id = product.Id }, product);
         }
 
-        // DELETE: api/Products/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProduct(string id)
         {
