@@ -13,6 +13,7 @@ using System.Text.Json;
 using TrialP.Products.Data.Request;
 using TrialP.Products.Models;
 using TrialP.Products.Models.Api;
+using TrialP.Products.Models.Api.Shop;
 using TrialP.Products.Services.Abstract;
 
 namespace TrialP.Products.Controllers
@@ -23,13 +24,12 @@ namespace TrialP.Products.Controllers
     public class ApiSpoofController : ControllerBase
     {
         private readonly IProductService _productService;
-        //private const string catalogApiUrl = "https://catalog.onliner.by/sdapi/catalog.ap";
-        //private const string shopApiUrl1 = "https://shop.api.onliner.by/shops/3016";
-        //private const string reviewApiUrl = "https://review.api.onliner.by/catalog/shops/3016/reviews";
+        private readonly IShopService _shopService;
 
-        public ApiSpoofController(IProductService productService)
+        public ApiSpoofController(IProductService productService, IShopService shopService)
         {
             _productService = productService;
+            _shopService = shopService;
         }
 
         public async Task<SearchProduct> GetProductsBySubSubCategory(string subSubCategory, int page = 1)
@@ -137,6 +137,12 @@ namespace TrialP.Products.Controllers
         public async Task<ProductShops> GetProductShopsByKey(string key)
         {
             var result = await _productService.GetProductShopsByKeyFromApi(key);
+            return result;
+        }
+
+        public async Task<ShopApiInfo> GetShopById(int id)
+        {
+            var result = await _shopService.GetShopInfoFromApi(id);
             return result;
         }
     }

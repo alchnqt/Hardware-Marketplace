@@ -14,14 +14,11 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import styles from './login.module.css';
 
 import { login } from "../../../redux/slices/authSlice";
-import { clearMessage } from "../../../redux/slices/messageSlice";
-import { Navigate, useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useState } from 'react';
 import { LoginDTO } from '../../../redux/services/userService';
-import { RootState, useAppDispatch } from '../../../redux/store/store';
+import { store, useAppDispatch } from '../../../redux/store/store';
 import Copyright from '../../Copyright/Copyright';
-import { store } from '../../../redux/store/store';
+import Navigate from '../../CustomComponents/Navigate';
 const theme = createTheme();
 
 export default function Login() {
@@ -30,10 +27,10 @@ export default function Login() {
 
     const [errorMsg, setErrorMsg] = useState<string>('');
 
-    const initialValues = {
-        email: "",
-        password: "",
-    };
+    if(store.getState().auth.isLoggedIn){
+        return <Navigate to={'/profile'}/>
+    }
+
 
     const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -47,7 +44,6 @@ export default function Login() {
         if(loginRes.accessToken === '' && loginRes.user == null){
             setErrorMsg(loginRes.message)
         }
-
     };
 
     return (

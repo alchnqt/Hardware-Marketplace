@@ -1,11 +1,6 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
 import styles from './home.module.css';
 import Carousel from './Carousel/Carousel';
-import Navbar from './Navbar/Navbar';
-import OverlayHomePresent from '../3D/Computers/OverlayHomePresent';
-import { Logo } from '@pmndrs/branding';
-import { Container, Typography } from '@mui/material';
+import { Container } from '@mui/material';
 
 function OverlayInfo() {
     let date = new Date().toLocaleDateString();

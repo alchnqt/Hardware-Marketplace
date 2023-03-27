@@ -76,9 +76,9 @@ builder.Services.AddCors(options =>
                     builder =>
                     {
                         builder
+                          .WithOrigins("http://rhino.acme.com:8099")
                           .AllowAnyMethod()
                           .AllowAnyHeader()
-                          .SetIsOriginAllowed(origin => true)
                           .AllowCredentials();
                     });
 });

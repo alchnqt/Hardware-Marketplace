@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { setMessage } from "./messageSlice";
 import jwt_decode from "jwt-decode";
-import accessTokenService from '../../Auth/AccessToken';
 import AuthService, { LoginDTO, RegisterDTO } from "../services/userService";
 
 
@@ -38,8 +37,7 @@ export const login = createAsyncThunk(
     async (data: LoginDTO, thunkAPI) => {
         try {
             const resp = await AuthService.login(data) as AxiosRequestResult;
-            if(resp.status !== 200){
-                //console.log(resp.data as string)
+            if (resp.status !== 200) {
                 return { user: null, accessToken: '', message: resp.data };
             }
             var decoded = jwt_decode(resp.data.access_token);
@@ -61,6 +59,15 @@ export const logout = createAsyncThunk("auth/logout", async () => {
     await AuthService.logout();
 });
 
+export const refreshToken = async () => {
+    const resp = await AuthService.refreshToken();
+    if (!resp.success) {
+        return { user: null, message: resp.result };
+    }
+    var decoded = jwt_decode(resp.result);
+    return { user: decoded, message: resp.result };
+};
+
 const initialState =
     user ?
         {
@@ -71,7 +78,7 @@ const initialState =
         {
             isLoggedIn: false,
             user: null,
-            accessToken: accessTokenService.getAccessToken()
+            accessToken: ''
         };
 
 const authSlice = createSlice({
@@ -99,7 +106,7 @@ const authSlice = createSlice({
             state.isLoggedIn = false;
             state.user = null;
             //state.role = null;
-        },
+        }
     },
 });
 

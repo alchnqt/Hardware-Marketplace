@@ -1,4 +1,4 @@
-export const DEFAULT_OCELOT_GATEWAY: string = 'https://localhost:7003/api';
+export const DEFAULT_OCELOT_GATEWAY: string = 'http://rhino.acme.com:5003/api';
 
 interface Dictionary<T> {
     [Key: string]: T;
@@ -23,8 +23,34 @@ export const translatedComponentNames: Dictionary<string> = {
     "product": `товар`,
     "profile": `профиль`,
     "history": `история`,
-    "products": `товары`
+    "products": `товары`,
+    "shop": `магазин`
 } 
+
+export const translatedDays: Dictionary<string> = {
+    "monday": `Понедельник`,
+    "tuesday": `Вторник`,
+    "wednesday": `Среда`,
+    "thursday": `Четверг`,
+    "friday": `Пятница`,
+    "saturday": `Суббота`,
+    "sunday": `Воскресенье`
+} 
+
+export const translateDays = (key: string) => {
+    return translatedDays[key];
+}
+
+export const toNormalHours = (key: string) => {
+    const normalH = key.substring(0, key.indexOf('+'));
+    return normalH;
+}
+
+export const toNormalTime = (key: string) => {
+    const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+    let date = new Date(key);
+    return date.toLocaleDateString('ru-RU', options);
+}
 
 function toUnicode(str: string) {
 	return str.split('').map(function (value, index, array) {

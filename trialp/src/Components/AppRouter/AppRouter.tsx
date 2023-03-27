@@ -22,6 +22,7 @@ import Cart from '../Cart/Cart';
 import { ROLE_CLAIM } from '../../redux/slices/authSlice';
 import Admin from '../Admin/Admin';
 import HistoryOrder from '../History/History';
+import Shop from '../Shop/Shop';
 
 
 function RequireAuth({ children, redirectTo }: any) {
@@ -68,6 +69,7 @@ function AppRouter() {
               <Route path="/products" element={<Products />} />
               <Route path="/products/:subsubcategory" element={<Products />} />
               <Route path="/product/:key" element={<Product />} />
+              <Route path="/shop/:id" element={<Shop />} />
               <Route path='*' element={<NotFound />} />
           </Route>
       </Routes>

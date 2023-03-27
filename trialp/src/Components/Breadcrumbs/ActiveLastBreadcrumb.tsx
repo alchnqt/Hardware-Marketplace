@@ -33,6 +33,7 @@ export default function ActiveLastBreadcrumb() {
 
     //product page
     const [productName, setProductName] = useState<string>('');
+    const [shopName, setShopName] = useState<string>('');
 
     const [loaded, setLoaded] = useState(false)
 
@@ -72,13 +73,24 @@ export default function ActiveLastBreadcrumb() {
                 link: ``
             }
         }
+
+
+        //shop handling
+        if (brArr.length > 2 && brArr.some(s => s.id === 'shop')) {
+            brArr[2] = {
+                title: `${shopName}`,
+                id: `spname${shopName}`,
+                link: ``
+            }
+        }
         setBreadcrumbs(brArr);
         setLoaded(true);
-    }, [breadcrumbs, loaded, productName, productPage]);
+    }, [breadcrumbs, loaded, productName, productPage, shopName]);
 
     store.subscribe(() => {
         setLoaded(false);
         setProductName(store.getState().product.product?.name || '');
+        setShopName(store.getState().shop.shop?.title || '')
         setProductPage(store.getState().product.apiPage);
     })
 
@@ -87,7 +99,10 @@ export default function ActiveLastBreadcrumb() {
             <Breadcrumbs aria-label='breadcrumb' className={`${breadcrumbs.length === 1 ? styles.breadcrumbsMuiHide : ''}`} separator={<NavigateNextIcon />}>
                 {breadcrumbs &&
                     breadcrumbs.map((b, index) =>
-                        index !== breadcrumbs.length - 1 && b.id.toLowerCase().indexOf("product") === -1 ? (
+                        index !== breadcrumbs.length - 1 
+                        && b.id.toLowerCase().indexOf("product") === -1 
+                        && b.id.toLowerCase().indexOf("shop") === -1
+                        ? (
                             <div key={`breadcrumb${b.title}`}>
                                 <Link underline='hover' className={`${styles.breadcrumb}`} href={b.link}>
                                     <div dangerouslySetInnerHTML={createTitle(b.title)}></div>
