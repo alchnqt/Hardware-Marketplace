@@ -172,7 +172,6 @@ public partial class TrialPProductsContext : DbContext
             entity.Property(e => e.ApiProductId).HasColumnName("api_product_id");
             entity.Property(e => e.ApiId).HasColumnName("api_id");
             entity.Property(e => e.ApiProductUrl).HasColumnName("api_product_url");
-            entity.Property(e => e.ApiUserId).HasColumnName("api_user_id");
             entity.Property(e => e.Cons).HasColumnName("cons");
             entity.Property(e => e.CreatedAt)
                 .HasColumnType("datetime")
@@ -183,6 +182,8 @@ public partial class TrialPProductsContext : DbContext
             entity.Property(e => e.Summary).HasColumnName("summary");
             entity.Property(e => e.Text).HasColumnName("text");
             entity.Property(e => e.UserId).HasColumnName("user_id");
+            entity.Property(e => e.ApiAuthor).HasColumnName("author");
+            entity.Property(e => e.ApiId).HasColumnName("api_id");
 
             entity.HasOne(d => d.Product).WithMany(p => p.Reviews)
                 .HasForeignKey(d => d.ProductId)

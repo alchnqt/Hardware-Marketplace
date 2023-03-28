@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using System.Text.Encodings.Web;
 using System.Text.Json;
+using System.Text.Unicode;
 using TrialP.Products.Configuration;
 using TrialP.Products.Models;
 using TrialP.Products.Models.Api;
@@ -64,7 +66,8 @@ namespace TrialP.Products.Services.Domain
             var serializeOptions = new JsonSerializerOptions
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                WriteIndented = true
+                WriteIndented = true,
+                Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Cyrillic)
             };
             ReviewsDto reviewsDto = await JsonSerializer.DeserializeAsync<ReviewsDto>(result, serializeOptions);
 

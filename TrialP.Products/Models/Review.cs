@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json;
 using System.Text.Json.Serialization;
+using TrialP.Products.Helpers;
 
 namespace TrialP.Products.Models;
 
@@ -14,7 +16,7 @@ public class ApiAuthor
 
 public partial class Review
 {
-    private ApiAuthor author;
+    private JsonDocument _author;
 
     [JsonPropertyName("dbId")]
     public Guid Id { get; set; }
@@ -22,7 +24,7 @@ public partial class Review
 
     [JsonPropertyName("id")]
     public int? ApiId { get; set; }
-    public int? ApiUserId { get; set; }
+    public string ApiAuthor { get; set; }
     public int? Rating { get; set; }
 
     [JsonPropertyName("product_id")]
@@ -48,15 +50,18 @@ public partial class Review
     [JsonIgnore]
     public virtual Product? Product { get; set; }
 
-
     [NotMapped]
-    public ApiAuthor Author
+    public JsonDocument Author
     {
-        get => author;
+        get
+        {
+            return _author;
+        }
+
         set
         {
-            author = value;
-            ApiUserId = author.Id;
+            _author = value;
+            ApiAuthor = _author.ToJsonString();
         }
     }
 }
