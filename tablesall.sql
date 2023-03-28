@@ -85,3 +85,6 @@ create table Reviews(
 	"text" nvarchar(max),
 	created_at datetime
 );
+go
+create view [RowNumProducts] AS
+	select RowNum, Id, [Key] from (select row_number() over (order by id) as rowNum, * from Products) t2
