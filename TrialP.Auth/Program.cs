@@ -109,7 +109,7 @@ using (var scope = app.Services.CreateScope())
     IdentityResult bobResult = await userManager.CreateAsync(bob, "1234");
     if (!bobResult.Succeeded)
     {
-        IdentityUser bobDelete = await userManager.FindByNameAsync("admin_default");
+        IdentityUser? bobDelete = await userManager.FindByNameAsync("admin_default");
         if (bobDelete != null)
         {
             await userManager.DeleteAsync(bobDelete);

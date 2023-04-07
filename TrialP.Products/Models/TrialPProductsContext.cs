@@ -91,7 +91,7 @@ public partial class TrialPProductsContext : DbContext
             entity.Property(e => e.Amount)
                 .HasColumnType("decimal(8, 2)")
                 .HasColumnName("amount");
-            entity.Property(e => e.ApiId).HasColumnName("apiId");
+            entity.Property(e => e.ApiId).HasColumnName("api_id");
             entity.Property(e => e.Article).HasColumnName("article");
             entity.Property(e => e.Comment).HasColumnName("comment");
             entity.Property(e => e.Currency).HasColumnName("currency");
@@ -122,7 +122,7 @@ public partial class TrialPProductsContext : DbContext
             entity.Property(e => e.Id)
                 .HasDefaultValueSql("(newid())")
                 .HasColumnName("id");
-            entity.Property(e => e.ApiId).HasColumnName("apiId");
+            entity.Property(e => e.ApiId).HasColumnName("api_id");
             entity.Property(e => e.Description).HasColumnName("description");
             entity.Property(e => e.ExtendedName).HasColumnName("extended_name");
             entity.Property(e => e.FullName).HasColumnName("full_name");
@@ -156,7 +156,7 @@ public partial class TrialPProductsContext : DbContext
             entity.Property(e => e.Id)
                 .HasDefaultValueSql("(newid())")
                 .HasColumnName("id");
-            entity.Property(e => e.ApiId).HasColumnName("apiId");
+            entity.Property(e => e.ApiId).HasColumnName("api_id");
             entity.Property(e => e.Logo).HasColumnName("logo");
             entity.Property(e => e.Title).HasColumnName("title");
             entity.Property(e => e.Url).HasColumnName("url");
@@ -170,7 +170,6 @@ public partial class TrialPProductsContext : DbContext
                 .HasDefaultValueSql("(newid())")
                 .HasColumnName("id");
             entity.Property(e => e.ApiProductId).HasColumnName("api_product_id");
-            entity.Property(e => e.ApiId).HasColumnName("api_id");
             entity.Property(e => e.ApiProductUrl).HasColumnName("api_product_url");
             entity.Property(e => e.Cons).HasColumnName("cons");
             entity.Property(e => e.CreatedAt)

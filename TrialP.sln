@@ -17,9 +17,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrialP.Auth", "TrialP.Auth\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SQL", "SQL", "{8EA8541D-D4D0-4DCC-8368-922367E679FF}"
 	ProjectSection(SolutionItems) = preProject
-		refreshtokentable.sql = refreshtokentable.sql
 		scaffold.txt = scaffold.txt
-		tablesall.sql = tablesall.sql
+		identity_tables.sql = identity_tables.sql
+		products_tables.sql = products_tables.sql
 	EndProjectSection
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{D1544DCF-5310-4BF3-AC7D-8B68E08AE060}"

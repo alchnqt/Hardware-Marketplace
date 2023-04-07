@@ -17,13 +17,11 @@ interface ProductShopMap {
     value: ProductShop
 }
 
-interface IShopProps{
+interface ShopProps{
     product: Product | undefined
 }
 
-export const ProductShops: React.FC<IShopProps> = (
-    props: IShopProps
-) => {
+export const ProductShops: React.FC<ShopProps> = (props: ShopProps) => {
     const { key } = useParams();
     const product = props.product;
     const shopQuery = useProductShopsQuery({ key: key });
@@ -93,7 +91,7 @@ export const ProductShops: React.FC<IShopProps> = (
                             </div>
                         </div>
                     </div>
-                    <hr />
+                    <div className={`${styles.borderLine}`}></div>
                 </div>
             }
             )}

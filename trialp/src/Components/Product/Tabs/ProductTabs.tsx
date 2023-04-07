@@ -5,7 +5,9 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { Product } from '../../../Models/Products/ProductType';
 import ProductShops from '../ProductShops/ProductShops';
-
+import Reviews from '../Reviews/Reviews';
+import { hardResetPage } from '../../../redux/slices/reviewsSlice';
+import { RootState, useAppDispatch } from '../../../redux/store/store';
 interface TabPanelProps {
     children?: React.ReactNode;
     index: number;
@@ -24,8 +26,8 @@ function TabPanel(props: TabPanelProps) {
             {...other}
         >
             {value === index && (
-                <Box sx={{ p: 3 }}>
-                    <Typography>{children}</Typography>
+                <Box sx={{ p: 3 }} component={'div'}>
+                    <Typography component={'div'}>{children}</Typography>
                 </Box>
             )}
         </div>
@@ -46,27 +48,37 @@ interface BasicTabsProps {
 export default function BasicTabs(props: BasicTabsProps) {
     const [value, setValue] = React.useState(0);
     const product = props.product;
+    
+    const dispatch = useAppDispatch();
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);
+        dispatch(hardResetPage(undefined))
     };
-
     return (
         <Box sx={{ width: '100%' }}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                    <Tab label="Предложения" {...a11yProps(0)} />
-                    <Tab label="Отзывы" {...a11yProps(1)} />
-                    <Tab label="Отзывы из интернета" {...a11yProps(2)} />
+                    <Tab label={`Предложения`} {...a11yProps(0)} />
+                    <Tab label={`Отзывы (${product?.reviews.internalCount})`} {...a11yProps(1)} />
+                    <Tab label={`Отзывы из интернета (${product?.reviews.externalCount})`} {...a11yProps(2)} />
                 </Tabs>
             </Box>
             <TabPanel value={value} index={0}>
                 <ProductShops product={product} />
             </TabPanel>
             <TabPanel value={value} index={1}>
-                Item Two
+            <Reviews 
+                productKey={product?.key || ''} 
+                productName={product?.full_name || ''}
+                isSelf={true}
+                />
             </TabPanel>
             <TabPanel value={value} index={2}>
-                Item Three
+                <Reviews 
+                productKey={product?.key || ''} 
+                productName={product?.full_name || ''}
+                isSelf={false}
+                />
             </TabPanel>
         </Box>
     );

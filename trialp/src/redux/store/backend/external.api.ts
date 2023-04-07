@@ -5,6 +5,7 @@ import { ProductAllShop } from '../../../Models/Products/ProductAllShop';
 import { Product } from '../../../Models/Products/ProductType';
 import ShopResult from '../../../Models/Shop/ShopResult';
 import { refreshToken } from '../../slices/authSlice';
+import ProductReviews, { CreateReview } from '../../../Models/Reviews/ProductReviews';
 
 export const externalProductsApi = createApi({
     reducerPath: 'externalApi',
@@ -84,15 +85,35 @@ export const externalProductsApi = createApi({
                 }
             }
         }),
+        reviews: build.query<ProductReviews, { key: string, page: number, isSelf: boolean }>({
+            query: (args) => {
+                const { key, page, isSelf } = args;
+                return {
+                    url: `/getproductreviewsbykey?key=${key}&page=${page}&isSelf=${isSelf}`,
+                }
+            }
+        }),
+        createReview: build.mutation<any, CreateReview>({
+            query: (data) => {
+                return {
+                    method: 'POST',
+                    url: `/createproductreview`,
+                    body: data
+                }
+            }
+        }),
     })
 });
 
-export const { 
-    useProductsQuery, 
-    useProductQuery, 
-    useProductShopsQuery, 
-    useUserOrdersQuery, 
-    useAllOrdersQuery, 
+export const {
+    useProductsQuery,
+    useProductQuery,
+    useProductShopsQuery,
+    useUserOrdersQuery,
+    useAllOrdersQuery,
     useCompleteOrderMutation,
-    useShopQuery
+    useShopQuery,
+    useReviewsQuery,
+    useLazyReviewsQuery,
+    useCreateReviewMutation
 } = externalProductsApi;

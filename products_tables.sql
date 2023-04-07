@@ -21,7 +21,7 @@ create table SubSubCategory(
 
 create table Products(
 	id uniqueidentifier default NEWID() PRIMARY KEY,
-	apiId int,
+	api_id int,
 	"key" nvarchar(max),
 	name nvarchar(max),
 	full_name nvarchar(max),
@@ -39,7 +39,7 @@ create table Products(
 
 create table ProductShop(
 	id uniqueidentifier default NEWID() PRIMARY KEY,
-	apiId int,
+	api_id int,
 	logo nvarchar(max),
 	title nvarchar(max),
 	url nvarchar(max)
@@ -47,7 +47,7 @@ create table ProductShop(
 
 create table PositionsPrimary(
 	id uniqueidentifier default NEWID() PRIMARY KEY,
-	apiId nvarchar(max),
+	api_id nvarchar(max),
 	"key" nvarchar(max),
 	amount decimal(8,2),
 	currency nvarchar(max),
@@ -74,7 +74,7 @@ create table Orders(
 create table Reviews(
 	id uniqueidentifier default NEWID() PRIMARY KEY,
 	user_id uniqueidentifier,
-	api_user_id int,
+	author nvarchar(max),
 	rating int,
 	api_product_id nvarchar(max),
 	product_id uniqueidentifier foreign key references Products(id) on delete cascade on update cascade,

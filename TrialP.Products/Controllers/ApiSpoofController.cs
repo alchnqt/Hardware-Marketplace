@@ -105,9 +105,9 @@ namespace TrialP.Products.Controllers
         }
 
         [HttpGet]
-        public async Task<ReviewsDto> GetProductReviewsById(string key, int page = 1)
+        public async Task<ReviewsDto> GetProductReviewsByKey(string key, bool isSelf, int page = 1)
         {
-            var result = await _productService.GetProductReviewByIdFromApi(key, page);
+            var result = await _productService.GetProductReviewByIdFromApi(key, isSelf, page);
             return result;
         }
 
@@ -119,6 +119,7 @@ namespace TrialP.Products.Controllers
                 var review = new Review()
                 {
                     UserId = createReviewDto.UserId,
+                    Author = JsonDocument.Parse(createReviewDto.Author),
                     Text = createReviewDto.Text,
                     Cons = createReviewDto.Cons,
                     Pros = createReviewDto.Pros,
@@ -130,7 +131,7 @@ namespace TrialP.Products.Controllers
                 };
                 await context.Reviews.AddAsync(review);
                 await context.SaveChangesAsync();
-                return CreatedAtAction(nameof(GetProductReviewsById), new { id = review.ProductId}, review);
+                return CreatedAtAction(nameof(GetProductShopsByKey), new { id = review.ProductId}, review);
             }
         }
 

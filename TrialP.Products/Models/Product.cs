@@ -7,8 +7,16 @@ namespace TrialP.Products.Models;
 
 public class AggregatedReviews
 {
-    public int Rating { get; set; }
-    public int Count { get; set; }
+    public int InternalRating { get; set; }
+    public int InternalCount { get; set; }
+    public int ExternalCount { get; set; }
+    public int ExternalRating { get; set; }
+
+    [JsonPropertyName("count")]
+    public int TotalCount { get; set; }
+    [JsonPropertyName("rating")]
+    public int TotalRating { get; set; }
+
     [JsonPropertyName("html_url")]
     public string? HtmlUrl { get; set; }
     public string? Url { get; set; }
@@ -42,10 +50,6 @@ public class Prices
 }
 public partial class Product
 {
-    private decimal? priceMin;
-    private decimal? priceMax;
-    private int? offers;
-    private string imageHeader;
     private Prices prices;
     private Images images;
 

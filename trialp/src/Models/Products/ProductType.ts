@@ -10,6 +10,13 @@ export type TotalUngrouped = number;
 export interface AggregatedReviews{
     rating: number,
     count: number,
+
+    externalCount: number,
+    externalRating: number,
+
+    internalCount: number,
+    internalRating:number,
+
     url: string | null,
     html_url: string | null
 }

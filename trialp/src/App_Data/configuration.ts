@@ -52,6 +52,12 @@ export const toNormalTime = (key: string) => {
     return date.toLocaleDateString('ru-RU', options);
 }
 
+export const toNormalTimeWithHours = (key: string) => {
+    const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+    let date = new Date(key);
+    return date.toLocaleDateString('ru-RU', options);
+}
+
 function toUnicode(str: string) {
 	return str.split('').map(function (value, index, array) {
 		var temp = value.charCodeAt(0).toString(16).toUpperCase();

@@ -85,10 +85,6 @@ export default function Login() {
                             id="password"
                             autoComplete="current-password"
                         />
-                        <FormControlLabel
-                            control={<Checkbox value="remember" color="primary" />}
-                            label="Запомнить меня"
-                        />
                         {errorMsg !== '' ? (<div style={{color: 'red'}}>
                             {errorMsg}
                         </div>) : null}

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using System.Linq.Expressions;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Unicode;
@@ -34,26 +35,30 @@ namespace TrialP.Products.Services.Domain
             using (var context = new TrialPProductsContext())
             {
                 var searchProduct = context.Products.Include(r => r.Reviews).Where(x => x.Key == key).FirstOrDefault();
-                var requestCount = product?.AggregatedReviews.Count ?? 0;
-                var requestRating = (product?.AggregatedReviews.Rating ?? 0) * requestCount;
+                if (searchProduct == null)
+                {
+                    return product;
+                }
+                var requestCount = product?.AggregatedReviews.TotalCount ?? 0;
+                var requestRating = (product?.AggregatedReviews.TotalRating ?? 0) * requestCount;
                 searchProduct.AggregatedReviews = new AggregatedReviews()
                 {
-                    Count = requestCount + searchProduct.Reviews.Count(),
-                    Rating = (requestRating + searchProduct.Reviews.Select(s => s.Rating).Sum() ?? 0) / ((requestCount + searchProduct.Reviews.Count()) == 0 ? 1 : (requestCount + searchProduct.Reviews.Count())),
+                    ExternalCount = requestCount,
+                    ExternalRating = product?.AggregatedReviews.TotalRating ?? 0,
+
+                    InternalCount = searchProduct.Reviews.Count(),
+                    InternalRating = searchProduct.Reviews.Select(s => s.Rating).Sum() ?? 0,
+
+                    TotalCount = requestCount + searchProduct.Reviews.Count(),
+                    TotalRating = (requestRating + searchProduct.Reviews.Select(s => s.Rating).Sum() ?? 0) / ((requestCount + searchProduct.Reviews.Count()) == 0 ? 1 : (requestCount + searchProduct.Reviews.Count())),
                     Url = product?.AggregatedReviews.Url ?? "",
                     HtmlUrl = product?.AggregatedReviews.HtmlUrl
                 };
-
-                if (searchProduct != null)
-                {
-                    return searchProduct;
-                }
+                return searchProduct;
             }
-            
-            return product;
         }
 
-        public async Task<ReviewsDto> GetProductReviewByIdFromApi(string key, int page = 1)
+        public async Task<ReviewsDto> GetProductReviewByIdFromApi(string key, bool isSelf, int page = 1)
         {
             string url = $"{_apiConfiguration.CatalogApiUrl}/products/{key}/reviews?order=created_at:desc";
 
@@ -83,7 +88,17 @@ namespace TrialP.Products.Services.Domain
                 await context.Reviews.AddRangeAsync(missingReviews);
                 await context.SaveChangesAsync();
 
-                var productsFromDb = await context.Reviews.OrderByDescending(odb => odb.CreatedAt).Skip(10 * (page - 1)).Take(10).ToListAsync();
+                Expression<Func<Review, bool>> reviewFiler;
+                if (isSelf)
+                {
+                    reviewFiler = x => x.UserId != null;
+                }
+                else
+                {
+                    reviewFiler = x => x.UserId == null;
+                }
+
+                var productsFromDb = await context.Reviews.Where(reviewFiler).OrderByDescending(odb => odb.CreatedAt).Skip(10 * (page - 1)).Take(10).ToListAsync();
 
                 reviewsDto.Reviews = productsFromDb;
 
@@ -117,7 +132,7 @@ namespace TrialP.Products.Services.Domain
                     s.PriceMin = decimal.Parse(s.Prices.PriceMin.Amount, System.Globalization.CultureInfo.InvariantCulture);
                     s.ImageHeader = s.Images.Header;
                     s.Offers = s.Prices.ApiOffers.Count;
-                    s.SubSubCategoryId =  (context.SubSubCategories.Where(w => w.ApiName == subSubCategory).FirstOrDefault())?.Id;
+                    s.SubSubCategoryId = (context.SubSubCategories.Where(w => w.ApiName == subSubCategory).FirstOrDefault())?.Id;
                     return s;
                 });
                 await context.Products.AddRangeAsync(missingProducts);
@@ -126,18 +141,24 @@ namespace TrialP.Products.Services.Domain
                 //.Skip(30 * (page - 1)).Take(30)
                 var requestApiProductKeys = searchProduct.Products.Select(s => s.Key).ToList();
                 var productsFromDb = await context.Products
-                    .Where(w => w.SubSubCategory.ApiName == subSubCategory 
+                    .Where(w => w.SubSubCategory.ApiName == subSubCategory
                     && requestApiProductKeys.Contains(w.Key)).ToListAsync();
 
                 productsFromDb = productsFromDb.Select(s =>
                 {
                     var requestProduct = searchProduct.Products.Where(w => w.Key == s.Key).FirstOrDefault();
-                    var requestCount = requestProduct?.AggregatedReviews.Count ?? 0;
-                    var requestRating = (requestProduct?.AggregatedReviews.Rating ?? 0) * requestCount;
+                    var requestCount = requestProduct?.AggregatedReviews.TotalCount ?? 0;
+                    var requestRating = (requestProduct?.AggregatedReviews.TotalRating ?? 0) * requestCount;
                     s.AggregatedReviews = new AggregatedReviews()
                     {
-                        Count = requestCount + s.Reviews.Count(),
-                        Rating = (requestRating + s.Reviews.Select(s => s.Rating).Sum() ?? 0) / ((requestCount + s.Reviews.Count()) == 0 ? 1 : (requestCount + s.Reviews.Count())),
+                        ExternalCount = requestCount,
+                        ExternalRating = requestProduct?.AggregatedReviews.TotalRating ?? 0,
+                        
+                        InternalCount = s.Reviews.Count(),
+                        InternalRating = s.Reviews.Select(s => s.Rating).Sum() ?? 0,
+
+                        TotalCount = requestCount + s.Reviews.Count(),
+                        TotalRating = (requestRating + s.Reviews.Select(s => s.Rating).Sum() ?? 0) / ((requestCount + s.Reviews.Count()) == 0 ? 1 : (requestCount + s.Reviews.Count())),
                         Url = requestProduct?.AggregatedReviews.Url ?? "",
                         HtmlUrl = requestProduct?.AggregatedReviews.HtmlUrl
                     };

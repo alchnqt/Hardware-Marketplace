@@ -16,15 +16,14 @@ public class ApiAuthor
 
 public partial class Review
 {
-    private JsonDocument _author;
-
     [JsonPropertyName("dbId")]
     public Guid Id { get; set; }
     public Guid? UserId { get; set; }
 
     [JsonPropertyName("id")]
     public int? ApiId { get; set; }
-    public string ApiAuthor { get; set; }
+
+    public string? ApiAuthor { get; set; }
     public int? Rating { get; set; }
 
     [JsonPropertyName("product_id")]
@@ -35,13 +34,9 @@ public partial class Review
 
     [JsonPropertyName("product_url")]
     public string? ApiProductUrl { get; set; }
-
     public string? Pros { get; set; }
-
     public string? Cons { get; set; }
-
     public string? Summary { get; set; }
-
     public string? Text { get; set; }
 
     [JsonPropertyName("created_at")]
@@ -55,13 +50,16 @@ public partial class Review
     {
         get
         {
-            return _author;
+            if(ApiAuthor == null)
+            {
+                return null;
+            }
+            return JsonDocument.Parse(ApiAuthor);
         }
 
         set
         {
-            _author = value;
-            ApiAuthor = _author.ToJsonString();
+            ApiAuthor = value.ToJsonString();
         }
     }
 }

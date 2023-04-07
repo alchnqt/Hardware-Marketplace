@@ -8,6 +8,7 @@ import userReducer from '../slices/userSlice';
 import cartReducer from '../slices/cartSlice';
 import productsReducer from '../slices/productsSlice';
 import shopReducer from '../slices/shopSlice';
+import reviewReducer from '../slices/reviewsSlice';
 import {
     persistStore, persistReducer, FLUSH,
     REHYDRATE,
@@ -34,14 +35,16 @@ export const store = configureStore({
         [categoriesApi.reducerPath]: categoriesApi.reducer,
         [ordersApi.reducerPath]: ordersApi.reducer,
         [externalProductsApi.reducerPath]: externalProductsApi.reducer,
-        user: userReducer,
         [shopsApi.reducerPath]: shopsApi.reducer,
         [identityApi.reducerPath]: identityApi.reducer,
+        
+        user: userReducer,
         auth: persistedAuthReducer,
         message: messageReducer,
         cart: persistedCartReducer,
         product: productsReducer,
-        shop: shopReducer
+        shop: shopReducer,
+        review: reviewReducer
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware({
         serializableCheck: {
