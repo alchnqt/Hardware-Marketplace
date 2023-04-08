@@ -20,8 +20,8 @@ namespace TrialP.Products.Controllers
             _externalApiService = externalApiService;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Top3CoProductsByProductId(string key)
+        [HttpGet("{key}")]
+        public async Task<IActionResult> Top3CoProductsByProductApiKey(string key)
         {
             using(var context = new TrialP.Products.Models.TrialPProductsContext()) 
             {

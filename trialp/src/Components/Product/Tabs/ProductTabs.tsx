@@ -6,7 +6,7 @@ import Box from '@mui/material/Box';
 import { Product } from '../../../Models/Products/ProductType';
 import ProductShops from '../ProductShops/ProductShops';
 import Reviews from '../Reviews/Reviews';
-import { hardResetPage } from '../../../redux/slices/reviewsSlice';
+import { setPage } from '../../../redux/slices/reviewsSlice';
 import { RootState, useAppDispatch } from '../../../redux/store/store';
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -52,7 +52,7 @@ export default function BasicTabs(props: BasicTabsProps) {
     const dispatch = useAppDispatch();
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);
-        dispatch(hardResetPage(undefined))
+        dispatch(setPage())
     };
     return (
         <Box sx={{ width: '100%' }}>

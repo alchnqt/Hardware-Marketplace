@@ -6,8 +6,8 @@ import styles from './reviews.module.css';
 import { toNormalTimeWithHours } from '../../../App_Data/configuration';
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../../../redux/store/store';
-import { decrementPage, incrementPage } from '../../../redux/slices/reviewsSlice';
-
+import { decrementPage, incrementPage, setPage } from '../../../redux/slices/reviewsSlice';
+import { store } from '../../../redux/store/store';
 interface ReviewsProps {
     productKey: string,
     productName: string,
@@ -20,7 +20,6 @@ export const Reviews: React.FC<ReviewsProps> = (props: ReviewsProps) => {
     const { page } = useSelector((state: RootState) => state.review);
     const reviewsQuery = useReviewsQuery({ key: productKey, page: page, isSelf: props.isSelf });
     const dispatch = useAppDispatch();
-
     if (reviewsQuery.isLoading) {
         return (
             <CircularLoader />
@@ -35,6 +34,12 @@ export const Reviews: React.FC<ReviewsProps> = (props: ReviewsProps) => {
 
     return (
         <div className={`${styles.reviewsContainer}`}>
+            {(reviewsQuery.data?.reviews.length || 0) > 9 ?
+                <div>
+                    <div>Страница {store.getState().review.apiPage.current} из {reviewsQuery.data?.page.last}</div>
+                    <hr />
+                </div>
+                : null}
             {reviewsQuery.data?.reviews.map((review) =>
                 <div key={`reviewid${review.dbId}}`} className={`${styles.review}`}>
                     <div>
@@ -56,8 +61,8 @@ export const Reviews: React.FC<ReviewsProps> = (props: ReviewsProps) => {
                     <hr />
                 </div>)}
             <div>
-                {reviewsQuery.data?.page.current !== reviewsQuery.data?.page.last 
-                && (reviewsQuery.data?.reviews.length || 0) > 9 ?
+                {reviewsQuery.data?.page.current !== reviewsQuery.data?.page.last
+                    && (reviewsQuery.data?.reviews.length || 0) > 9 ?
                     <div>
                         <Divider className={`${styles.divider}`}></Divider>
                         <Button
@@ -69,7 +74,7 @@ export const Reviews: React.FC<ReviewsProps> = (props: ReviewsProps) => {
                     </div> : null}
 
                 <Divider className={`${styles.divider}`}></Divider>
-                {page > 1 && (
+                {store.getState().review.apiPage.current > 1 && (
                     <Button
                         fullWidth
                         className={`${styles.nextBtn}`}

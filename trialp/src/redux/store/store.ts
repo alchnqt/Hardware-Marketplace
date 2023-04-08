@@ -2,6 +2,8 @@ import { configureStore } from "@reduxjs/toolkit";
 import { categoriesApi } from '../store/backend/categoriesServer.api';
 import { ordersApi } from '../store/backend/ordersServer.api';
 import { externalProductsApi } from "./backend/external.api";
+import { productsApi } from "./backend/productServer.api";
+
 import authReducer from "../slices/authSlice";
 import messageReducer from "../slices/messageSlice";
 import userReducer from '../slices/userSlice';
@@ -37,7 +39,8 @@ export const store = configureStore({
         [externalProductsApi.reducerPath]: externalProductsApi.reducer,
         [shopsApi.reducerPath]: shopsApi.reducer,
         [identityApi.reducerPath]: identityApi.reducer,
-        
+        [productsApi.reducerPath]: productsApi.reducer,
+
         user: userReducer,
         auth: persistedAuthReducer,
         message: messageReducer,
@@ -56,7 +59,8 @@ export const store = configureStore({
         categoriesApi.middleware, 
         ordersApi.middleware, 
         identityApi.middleware, 
-        shopsApi.middleware])
+        shopsApi.middleware,
+        productsApi.middleware])
 });
 
 export const persistor = persistStore(store);

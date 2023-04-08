@@ -108,6 +108,7 @@ export const externalProductsApi = createApi({
 export const {
     useProductsQuery,
     useProductQuery,
+    useLazyProductQuery,
     useProductShopsQuery,
     useUserOrdersQuery,
     useAllOrdersQuery,

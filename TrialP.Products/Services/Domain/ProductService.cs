@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using System.Drawing.Printing;
 using System.Linq.Expressions;
 using System.Text.Encodings.Web;
 using System.Text.Json;
@@ -46,10 +47,10 @@ namespace TrialP.Products.Services.Domain
                     ExternalCount = requestCount,
                     ExternalRating = product?.AggregatedReviews.TotalRating ?? 0,
 
-                    InternalCount = searchProduct.Reviews.Count(),
-                    InternalRating = searchProduct.Reviews.Select(s => s.Rating).Sum() ?? 0,
+                    InternalCount = searchProduct.Reviews.Where(x => x.UserId != null).Count(),
+                    InternalRating = searchProduct.Reviews.Where(x => x.UserId != null).Select(s => s.Rating).Sum() ?? 0,
 
-                    TotalCount = requestCount + searchProduct.Reviews.Count(),
+                    TotalCount = requestCount + searchProduct.Reviews.Where(x => x.UserId != null).Count(),
                     TotalRating = (requestRating + searchProduct.Reviews.Select(s => s.Rating).Sum() ?? 0) / ((requestCount + searchProduct.Reviews.Count()) == 0 ? 1 : (requestCount + searchProduct.Reviews.Count())),
                     Url = product?.AggregatedReviews.Url ?? "",
                     HtmlUrl = product?.AggregatedReviews.HtmlUrl
@@ -81,26 +82,36 @@ namespace TrialP.Products.Services.Domain
                 var missingReviews = reviewsDto.Reviews.Where(db => !context.Reviews.Any(search => db.ApiId == search.ApiId))
                     .Select(s =>
                     {
-                        Guid? prId = (from pr in context.Products where s.ApiProductId == pr.Key select pr.Id).FirstOrDefault();
+                        Guid? prId = context.Products.Where(w => w.Key == key).Select(s => s.Id).FirstOrDefault();
                         s.ProductId = prId == Guid.Empty ? null : prId;
                         return s;
                     });
                 await context.Reviews.AddRangeAsync(missingReviews);
                 await context.SaveChangesAsync();
 
-                Expression<Func<Review, bool>> reviewFiler;
+                var productsFromDb = context.Reviews.Include(pr => pr.Product).AsQueryable();
                 if (isSelf)
                 {
-                    reviewFiler = x => x.UserId != null;
+                    productsFromDb = productsFromDb.Where(x => x.UserId != null && x.Product.Key == key);
+                    reviewsDto.Total = context.Reviews.Count(x => x.UserId != null && x.Product.Key == key);
+
+                    reviewsDto.Page.Current = productsFromDb.Count() == 0 ? 1 : page;
+                    reviewsDto.Page.Items = productsFromDb.Count();
+                    reviewsDto.Page.Limit = 10;
+
+                    reviewsDto.Page.Last = (reviewsDto.Page.Items + reviewsDto.Page.Limit - 1) / reviewsDto.Page.Limit;
                 }
                 else
                 {
-                    reviewFiler = x => x.UserId == null;
+                    productsFromDb = productsFromDb.Where(x => x.UserId == null && x.Product.Key == key);
                 }
 
-                var productsFromDb = await context.Reviews.Where(reviewFiler).OrderByDescending(odb => odb.CreatedAt).Skip(10 * (page - 1)).Take(10).ToListAsync();
+                productsFromDb = productsFromDb
+                    .OrderByDescending(odb => odb.CreatedAt)
+                    .Skip(10 * (page - 1))
+                    .Take(10);
 
-                reviewsDto.Reviews = productsFromDb;
+                reviewsDto.Reviews = await productsFromDb.ToListAsync();
 
                 return reviewsDto;
             }
@@ -126,7 +137,8 @@ namespace TrialP.Products.Services.Domain
             using (var context = new TrialPProductsContext())
             {
 
-                var missingProducts = searchProduct.Products.Where(db => !context.Products.Include(r => r.Reviews).Any(search => db.ApiId == search.ApiId)).Select(s =>
+                var missingProducts = searchProduct.Products.Where(db =>
+                    !context.Products.Include(r => r.Reviews).Any(search => db.Key == search.Key)).Select(s =>
                 {
                     s.PriceMax = decimal.Parse(s.Prices.PriceMax.Amount, System.Globalization.CultureInfo.InvariantCulture);
                     s.PriceMin = decimal.Parse(s.Prices.PriceMin.Amount, System.Globalization.CultureInfo.InvariantCulture);
@@ -153,7 +165,7 @@ namespace TrialP.Products.Services.Domain
                     {
                         ExternalCount = requestCount,
                         ExternalRating = requestProduct?.AggregatedReviews.TotalRating ?? 0,
-                        
+
                         InternalCount = s.Reviews.Count(),
                         InternalRating = s.Reviews.Select(s => s.Rating).Sum() ?? 0,
 
@@ -214,11 +226,8 @@ namespace TrialP.Products.Services.Domain
                                                   where pp.Product.Key == key
                                                   select pp).ToList();
 
-                productShops.Shops = (from pp
-                                      in context.PositionsPrimaries.Include(pr => pr.Product).Include(sh => sh.Shop)
-                                      join shop in context.ProductShops on pp.ShopIdApi equals shop.ApiId
-                                      where pp.Product.Key == key
-                                      select shop)
+
+                productShops.Shops = context.PositionsPrimaries.Include(pr => pr.Product).Include(sh => sh.Shop).Where(w => w.Product.Key == key).Select(p => p.Shop)
                 .ToDictionary(k => k.ApiId.Value, v => v);
             }
 

@@ -1,14 +1,14 @@
 
 import { Button, Container, Link, Rating } from '@mui/material';
 import { useParams } from 'react-router-dom';
-import { useProductQuery } from '../../redux/store/backend/external.api';
+import { useLazyProductQuery, useProductQuery } from '../../redux/store/backend/external.api';
 import CircularLoader from '../Loader/CircularLoader';
 import styles from './product.module.css';
 import BasicTabs from './Tabs/ProductTabs';
 import { useSelector } from 'react-redux';
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Review } from './Review/Review';
-
+import Recommendations from './Recommendations/Recommendations';
 enum ProductState {
     Tabs,
     CreateReviews
@@ -16,27 +16,35 @@ enum ProductState {
 
 export const Product = () => {
     const { key } = useParams();
-    const productQuery = useProductQuery({ key: key });
+    const [trigger, result] = useLazyProductQuery();
     const { user, isLoggedIn } = useSelector((state: any) => state.auth);
     const [productState, setProductState] = useState<ProductState>(ProductState.Tabs);
 
-    if (productQuery.isLoading) {
+    useEffect(() => {
+        if (!result.isSuccess && !result.isLoading)
+            trigger({ key: key }, false);
+    })
+
+    if (result.isLoading) {
         return (
             <CircularLoader />
         );
     }
+
     else {
         return (
             <Container>
                 <div className={`${styles.productItself}`}>
-                    <img src={`${productQuery.data?.images.header}`} />
+                    <img src={`${result.data?.images.header}`} />
                     <div className={`${styles.description}`}>
-                        <h3>{productQuery.data?.extended_name}</h3>
-                        <p>{productQuery.data?.description}</p>
+                        <h3>{result.data?.extended_name}</h3>
+                        <p>{result.data?.description}</p>
                         <div className={`${styles.reviews}`}>
-                            <Rating className={`${styles.ratingContainer}`} name="read-only" value={(productQuery.data?.reviews.rating || 0 / 10)} readOnly />
-                            <Link className={`${styles.reviewsLink}`} target="_blank" href={`${productQuery.data?.reviews.html_url}`}>
-                                Всего отзывов: {productQuery.data?.reviews.count}</Link>
+                            <Rating className={`${styles.ratingContainer}`}
+                                name="read-only" value={(result.data?.reviews.rating || 0 / 10)} readOnly />
+                            <Link className={`${styles.reviewsLink}`} target="_blank"
+                                href={`${result.data?.reviews.html_url}`}>
+                                Всего отзывов: {result.data?.reviews.count}</Link>
                         </div>
                     </div>
                     {isLoggedIn ?
@@ -61,14 +69,17 @@ export const Product = () => {
                 </div>
                 <hr />
                 {productState === ProductState.Tabs ?
-                    <BasicTabs product={productQuery.data} />
+                    <>
+                        <Recommendations productKey={result.data?.key || ''}/>
+                        <BasicTabs product={result.data} />
+                    </>
                     : null}
                 {productState === ProductState.CreateReviews ?
                     <Review
-                        productName={productQuery.data?.full_name || ''}
+                        productName={result.data?.full_name || ''}
                         userId={user.id}
-                        apiProductId={productQuery.data?.key || ''}
-                        productId={productQuery.data?.dbId || ''}
+                        apiProductId={result.data?.key || ''}
+                        productId={result.data?.dbId || ''}
                     />
                     : null}
             </Container>

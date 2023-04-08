@@ -1,11 +1,11 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { Product } from "../../Models/Products/ProductType";
 import { externalProductsApi } from "../store/backend/external.api";
 import { RootState } from "../store/store";
 import { productThunks } from "../thunks/productThunks";
 import { ProductReviews } from "../../Models/Reviews/ProductReviews";
 
-interface ReviewsState{
+interface ReviewsState {
     page: number,
     reviews: ProductReviews | null,
     loading: boolean,
@@ -45,34 +45,34 @@ const reviewsSlice = createSlice({
             }
             window.scrollTo(0, 0)
         },
-        hardResetPage: (state, action) => {
+        setPage: (state) => {
             state.page = 1;
             state.apiPage.current = 1;
         }
     },
     extraReducers: (builder) => {
         builder
-        .addMatcher(externalProductsApi.endpoints.reviews.matchPending, (state, action) => {
-            state.loading = true;
-        })
-        .addMatcher(
-            externalProductsApi.endpoints.reviews.matchFulfilled, (state, action) => {
+            .addMatcher(externalProductsApi.endpoints.reviews.matchPending, (state, action) => {
+                state.loading = true;
+            })
+            .addMatcher(
+                externalProductsApi.endpoints.reviews.matchFulfilled, (state, action) => {
+                    state.loading = false;
+                    state.fullfilled = true;
+                    state.reviews = action.payload;
+                }
+            )
+            .addMatcher(externalProductsApi.endpoints.reviews.matchRejected, (state, action) => {
                 state.loading = false;
-                state.fullfilled = true;
-                state.reviews = action.payload;
-            }
-        )
-        .addMatcher(externalProductsApi.endpoints.reviews.matchRejected, (state, action) => {
-            state.loading = false;
-            state.rejected = true;
-        })
-        .addMatcher(externalProductsApi.endpoints.reviews.matchFulfilled, (state, action) => {
-            state.apiPage = action.payload.page
-        })
+                state.rejected = true;
+            })
+            .addMatcher(externalProductsApi.endpoints.reviews.matchFulfilled, (state, action) => {
+                state.apiPage = action.payload.page
+            })
     }
 });
 const { reducer, actions } = reviewsSlice;
 
-export const { incrementPage, decrementPage, hardResetPage } = actions
+export const { incrementPage, decrementPage, setPage } = actions
 export default reducer;
 export const selectCurrentProduct = (state: RootState) => state.product;
