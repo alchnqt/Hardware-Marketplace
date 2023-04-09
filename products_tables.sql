@@ -74,6 +74,7 @@ create table Orders(
 create table Reviews(
 	id uniqueidentifier default NEWID() PRIMARY KEY,
 	user_id uniqueidentifier,
+	api_id int,
 	author nvarchar(max),
 	rating int,
 	api_product_id nvarchar(max),

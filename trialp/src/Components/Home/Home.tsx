@@ -1,6 +1,7 @@
 import styles from './home.module.css';
 import Carousel from './Carousel/Carousel';
 import { Container } from '@mui/material';
+import OurGoal from '../Footer/OurGoal/OurGoal';
 
 function OverlayInfo() {
     let date = new Date().toLocaleDateString();
@@ -30,6 +31,7 @@ export const Home = () => {
             </div>
             <div className={`container ${styles.home}`}>
                 <Carousel />
+                <OurGoal />
             </div>
         </div>
         

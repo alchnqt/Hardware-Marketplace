@@ -5,8 +5,6 @@ using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 using System.Text;
 
-var authenticationProviderKey = "IdentityApiKey";
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.SetBasePath(builder.Environment.ContentRootPath)
