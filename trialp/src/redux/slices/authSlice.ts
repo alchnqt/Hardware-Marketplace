@@ -7,7 +7,8 @@ import AuthService, { LoginDTO, RegisterDTO } from "../services/userService";
 export interface AxiosRequestResult {
     data: any,
     status: number,
-    statusText: string
+    statusText: string,
+    message: any
 }
 
 const user = JSON.parse(localStorage.getItem("user") as any);
@@ -34,24 +35,14 @@ export const register = createAsyncThunk(
 
 export const login = createAsyncThunk(
     "auth/login",
-    async (data: LoginDTO, thunkAPI) => {
-        try {
-            const resp = await AuthService.login(data) as AxiosRequestResult;
-            if (resp.status !== 200) {
-                return { user: null, accessToken: '', message: resp.data };
-            }
-            var decoded = jwt_decode(resp.data.access_token);
-            return { user: decoded, accessToken: resp.data.access_token, message: resp.data.statusText };
-        } catch (error: any) {
-            const message =
-                (error.response &&
-                    error.response.data &&
-                    error.response.data.message) ||
-                error.message ||
-                error.toString();
-            thunkAPI.dispatch(setMessage(message));
-            return thunkAPI.rejectWithValue(undefined);
+    async (data: LoginDTO) => {
+        const resp = await AuthService.login(data);
+        if (resp.access_token !== undefined) {
+            var decoded = jwt_decode(resp.access_token);
+            localStorage.setItem("user", JSON.stringify(decoded));
+            return;
         }
+        return resp;
     }
 );
 
@@ -73,40 +64,46 @@ const initialState =
         {
             isLoggedIn: true,
             user,
-            accessToken: ''
+            accessToken: '',
+            message: ''
         } :
         {
             isLoggedIn: false,
             user: null,
-            accessToken: ''
+            accessToken: '',
+            message: ''
         };
 
 const authSlice = createSlice({
     name: "auth",
     initialState: initialState,
     reducers: {},
-    extraReducers: {
-        [register.fulfilled as any]: (state: { isLoggedIn: boolean; }, action: any) => {
-            state.isLoggedIn = false;
-        },
-        [register.rejected as any]: (state, action) => {
-            state.isLoggedIn = false;
-        },
-        [login.fulfilled as any]: (state, action) => {
-            state.isLoggedIn = true;
-            state.accessToken = action.payload.accessToken
-            state.user = action.payload.user;
-        },
-        [login.rejected as any]: (state, action) => {
-            state.isLoggedIn = false;
-            state.user = null;
-            //state.role = null;
-        },
-        [logout.fulfilled as any]: (state, action) => {
-            state.isLoggedIn = false;
-            state.user = null;
-            //state.role = null;
-        }
+    extraReducers: (builder) => {
+        builder
+            .addCase(register.fulfilled, (state: { isLoggedIn: boolean; }, action) => {
+                state.isLoggedIn = false;
+            })
+            .addCase(register.rejected, (state, action) => {
+                state.isLoggedIn = false;
+            })
+            .addCase(login.fulfilled, (state, action) => {
+                state.accessToken = action.payload?.access_token || ''
+                state.message = action.payload?.message || ''
+                state.isLoggedIn = true;
+                console.log(action.payload?.access_token);
+                //var decoded = jwt_decode(action.payload?.access_token || '');
+                state.user = JSON.parse(localStorage.getItem('user') || '');
+            })
+            .addCase(login.rejected, (state, action) => {
+                state.isLoggedIn = false;
+                state.user = null;
+                state.accessToken = ''
+            })
+            .addCase(logout.fulfilled, (state, action) => {
+                state.isLoggedIn = false;
+                state.user = null;
+                state.accessToken = ''
+            })
     },
 });
 

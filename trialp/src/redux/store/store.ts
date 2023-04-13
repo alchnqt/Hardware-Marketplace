@@ -50,10 +50,7 @@ export const store = configureStore({
         review: reviewReducer
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware({
-        serializableCheck: {
-            // Ignore these action types
-            ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-        },
+        serializableCheck: false,
     }).concat([
         externalProductsApi.middleware, 
         categoriesApi.middleware, 

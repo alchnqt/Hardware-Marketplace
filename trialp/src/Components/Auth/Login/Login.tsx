@@ -40,9 +40,9 @@ export default function Login() {
             password: data.get('password')?.toString() || ""
         }
         const loginRes = await dispatch(login(loginDto)).unwrap();
-        //console.log(loginRes);
-        if(loginRes.accessToken === '' && loginRes.user == null){
-            setErrorMsg(loginRes.message)
+
+        if(loginRes?.access_token === undefined){
+            setErrorMsg(loginRes?.message || '')
         }
     };
 

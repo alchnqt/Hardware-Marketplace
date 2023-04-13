@@ -89,6 +89,9 @@ public partial class Product
         set => images = value;
     }
 
+    [NotMapped]
+    [JsonPropertyName("category_name")]
+    public string CategoryName { get => SubSubCategory?.ApiName ?? ""; }
     public string Description { get; set; }
 
     [JsonPropertyName("micro_description")]
@@ -127,7 +130,6 @@ public partial class Product
 
     [JsonIgnore]
     public virtual ICollection<PositionsPrimary> PositionsPrimaries { get; } = new List<PositionsPrimary>();
-
     [JsonIgnore]
     public virtual SubSubCategory SubSubCategory { get; set; }
 }

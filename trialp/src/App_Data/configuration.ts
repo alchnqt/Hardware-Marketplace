@@ -24,7 +24,9 @@ export const translatedComponentNames: Dictionary<string> = {
     "profile": `профиль`,
     "history": `история`,
     "products": `товары`,
-    "shop": `магазин`
+    "shop": `магазин`,
+    "cart": `корзина`,
+    
 } 
 
 export const translatedDays: Dictionary<string> = {

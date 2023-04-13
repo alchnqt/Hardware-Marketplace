@@ -17,22 +17,22 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrialP.Auth", "TrialP.Auth\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SQL", "SQL", "{8EA8541D-D4D0-4DCC-8368-922367E679FF}"
 	ProjectSection(SolutionItems) = preProject
-		scaffold.txt = scaffold.txt
 		identity_tables.sql = identity_tables.sql
 		products_tables.sql = products_tables.sql
+		scaffold.txt = scaffold.txt
 	EndProjectSection
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{D1544DCF-5310-4BF3-AC7D-8B68E08AE060}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ConsoleApps", "ConsoleApps", "{BBF7A592-C7B5-45DF-8720-A0B8DE6A2271}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "HelperApps", "HelperApps", "{BBF7A592-C7B5-45DF-8720-A0B8DE6A2271}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WhoBoughtThisItemAlsoBought", "WhoBoughtThisItemAlsoBought\WhoBoughtThisItemAlsoBought.csproj", "{55563BDF-7098-4621-9989-50252685CE71}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrialP.ML", "TrialP.ML\TrialP.ML.csproj", "{88D9EC4C-E669-4E8D-AC17-9CA48DF09445}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SelfHostTgBot", "..\SelfHostTgBot\SelfHostTgBot.csproj", "{C0374F67-3A94-4F64-B16A-2E0FF05FC126}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrialP.BotApi", "TrialP.BotApi\TrialP.BotApi.csproj", "{29945C63-FF1C-442F-9079-FE9CB17A3B84}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrialP.TgBot", "..\TrialP.TgBot\TrialP.TgBot.csproj", "{2B5CE155-26F1-40FF-AFCD-8ABF39B8AADC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -68,14 +68,14 @@ Global
 		{88D9EC4C-E669-4E8D-AC17-9CA48DF09445}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{88D9EC4C-E669-4E8D-AC17-9CA48DF09445}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{88D9EC4C-E669-4E8D-AC17-9CA48DF09445}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C0374F67-3A94-4F64-B16A-2E0FF05FC126}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C0374F67-3A94-4F64-B16A-2E0FF05FC126}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C0374F67-3A94-4F64-B16A-2E0FF05FC126}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C0374F67-3A94-4F64-B16A-2E0FF05FC126}.Release|Any CPU.Build.0 = Release|Any CPU
 		{29945C63-FF1C-442F-9079-FE9CB17A3B84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{29945C63-FF1C-442F-9079-FE9CB17A3B84}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{29945C63-FF1C-442F-9079-FE9CB17A3B84}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{29945C63-FF1C-442F-9079-FE9CB17A3B84}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B5CE155-26F1-40FF-AFCD-8ABF39B8AADC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B5CE155-26F1-40FF-AFCD-8ABF39B8AADC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B5CE155-26F1-40FF-AFCD-8ABF39B8AADC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B5CE155-26F1-40FF-AFCD-8ABF39B8AADC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -86,8 +86,8 @@ Global
 		{DAC326E2-F443-4639-B384-38709691FB0A} = {222B770E-E7DE-405D-9FF0-3A6D77FAE0B8}
 		{55563BDF-7098-4621-9989-50252685CE71} = {BBF7A592-C7B5-45DF-8720-A0B8DE6A2271}
 		{88D9EC4C-E669-4E8D-AC17-9CA48DF09445} = {222B770E-E7DE-405D-9FF0-3A6D77FAE0B8}
-		{C0374F67-3A94-4F64-B16A-2E0FF05FC126} = {BBF7A592-C7B5-45DF-8720-A0B8DE6A2271}
 		{29945C63-FF1C-442F-9079-FE9CB17A3B84} = {222B770E-E7DE-405D-9FF0-3A6D77FAE0B8}
+		{2B5CE155-26F1-40FF-AFCD-8ABF39B8AADC} = {222B770E-E7DE-405D-9FF0-3A6D77FAE0B8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CF5AA923-B875-42F4-A7DD-D7DC34C42D1E}

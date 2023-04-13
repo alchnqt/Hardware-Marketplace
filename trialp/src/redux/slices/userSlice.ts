@@ -11,14 +11,6 @@ const initialState = {
     success: false, // for monitoring the registration process.
 }
 
-//const userSlice = createSlice({
-//    name: 'user',
-//    initialState,
-//    reducers: {},
-//    extraReducers: {},
-//});
-
-
 export const userSlice = createSlice({
     initialState: initialState,
     name: 'userSlice',

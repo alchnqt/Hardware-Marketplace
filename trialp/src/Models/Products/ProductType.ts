@@ -66,7 +66,8 @@ export interface Product {
         htmlUrl: string,
         url: string
     },
-    reviews: AggregatedReviews
+    reviews: AggregatedReviews,
+    category_name: string
 }
 
 export interface ProductsResult {

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System.Drawing.Printing;
 using System.Linq.Expressions;
@@ -35,7 +36,7 @@ namespace TrialP.Products.Services.Domain
 
             using (var context = new TrialPProductsContext())
             {
-                var searchProduct = context.Products.Include(r => r.Reviews).Where(x => x.Key == key).FirstOrDefault();
+                var searchProduct = context.Products.Include(r => r.Reviews).Include(ssb => ssb.SubSubCategory).Where(x => x.Key == key).FirstOrDefault();
                 if (searchProduct == null)
                 {
                     return product;
@@ -194,6 +195,13 @@ namespace TrialP.Products.Services.Domain
                 WriteIndented = true
             };
             ProductShops productShops = await JsonSerializer.DeserializeAsync<ProductShops>(result, serializeOptions);
+
+            if (productShops == null || 
+                productShops.Shops == null || 
+                productShops.Positions == null)
+            {
+                return null;
+            }
 
             using (var context = new TrialPProductsContext())
             {

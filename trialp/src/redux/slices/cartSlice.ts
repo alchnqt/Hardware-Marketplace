@@ -10,7 +10,9 @@ export interface CartItem {
     image: string,
     amount: string,
     currency: string,
-    quantity?: number
+    quantity?: number,
+    text: string,
+    category: string
 }
 
 

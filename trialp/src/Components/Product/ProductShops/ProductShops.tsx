@@ -37,6 +37,13 @@ export const ProductShops: React.FC<ShopProps> = (props: ShopProps) => {
             <CircularLoader />
         );
     }
+
+    if(shopQuery.isError){
+        return <div>
+            {(shopQuery.error as any).data.message}
+        </div>
+    }
+
     const array: ProductShopMap[] = [];
     if (shopQuery.data?.shops !== undefined) {
         Object.entries(shopQuery.data?.shops).forEach(
@@ -79,7 +86,9 @@ export const ProductShops: React.FC<ShopProps> = (props: ShopProps) => {
                                             title: product?.extended_name || "",
                                             image: product?.images.header || "",
                                             amount: primary?.amount || "",
-                                            currency: primary?.currency || ""
+                                            currency: primary?.currency || "",
+                                            text: product?.description || '',
+                                            category: product?.category_name || ''
                                         };
                                         handleCart(item)
                                     }} type="button">В корзину</Button>

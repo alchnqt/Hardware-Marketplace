@@ -68,17 +68,19 @@ namespace TrialP.Auth.Controllers
 
             if (existingUser == null)
             {
-                return BadRequest("Пользователь не найден");
+                return BadRequest(new { message = "Пользователь не найден" });
             }
 
             if (user.Email != existingUser.Email)
             {
-                return BadRequest("Пользователь не найден");
+                return BadRequest(new { message = "Пользователь не найден" });
             }
 
-            if (string.IsNullOrEmpty(user.Password))
+            var passwordCheck = await _userManager.CheckPasswordAsync(existingUser, user.Password);
+
+            if (!passwordCheck)
             {
-                return BadRequest("Неверный пароль");
+                return BadRequest(new { message = "Неверный пароль" });
             }
 
             string token = await CreateToken(existingUser.UserName);

@@ -1,22 +1,25 @@
 import * as React from 'react';
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
 import styles from './recommendations.module.css'
 import { useTop3CoProductsByProductApiKeyQuery } from '../../../redux/store/backend/productServer.api';
 import CircularLoader from '../../Loader/CircularLoader';
+import { Link } from '@mui/material';
 
 interface RecommendationsProps {
     productKey: string
 }
 
 export const Recommendations: React.FC<RecommendationsProps> = (props: RecommendationsProps) => {
+
+    if(props.productKey === ''){
+        return <CircularLoader />
+    }
+
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const recsQuery = useTop3CoProductsByProductApiKeyQuery({ key: props.productKey });
 
-    if (recsQuery.isLoading) {
+    if (recsQuery.isLoading && recsQuery.isError) {
         return <CircularLoader />
     }
 
@@ -28,7 +31,7 @@ export const Recommendations: React.FC<RecommendationsProps> = (props: Recommend
                     if (product === null) {
                         return null;
                     }
-                    return <Card className={`${styles.card}`} sx={{ margin: '0 10px 15px' }}>
+                    return <Card key={`cardrect${product.dbId}`} className={`${styles.card}`} sx={{ margin: '0 10px 15px' }}>
                         <CardContent className={`${styles.cardContent}`}>
                             <div>
                                 <div className={`${styles.image}`}>
@@ -38,7 +41,7 @@ export const Recommendations: React.FC<RecommendationsProps> = (props: Recommend
                             <div>
                                 <h6>{product.full_name}</h6>
                                 <div>от {product.prices.price_min.amount} {product.prices.price_min.currency}</div>
-                                <Button size="small" variant='text'>Предложений {product.prices.offers.count}</Button>
+                                <Link href={`/product/${product.key}`}>Предложений {product.prices.offers.count}</Link>
                             </div>
                         </CardContent>
                     </Card>

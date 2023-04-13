@@ -1,12 +1,12 @@
 
 import { Button, Container, Link, Rating } from '@mui/material';
 import { useParams } from 'react-router-dom';
-import { useLazyProductQuery, useProductQuery } from '../../redux/store/backend/external.api';
+import { useLazyProductQuery } from '../../redux/store/backend/external.api';
 import CircularLoader from '../Loader/CircularLoader';
 import styles from './product.module.css';
 import BasicTabs from './Tabs/ProductTabs';
 import { useSelector } from 'react-redux';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Review } from './Review/Review';
 import Recommendations from './Recommendations/Recommendations';
 enum ProductState {
@@ -21,7 +21,7 @@ export const Product = () => {
     const [productState, setProductState] = useState<ProductState>(ProductState.Tabs);
 
     useEffect(() => {
-        if (!result.isSuccess && !result.isLoading)
+        if (!result.isSuccess && !result.isLoading && !result.isError)
             trigger({ key: key }, false);
     })
 

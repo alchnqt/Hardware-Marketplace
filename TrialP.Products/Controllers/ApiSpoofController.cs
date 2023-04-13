@@ -135,10 +135,14 @@ namespace TrialP.Products.Controllers
             }
         }
 
-        public async Task<ProductShops> GetProductShopsByKey(string key)
+        public async Task<IActionResult> GetProductShopsByKey(string key)
         {
             var result = await _productService.GetProductShopsByKeyFromApi(key);
-            return result;
+            if(result == null)
+            {
+                return BadRequest(new { message = "Нет в наличии" });
+            }
+            return Ok(result);
         }
 
         public async Task<ShopApiInfo> GetShopById(int id)
