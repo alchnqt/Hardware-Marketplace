@@ -64,6 +64,16 @@ namespace TrialP.Products.Controllers
             }
         }
 
+        [HttpPost]
+        public IActionResult CompleteAllOrders()
+        {
+            using (var context = new TrialPProductsContext())
+            {
+                var updatedOrders = context.Orders.ExecuteUpdate(s => s.SetProperty(b => b.IsCompleted, true));
+                return Ok(updatedOrders);
+            }
+        }
+
         [Authorize]
         [HttpGet("{id}")]
         public IActionResult GetUsersOrderById(Guid id, bool isCompleted = false)
