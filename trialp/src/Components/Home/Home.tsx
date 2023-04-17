@@ -10,7 +10,7 @@ function OverlayInfo() {
         <div className={styles.info}>
             <Container className={styles.intro} disableGutters maxWidth="sm" component="main" sx={{ pt: 3, pb: 3 }}>
                 <h4 className={styles.description}>
-                    Каталог товаров, сравнение, подбор, все цены интернет-магазинов.
+                    Каталог товаров, подбор, все цены интернет-магазинов компьютерной техники.
                 </h4>
             </Container>
             <a href="https://pmnd.rs/" target="_blank" style={{ position: 'absolute', bottom: 40, left: 90, fontSize: '13px' }}>
