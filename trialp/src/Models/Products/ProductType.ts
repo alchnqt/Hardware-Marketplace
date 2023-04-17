@@ -7,7 +7,7 @@ export interface Page {
 }
 export type TotalUngrouped = number;
 
-export interface AggregatedReviews{
+export interface AggregatedReviews {
     rating: number,
     count: number,
 
@@ -15,7 +15,7 @@ export interface AggregatedReviews{
     externalRating: number,
 
     internalCount: number,
-    internalRating:number,
+    internalRating: number,
 
     url: string | null,
     html_url: string | null
@@ -75,4 +75,18 @@ export interface ProductsResult {
     Products: Array<Product>,
     Total: number,
     TotalUngrouped: number
+}
+
+export interface ProductMicroInfo {
+    key: string,
+    product: {
+        apiKey: string,
+        name: string,
+        microdescription: string,
+        amount: string,
+        currency: string,
+        images: {
+            header: string
+        }
+    }
 }

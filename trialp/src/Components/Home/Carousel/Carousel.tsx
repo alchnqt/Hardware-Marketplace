@@ -14,6 +14,8 @@ import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 import GlobalStyles from '@mui/material/GlobalStyles';
 import Container from '@mui/material/Container';
+import { useTop3SoldQuery } from '../../../redux/store/backend/productServer.api';
+import CircularLoader from '../../Loader/CircularLoader';
 
 function Copyright(props: any) {
     return (
@@ -67,32 +69,16 @@ const tiers = [
         buttonVariant: 'outlined',
     },
 ];
-const footers = [
-    {
-        title: 'Company',
-        description: ['Team', 'History', 'Contact us', 'Locations'],
-    },
-    {
-        title: 'Features',
-        description: [
-            'Cool stuff',
-            'Random feature',
-            'Team feature',
-            'Developer stuff',
-            'Another one',
-        ],
-    },
-    {
-        title: 'Resources',
-        description: ['Resource', 'Resource name', 'Another resource', 'Final resource'],
-    },
-    {
-        title: 'Legal',
-        description: ['Privacy policy', 'Terms of use'],
-    },
-];
 
 function PricingContent() {
+    let top3SoldRes = useTop3SoldQuery();
+    if (top3SoldRes.isError || top3SoldRes.isLoading) {
+        return <CircularLoader />
+    }
+    let arr = [...top3SoldRes?.data || []];
+
+    arr = arr.sort((a, b) => b.product.microdescription.length - a.product.microdescription.length);
+    [arr[0], arr[1]] = [arr[1], arr[0]];
     return (
         <React.Fragment>
 
@@ -112,24 +98,24 @@ function PricingContent() {
                     оборудование для ремонта и строительства, туристическое снаряжение, детские товары и многое другое.
                 </Typography>
             </Container>
-            {/* End hero unit */}
+            <hr />
             <Container maxWidth="md" component="main">
+                <h3 style={{textAlign: 'center'}}>Топ продаж</h3>
                 <Grid container spacing={5} alignItems="flex-end">
-                    {tiers.map((tier) => (
+                    {arr.map((res, index) => (
                         // Enterprise card is full width at sm breakpoint
                         <Grid
                             item
-                            key={tier.title}
+                            key={`top3product${res.key}`}
                             xs={12}
-                            sm={tier.title === 'Enterprise' ? 12 : 6}
+                            sm={index === 2 ? 12 : 6}
                             md={4}
                         >
                             <Card>
                                 <CardHeader
-                                    title={tier.title}
-                                    subheader={tier.subheader}
+                                    title={res.product.name}
                                     titleTypographyProps={{ align: 'center' }}
-                                    action={tier.title === 'Pro' ? <StarIcon /> : null}
+                                    action={index === 1 ? <StarIcon /> : null}
                                     subheaderTypographyProps={{
                                         align: 'center',
                                     }}
@@ -145,43 +131,63 @@ function PricingContent() {
                                         sx={{
                                             display: 'flex',
                                             justifyContent: 'center',
-                                            alignItems: 'baseline',
+                                            alignItems: 'center',
                                             mb: 2,
                                         }}
                                     >
-                                        <Typography component="h2" variant="h3" color="text.primary">
-                                            ${tier.price}
-                                        </Typography>
-                                        <Typography variant="h6" color="text.secondary">
-                                            /mo
+                                        <img src={`${res.product.images.header}`} width={'50%'} height={'50%'} />
+                                    </Box>
+                                    <Box component="div"
+                                        sx={{
+                                            display: 'flex',
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                            mb: 2,
+                                        }}
+                                    >
+                                        <Typography component="h2" variant="h4" color="text.primary">
+                                            От {res.product.amount} {res.product.currency}
                                         </Typography>
                                     </Box>
-                                    <ul>
-                                        {tier.description.map((line) => (
-                                            <Typography
-                                                component="li"
-                                                variant="subtitle1"
-                                                align="center"
-                                                key={line}
-                                            >
-                                                {line}
-                                            </Typography>
-                                        ))}
-                                    </ul>
-                                </CardContent>
-                                <CardActions>
-                                    <Button
-                                        fullWidth
-                                        variant={tier.buttonVariant as 'outlined' | 'contained'}
+                                    <Box component="div"
+                                        sx={{
+                                            textAlign: 'center'
+                                        }}
                                     >
-                                        {tier.buttonText}
-                                    </Button>
+                                        {res.product.microdescription}
+                                    </Box>
+
+                                </CardContent>
+                                <CardActions
+                                    sx={{
+                                        display: 'block'
+                                    }}
+                                >
+                                    <Box component="div"
+                                        sx={{
+                                            display: 'flex',
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                            mb: 2,
+                                        }}
+                                    >
+                                        <Link
+                                            sx={{
+                                                textAlign: 'center'
+                                            }}
+                                            href={`/product/${res.product.apiKey}`}
+                                        >
+                                            Посмотреть предложения
+                                        </Link>
+                                    </Box>
+
                                 </CardActions>
                             </Card>
                         </Grid>
                     ))}
                 </Grid>
             </Container>
+            <hr />
         </React.Fragment>
     );
 }

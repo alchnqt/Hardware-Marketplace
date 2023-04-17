@@ -2,6 +2,7 @@ import styles from './home.module.css';
 import Carousel from './Carousel/Carousel';
 import { Container } from '@mui/material';
 import OurGoal from '../Footer/OurGoal/OurGoal';
+import { useTop3SoldQuery } from '../../redux/store/backend/productServer.api';
 
 function OverlayInfo() {
     let date = new Date().toLocaleDateString();

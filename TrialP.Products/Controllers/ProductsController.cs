@@ -20,10 +20,34 @@ namespace TrialP.Products.Controllers
             _externalApiService = externalApiService;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetTop3Sold()
+        {
+            using(var context = new TrialPProductsContext())
+            {
+                var top3 = await context.Orders
+                    .Include(pp => pp.PositionsPrimary)
+                    .Include(p => p.PositionsPrimary.Product).GroupBy(group => group.Key).Select(p => new
+                    {
+                        p.Key,
+                        Product = new
+                        {
+                            ApiKey = p.FirstOrDefault().PositionsPrimary.Product.Key,
+                            Name = p.FirstOrDefault().PositionsPrimary.Product.Name,
+                            Microdescription = p.FirstOrDefault().PositionsPrimary.Product.Description,
+                            Amount = p.FirstOrDefault().PositionsPrimary.Amount,
+                            Currency = p.FirstOrDefault().PositionsPrimary.Currency,
+                            Images = p.FirstOrDefault().PositionsPrimary.Product.Images
+                        }
+                    }).Take(3).ToListAsync();
+                return Ok(top3);
+            }
+        }
+
         [HttpGet("{key}")]
         public async Task<IActionResult> Top3CoProductsByProductApiKey(string key)
         {
-            using(var context = new TrialP.Products.Models.TrialPProductsContext()) 
+            using(var context = new TrialPProductsContext()) 
             {
                 var productIndex = context.RowNumberProducts.Where(w => w.Key == key)
                     .FirstOrDefault();
