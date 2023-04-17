@@ -34,30 +34,6 @@ namespace TrialP.ML.Services.Domain
                         select new ProductRecommendation() { ProductId = unchecked((uint)m), Score = p.Score }).Take(5);
 
             return top3.ToList();
-
-            //do
-            //{
-            //    var prediction = predictionengine.Predict(
-            //    new ProductInfo()
-            //    {
-            //        ProductID = id,
-            //        CombinedProductID = combiniedProductInfo
-            //    });
-
-            //    if (!float.IsNaN(prediction.Score))
-            //    {
-            //        score = prediction.Score;
-            //        predictions.Add(new ProductRecommendation { ProductId = combiniedProductInfo, Score = score });
-            //        if (predictions.Count() == 4 && combiniedProductInfo != MAX_ROWS)
-            //        {
-            //            predictions.RemoveAll(x => (decimal)x.Score == (decimal)predictions.Min(x => x.Score));
-            //        }
-            //    }
-            //    combiniedProductInfo++;
-            //} while (predictions.Any(a => (Math.Round(Convert.ToDecimal(
-            //    Math.Truncate(a.Score * 1000_000_000) / 1000_000_000), 8) < 0.7m)) || combiniedProductInfo != MAX_ROWS);
-
-            //return predictions;
         }
     }
 }
