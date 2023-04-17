@@ -42,15 +42,22 @@ namespace TrialP.Products.Controllers
         {
             using(var context = new TrialPProductsContext())
             {
-                var groupedOrders = (from order in context.Orders
-                                     group order by order.UserId into orderg
-                                     select new
-                                     {
-                                         Count = orderg.Count(),
-                                         UserId = orderg.Key,
-                                         Orders = (from o in orderg group o by o.Key into og select og.FirstOrDefault())
-                                     }).ToList();
-                return Ok(new { userOrders = groupedOrders });
+                var orders = context.Orders
+                    .Include(pp => pp.PositionsPrimary)
+                    .Include(pp => pp.PositionsPrimary.Product)
+                    .Where(w => (w.IsCompleted ?? false))
+                    .GroupBy(o => o.UserId)
+                    .Select(grp => new
+                {
+                    UserId = grp.Key,
+                    Orders = grp.ToList().Select(s => new
+                    {
+                        Name = s.PositionsPrimary.Product.Name,
+                        Amount = s.PositionsPrimary.Amount,
+                        OrderDate = s.OrderDate
+                    })
+                }).ToList();
+                return Ok(orders);
             }
         }
 

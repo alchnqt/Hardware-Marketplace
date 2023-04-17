@@ -6,9 +6,15 @@ using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 using System.Net.Http;
+using System.Text.Json;
+using TrialP.TgBot.Models;
 
 const string completeOrdersDisplayName = "Подтвердить заказы";
 const string showOrdersDisplayName = "Посмотреть действующие заказы";
+
+const string startDisplayName = "/start";
+const string helpDisplayName = "/help";
+
 HttpClient client = new HttpClient();
 
 var botClient = new TelegramBotClient("6026812025:AAF6J7iXE_DtmsnshBhPSGMMA3jwqJL49pc");
@@ -70,16 +76,36 @@ async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, Cancel
             await client.PostAsync("http://localhost:5003/api/product/apispoof/CompleteAllOrders", null);
             break;
         case showOrdersDisplayName:
+            var orderRes = await client.PostAsync("http://localhost:5003/api/product/apispoof/GetAllOrders", null);
+            var orderStream = await orderRes.Content.ReadAsStreamAsync();
+            var jsonserOptions = new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
+            List<UserOrders> ordersSerialized = await JsonSerializer.DeserializeAsync<List<UserOrders>>(orderStream, jsonserOptions);
+            Console.WriteLine(string.Join("\n ", ordersSerialized));
             await botClient.SendTextMessageAsync(
                 chatId: chatId,
-                text: $"Список заказов",
+                text: $"{string.Join("\n ", ordersSerialized)}",
+                replyMarkup: replyKeyboardMarkup,
+                cancellationToken: cancellationToken);
+
+            break;
+        case startDisplayName:
+            await botClient.SendTextMessageAsync(
+                chatId: chatId,
+                text: "Бот перезапущен",
+                replyMarkup: replyKeyboardMarkup,
+                cancellationToken: cancellationToken);
+            break;
+        case helpDisplayName:
+            await botClient.SendTextMessageAsync(
+                chatId: chatId,
+                text: "Если кнопки не отобразились, попробуйте комманду:\n/start - Перезапуск Бота",
                 replyMarkup: replyKeyboardMarkup,
                 cancellationToken: cancellationToken);
             break;
         default:
             await botClient.SendTextMessageAsync(
                 chatId: chatId,
-                text: "Choose a response",
+                text: "Список возможностей можно посмотреть, отправив команду help",
                 replyMarkup: replyKeyboardMarkup,
                 cancellationToken: cancellationToken);
             break;
