@@ -43,6 +43,7 @@ export const Product = () => {
                             <Rating className={`${styles.ratingContainer}`}
                                 name="read-only" value={(result.data?.reviews.rating || 0 / 10)} readOnly />
                             <Link className={`${styles.reviewsLink}`} target="_blank"
+                                title="Посмотреть отзывы на стороннем сервисе"
                                 href={`${result.data?.reviews.html_url}`}>
                                 Всего отзывов: {result.data?.reviews.count}</Link>
                         </div>

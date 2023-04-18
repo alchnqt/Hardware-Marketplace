@@ -40,7 +40,7 @@ export const login = createAsyncThunk(
         if (resp.access_token !== undefined) {
             var decoded = jwt_decode(resp.access_token);
             localStorage.setItem("user", JSON.stringify(decoded));
-            return;
+            return resp;
         }
         return resp;
     }
@@ -89,6 +89,7 @@ const authSlice = createSlice({
             .addCase(login.fulfilled, (state, action) => {
                 state.accessToken = action.payload?.access_token || ''
                 state.message = action.payload?.message || ''
+                console.log(action.payload?.access_token )
                 if(state.accessToken === ''){
                     state.isLoggedIn = false;
                 }
