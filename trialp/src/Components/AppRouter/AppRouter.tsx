@@ -23,6 +23,7 @@ import { ROLE_CLAIM } from '../../redux/slices/authSlice';
 import Admin from '../Admin/Admin';
 import HistoryOrder from '../History/History';
 import Shop from '../Shop/Shop';
+import { Support } from '../Support/Support';
 
 
 function RequireAuth({ children, redirectTo }: any) {
@@ -43,7 +44,7 @@ function AppRouter() {
               <Route index element={<Home />} />
               <Route path="/login" element={<Login/>} />
               <Route path="/register" element={<Register />} />
-
+              <Route path="/support" element={<Support />} />
               <Route path="/admin" element={
                   <RequireAuthAdmin redirectTo="/">
                       <Admin />

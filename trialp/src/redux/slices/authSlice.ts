@@ -89,10 +89,13 @@ const authSlice = createSlice({
             .addCase(login.fulfilled, (state, action) => {
                 state.accessToken = action.payload?.access_token || ''
                 state.message = action.payload?.message || ''
-                state.isLoggedIn = true;
-                console.log(action.payload?.access_token);
-                //var decoded = jwt_decode(action.payload?.access_token || '');
-                state.user = JSON.parse(localStorage.getItem('user') || '');
+                if(state.accessToken === ''){
+                    state.isLoggedIn = false;
+                }
+                else{
+                    state.isLoggedIn = true;
+                }
+                state.user = JSON.parse(localStorage.getItem('user') || 'null');
             })
             .addCase(login.rejected, (state, action) => {
                 state.isLoggedIn = false;

@@ -1,3 +1,4 @@
+//@ts-nocheck
 export default function parse(text, matches) {
     const result = [];
   

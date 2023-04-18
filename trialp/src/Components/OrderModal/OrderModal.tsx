@@ -5,7 +5,7 @@ import { EMAIL_CLAIM, ID_CLAIM } from '../../redux/slices/authSlice';
 import styles from './ordermodal.module.css';
 import { OrdersDto, usePostOrderMutation } from '../../redux/store/backend/ordersServer.api';
 import React from 'react';
-import { Box, Button } from '@mui/material';
+import { Box, Button, LinearProgress } from '@mui/material';
 const style = {
     position: 'absolute' as 'absolute',
     top: '50%',
@@ -13,7 +13,7 @@ const style = {
     transform: 'translate(-50%, -50%)',
     width: 400,
     bgcolor: 'background.paper',
-    border: '2px solid #000',
+    border: '1px solid #314661',
     boxShadow: 24,
     p: 4,
 };
@@ -32,7 +32,12 @@ export default function OrderModal(props: modalProps) {
     let modalContent: JSX.Element;
 
     if (productResult.isLoading) {
-        modalContent = (<div>Происходит оформление заказа...</div>)
+        modalContent = (
+            <Box sx={{ width: '100%' }}>
+                <div>Происходит обработка заказа...</div>
+                <LinearProgress />
+            </Box>
+        )
     }
     else {
         modalContent = (

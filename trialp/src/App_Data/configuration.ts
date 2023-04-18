@@ -26,6 +26,7 @@ export const translatedComponentNames: Dictionary<string> = {
     "products": `товары`,
     "shop": `магазин`,
     "cart": `корзина`,
+    "support": `поддержка`,
     
 } 
 

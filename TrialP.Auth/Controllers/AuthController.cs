@@ -103,7 +103,7 @@ namespace TrialP.Auth.Controllers
 
             if (user.Password != user.RepeatPassword)
             {
-                return BadRequest(new { message = "Пароли не совпдают" });
+                return BadRequest(new { message = "Пароли не совпадают" });
             }
             var newUser = new IdentityUser()
             {

@@ -45,7 +45,7 @@ namespace TrialP.Products.Controllers
                 var orders = context.Orders
                     .Include(pp => pp.PositionsPrimary)
                     .Include(pp => pp.PositionsPrimary.Product)
-                    .Where(w => (w.IsCompleted ?? false))
+                    .Where(w => !(w.IsCompleted ?? false))
                     .GroupBy(o => o.UserId)
                     .Select(grp => new
                 {

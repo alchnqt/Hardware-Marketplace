@@ -62,7 +62,7 @@ function Header() {
                         <Link
                             variant="button"
                             color="text.primary"
-                            href="#"
+                            href="/support"
                             sx={{ my: 1, mx: 1.5 }}
                         >
                             Поддержка

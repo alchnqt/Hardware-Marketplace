@@ -32,16 +32,16 @@ const Comparer = (props: ComparerProps) => {
             <h2 className={`${styles.comparerHeader}`}>Сравнение товаров</h2>
             <div className={`${styles.comparerContainer}`}>
                 <div className={`${styles.compareItem}`}>
-                    <h2>
+                    <h5>
                         {props.item1.name} от {props.item1.shopName}
-                    </h2>
+                    </h5>
                     <div>{props.item1.text}</div>
                     <h4 className={`${props.item1.amount < props.item2.amount ? styles.amountSuccess : ''}`}>Стоимость: {props.item1.amount} BYN</h4>
                 </div>
                 <div className={`${styles.compareItem}`}>
-                    <h2>
+                    <h5>
                         {props.item2.name} от {props.item2.shopName}
-                    </h2>
+                    </h5>
                     <div>{props.item2.text}</div>
                     <h4 className={`${props.item2.amount < props.item1.amount ? styles.amountSuccess : ''}`}>Стоимость: {props.item2.amount} BYN</h4>
                 </div>
