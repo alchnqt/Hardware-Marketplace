@@ -25,16 +25,11 @@ namespace TrialP.Auth.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly IConfiguration _configuration;
         private readonly UserManager<IdentityUser> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public AuthController(IConfiguration configuration, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
+        public AuthController(UserManager<IdentityUser> userManager)
         {
-            _configuration = configuration;
             _userManager = userManager;
-            _roleManager = roleManager;
-            //_userService = userService;
         }
 
         [HttpGet, Authorize]
@@ -48,18 +43,6 @@ namespace TrialP.Auth.Controllers
         {
             return Ok("admin secret");
         }
-
-        //[HttpPost("register")]
-        //public async Task<ActionResult<User>> Register(UserDto request)
-        //{
-        //    CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
-
-        //    user.Username = request.Username;
-        //    user.PasswordHash = passwordHash;
-        //    user.PasswordSalt = passwordSalt;
-
-        //    return Ok(user);
-        //}
 
         [HttpPost]
         public async Task<ActionResult<string>> Login(UserDto user)
@@ -160,7 +143,7 @@ namespace TrialP.Auth.Controllers
 
         private RefreshToken GenerateRefreshToken(string userId)
         {
-            var refreshToken = new TrialP.Auth.Models.RefreshToken
+            var refreshToken = new RefreshToken
             {
                 Token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64)),
                 Expires = DateTime.Now.AddDays(7),
@@ -194,10 +177,6 @@ namespace TrialP.Auth.Controllers
             {
                 HttpContext.Session.SetString("refreshToken", newRefreshToken.Token);
             }
-
-            //user.RefreshToken = newRefreshToken.Token;
-            //user.TokenCreated = newRefreshToken.Created;
-            //user.TokenExpires = newRefreshToken.Expires;
         }
 
         private async Task<string> CreateToken(string login)
@@ -232,24 +211,6 @@ namespace TrialP.Auth.Controllers
         {
             var users = await _userManager.GetUsersInRoleAsync("Customer");
             return Ok(users);
-        }
-
-        private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
-        {
-            using (var hmac = new HMACSHA512())
-            {
-                passwordSalt = hmac.Key;
-                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-            }
-        }
-
-        private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
-        {
-            using (var hmac = new HMACSHA512(passwordSalt))
-            {
-                var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-                return computedHash.SequenceEqual(passwordHash);
-            }
         }
     }
 }
