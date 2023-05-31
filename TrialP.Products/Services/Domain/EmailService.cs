@@ -19,14 +19,15 @@ namespace TrialP.Products.Services.Domain
 
         private async Task Send(string email, string body)
         {
-            MailAddress from = new MailAddress("ctestoures2022@gmail.com", "E-Katalog");
+            MailAddress from = new MailAddress("dimplomemailam2023@gmail.com", "E-Katalog");
             MailAddress to = new MailAddress(email);
             MailMessage m = new MailMessage(from, to);
             m.Subject = "Заказ товаров";
             m.Body = body;
             m.IsBodyHtml= true;
             SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587);
-            smtp.Credentials = new NetworkCredential("ctestoures2022@gmail.com", "dwrtowsdwilrjuaw");
+            smtp.UseDefaultCredentials = false;
+            smtp.Credentials = new NetworkCredential("dimplomemailam2023@gmail.com", "llltmkxgcklzokqs");
             smtp.EnableSsl = true;
             await smtp.SendMailAsync(m);
         }

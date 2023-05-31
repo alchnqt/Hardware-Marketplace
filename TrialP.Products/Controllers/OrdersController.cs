@@ -115,11 +115,11 @@ namespace TrialP.Products.Controllers
             decimal finalPrice = 0;
             foreach (var item in orderedPositions.Distinct())
             {
-                stringOrders.Add($"<h3>{item.PositionsPrimary.Product.FullName} - {item.PositionsPrimary.Amount} BYN. Количество: {item.Count}<h3/>");
+                stringOrders.Add($"<strong>{item.PositionsPrimary.Product.FullName} - {item.PositionsPrimary.Amount} BYN. Количество: {item.Count}<strong/>");
                 finalPrice += item.PositionsPrimary.Amount.Value * item.Count;
             }
 
-            await _emailService.SendEmailAsync(order.Email, $"Ваш заказ: {string.Join("<br>", stringOrders)} <br><br><b>Общая цена:</b> {finalPrice} BYN");
+            await _emailService.SendEmailAsync(order.Email, $"Номер заказа: {orderKey}<br><h4>Ваш заказ:</h4> {string.Join("<br>", stringOrders)} <br><br><b>Общая цена:</b> {finalPrice} BYN");
             return CreatedAtAction("GetOrder", new { id = order.Email }, order);
         }
 

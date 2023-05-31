@@ -19,11 +19,7 @@ namespace TrialP.ML.Services.Domain
             ITransformer trainedModel = mlContext.Model.Load("model.zip", out modelSchema);
             var predictionengine = mlContext.Model.CreatePredictionEngine<ProductInfo, ProductPrediction>(trainedModel);
             List<ProductRecommendation> predictions = new();
-            float score = 0.0f;
-            uint combiniedProductInfo = 1;
-
-
-            var top3 = (from m in Enumerable.Range(1, 262111)
+            var top4 = (from m in Enumerable.Range(1, 262111)
                         let p = predictionengine.Predict(
                            new ProductInfo()
                            {
@@ -31,9 +27,8 @@ namespace TrialP.ML.Services.Domain
                                CombinedProductID = unchecked((uint)m)
                            })
                         orderby p.Score descending
-                        select new ProductRecommendation() { ProductId = unchecked((uint)m), Score = p.Score }).Take(5);
-
-            return top3.ToList();
+                        select new ProductRecommendation() { ProductId = unchecked((uint)m), Score = p.Score }).Take(4);
+            return top4.ToList();
         }
     }
 }

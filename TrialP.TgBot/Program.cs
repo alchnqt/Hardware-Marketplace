@@ -78,12 +78,20 @@ async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, Cancel
         case showOrdersDisplayName:
             var orderRes = await client.PostAsync("http://localhost:5003/api/product/apispoof/GetAllOrders", null);
             var orderStream = await orderRes.Content.ReadAsStreamAsync();
+            var ordersText = "#";
             var jsonserOptions = new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
             List<UserOrders> ordersSerialized = await JsonSerializer.DeserializeAsync<List<UserOrders>>(orderStream, jsonserOptions);
-            Console.WriteLine(string.Join("\n ", ordersSerialized));
+            if(ordersSerialized.Count > 0)
+            {
+                ordersText = $"{string.Join("\n ", ordersSerialized)}";
+            }
+            else
+            {
+                ordersText = "Заказов нет";
+            }
             await botClient.SendTextMessageAsync(
                 chatId: chatId,
-                text: $"{string.Join("\n ", ordersSerialized)}",
+                text: ordersText,
                 replyMarkup: replyKeyboardMarkup,
                 cancellationToken: cancellationToken);
 

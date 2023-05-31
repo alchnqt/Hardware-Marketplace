@@ -1,13 +1,13 @@
 {
   "profiles": {
-    "TrialP.Products": {
+    "https": {
       "commandName": "Project",
+      "dotnetRunMessages": true,
       "launchUrl": "swagger",
+      "applicationUrl": "http://localhost:7002",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-      "dotnetRunMessages": true,
-      "applicationUrl": "http://localhost:7002"
+      }
     },
     "IIS Express": {
       "commandName": "IISExpress",

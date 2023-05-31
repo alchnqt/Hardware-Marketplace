@@ -33,6 +33,13 @@ builder.Services.AddTransient<ISearchService, SearchService>();
 builder.Services.AddTransient<IShopService, ShopService>(); 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddHttpClient();
+
+//builder.Services.AddHttpsRedirection(options =>
+//{
+//    options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
+//    options.HttpsPort = 44344;
+//});
+
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("AdministratorsOnly",
@@ -59,6 +66,7 @@ builder.Services.AddCors(options =>
                     {
                         builder
                           .WithOrigins("http://rhino.acme.com:8099")
+                          //.AllowAnyOrigin()
                           .AllowAnyMethod()
                           .AllowAnyHeader()
                           .AllowCredentials();

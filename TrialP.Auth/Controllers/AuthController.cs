@@ -32,7 +32,7 @@ namespace TrialP.Auth.Controllers
             _userManager = userManager;
         }
 
-        [HttpGet, Authorize]
+        [HttpGet]
         public ActionResult<string> Secret()
         {
             return Ok("secret");
